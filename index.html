@@ -1,0 +1,2150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Memon Dental Clinic — Thoughtful dental care in Federal B Area, Karachi</title>
+  <meta name="description" content="Memon Dental Clinic in Federal B Area, Karachi. Thoughtful dental care, focused on your comfort and confidence.">
+  <meta property="og:title" content="Memon Dental Clinic — Federal B Area, Karachi">
+  <meta property="og:description" content="Thoughtful dental care, focused on your comfort and confidence.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --page: #e9e7df;
+      --ink: #16193a;
+      --navy: #141a4a;
+      --white: #fff;
+      --card: #f8cf37;
+      --gap: 10px;
+      --w: calc(100vw - 24px);
+      --ease: cubic-bezier(.2,.8,.2,1);
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      background: var(--page);
+      scroll-behavior: auto;
+    }
+    body {
+      font-family: "Jost", "Futura", "Century Gothic", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+    a, button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* Integrated full-width Navigation bar (#nav) */
+    #nav {
+      position: fixed;
+      left: 50%;
+      margin-left: calc(var(--w) / -2);
+      top: 0;
+      width: var(--w);
+      height: 58px;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 0 0 12px 12px;
+      border-bottom: 1px solid rgba(22, 25, 58, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.2vw;
+      z-index: 50;
+    }
+    #nav .logo {
+      font-size: clamp(16px, 1.2vw, 21px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #links {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 2.2vw;
+      font-size: clamp(13px, 0.92vw, 15px);
+      font-weight: 500;
+    }
+    #links a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      transition: opacity .3s var(--ease);
+    }
+    #links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -3px;
+      height: 1.5px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .35s var(--ease);
+    }
+    #links a:hover::after {
+      transform: scaleX(1);
+    }
+    #links a.shop svg {
+      width: 9px;
+      height: 9px;
+      transition: transform .3s var(--ease);
+    }
+    body.menu #links a.shop {
+      opacity: 0.55;
+    }
+    body.menu #links a.shop svg {
+      transform: rotate(180deg);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+    }
+    .nav-btn.ghost {
+      border: 1px solid rgba(22, 25, 58, 0.14);
+      color: var(--ink);
+    }
+    .nav-btn.ghost:hover {
+      background: rgba(22, 25, 58, 0.05);
+    }
+    .nav-btn.primary {
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 600;
+    }
+    .nav-btn.primary:hover {
+      background: #1f286b;
+    }
+
+    /* Dental Treatments mega-menu strip (#drop) */
+    #drop {
+      position: fixed;
+      left: 50%;
+      margin-left: calc(var(--w) / -2);
+      width: var(--w);
+      top: 64px;
+      height: 86px;
+      background: #fff;
+      border-radius: 12px;
+      z-index: 49;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5.5vw;
+      clip-path: inset(0 0 100% 0 round 12px);
+      transition: clip-path .45s var(--ease);
+    }
+    body.menu #drop {
+      clip-path: inset(0 0 0 0 round 12px);
+    }
+    #drop a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(11px, 0.78vw, 13px);
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity .3s, transform .4s var(--ease);
+      white-space: nowrap;
+    }
+    body.menu #drop a {
+      opacity: 1;
+      transform: none;
+    }
+    body.menu #drop a:nth-child(1) { transition-delay: 0s; }
+    body.menu #drop a:nth-child(2) { transition-delay: 0.04s; }
+    body.menu #drop a:nth-child(3) { transition-delay: 0.08s; }
+    body.menu #drop a:nth-child(4) { transition-delay: 0.12s; }
+    body.menu #drop a:nth-child(5) { transition-delay: 0.16s; }
+    #drop svg {
+      width: clamp(24px, 1.9vw, 32px);
+      height: clamp(24px, 1.9vw, 32px);
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 1.3;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      transition: stroke .25s var(--ease);
+    }
+    #drop a:hover svg {
+      stroke: #3a49c9;
+    }
+
+    /* Near edge-to-edge Hero row (#hero) */
+    #hero {
+      position: relative;
+      width: var(--w);
+      margin: 0 auto;
+      padding-top: 68px;
+      height: 100vh;
+      display: flex;
+      gap: var(--gap);
+    }
+    #sky {
+      position: relative;
+      flex: 0 0 71.1%;
+      height: calc(100vh - 78px);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0d1650 center / cover no-repeat;
+    }
+    /* Layered parallax lavender clouds inside #sky (masked so upper starry sky stays still) */
+    .cloud-layer {
+      position: absolute;
+      inset: -6%;
+      background: center / cover no-repeat;
+      pointer-events: none;
+      z-index: 1;
+      will-change: transform, opacity;
+    }
+    #cloudBack {
+      -webkit-mask: linear-gradient(to top, rgba(0,0,0,0.85) 8%, rgba(0,0,0,0.6) 44%, transparent 68%);
+      mask: linear-gradient(to top, rgba(0,0,0,0.85) 8%, rgba(0,0,0,0.6) 44%, transparent 68%);
+      opacity: 0.78;
+    }
+    #cloudFront {
+      -webkit-mask: radial-gradient(120% 58% at 45% 92%, rgba(0,0,0,0.92) 20%, rgba(0,0,0,0.5) 62%, transparent 88%);
+      mask: radial-gradient(120% 58% at 45% 92%, rgba(0,0,0,0.92) 20%, rgba(0,0,0,0.5) 62%, transparent 88%);
+      opacity: 0.84;
+    }
+    #sky .tag {
+      position: absolute;
+      left: 5.2%;
+      top: 8.2%;
+      color: var(--white);
+      font-size: clamp(22px, 2.2vw, 38px);
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      z-index: 3;
+    }
+    #sky .tag .loc {
+      display: block;
+      margin-top: 8px;
+      font-size: clamp(12px, 0.88vw, 15px);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      color: rgba(255, 255, 255, 0.78);
+    }
+    #sky .word {
+      position: absolute;
+      left: 4.8%;
+      bottom: 5.2%;
+      color: var(--white);
+      font-size: clamp(72px, 13.8vw, 22vh);
+      font-weight: 600;
+      line-height: .78;
+      letter-spacing: -0.035em;
+      z-index: 3;
+      user-select: none;
+    }
+    #balloons {
+      position: absolute;
+      width: 29%;
+      aspect-ratio: 1360 / 2048;
+      background: center / contain no-repeat;
+      transform-origin: 49.4% 94.6%;
+      z-index: 2;
+      will-change: transform;
+    }
+    .grill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    /* Supporting Dental Card (#card) with Pakistani female dentist portrait */
+    #card {
+      position: relative;
+      flex: 1;
+      height: calc(100vh - 78px);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--card);
+      color: var(--navy);
+      padding: 2.8vh 1.8vw;
+      display: flex;
+      flex-direction: column;
+    }
+    #card .new {
+      align-self: flex-start;
+      display: inline-grid;
+      place-items: center;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      z-index: 3;
+    }
+    #card p {
+      margin-top: 1.6vh;
+      font-size: clamp(15px, 1.15vw, 20px);
+      line-height: 1.35;
+      font-weight: 500;
+      max-width: 18ch;
+      z-index: 3;
+    }
+    #pots {
+      position: absolute;
+      left: 50%;
+      top: 56%;
+      width: 106%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      pointer-events: none;
+      -webkit-mask: radial-gradient(closest-side, #000 78%, transparent 99%);
+      mask: radial-gradient(closest-side, #000 78%, transparent 99%);
+      z-index: 1;
+    }
+    #card .shop {
+      position: absolute;
+      left: 1.8vw;
+      right: 1.8vw;
+      bottom: 2.6vh;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+      font-size: clamp(13px, 0.92vw, 15px);
+      font-weight: 600;
+      transition: background .25s var(--ease), color .25s var(--ease);
+      z-index: 3;
+    }
+    #card .shop:hover {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* Dental Treatment Room panel (#kitchen) */
+    #kitchen {
+      position: relative;
+      width: var(--w);
+      height: calc(100vh - 78px);
+      margin: var(--gap) auto 0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #e5ddd0 center / cover no-repeat;
+    }
+    /* Environmental micro-animations canvas (lamp, sink water, exterior window snow) */
+    #envK {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Contact shadow on the white display pedestal */
+    #tshadow {
+      position: absolute;
+      left: 50%;
+      top: 57.5%;
+      width: 68px;
+      height: 16px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(20, 24, 42, 0.55) 0%, rgba(20, 24, 42, 0.22) 52%, rgba(20, 24, 42, 0) 76%);
+      transform: translate(-50%, -50%) scale(0.4);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+    #ktext {
+      position: absolute;
+      left: 54.5%;
+      top: 21.5%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: var(--ink);
+      z-index: 4;
+      white-space: nowrap;
+    }
+    #ktext h2 {
+      font-size: var(--kh, 28px);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.18;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+    #ktext p {
+      margin-top: .45em;
+      font-size: var(--kp, 16px);
+      line-height: 1.42;
+      font-weight: 450;
+      color: rgba(22, 25, 58, 0.84);
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+      transition-delay: .12s;
+    }
+    #kactions {
+      margin-top: 1.1em;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+      transition-delay: .22s;
+    }
+    #kactions .kbtn {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .25s var(--ease), color .25s var(--ease);
+    }
+    #kactions .kbtn.primary {
+      background: var(--navy);
+      color: var(--white);
+    }
+    #kactions .kbtn.primary:hover {
+      background: #1f286b;
+    }
+    #kactions .kbtn.secondary {
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      border: 1px solid rgba(22, 25, 58, 0.12);
+    }
+    #kactions .kbtn.secondary:hover {
+      background: var(--white);
+    }
+    body.landed #ktext h2,
+    body.landed #ktext p,
+    body.landed #kactions {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Interactive Stacked Folder Services Section (#services) */
+    #services {
+      position: relative;
+      width: var(--w);
+      margin: var(--gap) auto 0;
+      border-radius: 14px;
+      overflow: hidden;
+      background-color: #f1efec;
+      background-image:
+        linear-gradient(to right, rgba(154, 163, 184, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(154, 163, 184, 0.25) 1px, transparent 1px);
+      background-size: clamp(24px, 2.35vw, 34px) clamp(24px, 2.35vw, 34px);
+      background-position: center top;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+    .services-header {
+      padding: clamp(68px, 8.8vw, 124px) 24px clamp(42px, 5.2vw, 76px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    #services-heading {
+      font-family: "Cormorant Garamond", "Georgia", serif;
+      font-weight: 600;
+      font-size: clamp(48px, 6.2vw, 88px);
+      line-height: 0.94;
+      letter-spacing: -0.035em;
+      color: #4b56a6;
+    }
+    .services-subtitle {
+      margin-top: clamp(8px, 0.85vw, 14px);
+      font-family: "Jost", sans-serif;
+      font-weight: 400;
+      font-size: clamp(16px, 1.55vw, 24px);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      color: #18181b;
+    }
+
+    /* Stacked Folder Stage */
+    .folder-stack {
+      position: relative;
+      width: 100%;
+      height: 590px;
+      overflow: hidden;
+    }
+    .folder-layer {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 680px;
+      padding-top: 28px;
+      pointer-events: none;
+      will-change: transform;
+      transition: transform 480ms cubic-bezier(.2,.8,.2,1);
+    }
+    .folder-layer[data-index="0"] { top: 0px;   z-index: 1; }
+    .folder-layer[data-index="1"] { top: 82px;  z-index: 2; }
+    .folder-layer[data-index="2"] { top: 218px; z-index: 3; }
+    .folder-layer[data-index="3"] { top: 356px; z-index: 4; }
+
+    .folder-svg {
+      position: absolute;
+      left: 0;
+      top: 28px;
+      width: 100%;
+      height: calc(100% - 28px);
+      display: block;
+      overflow: visible;
+    }
+    .folder-fill {
+      fill: var(--folder-bg);
+      pointer-events: visiblePainted;
+      cursor: pointer;
+      transition: fill 450ms cubic-bezier(.2,.8,.2,1);
+    }
+    .folder-layer.is-active .folder-fill {
+      fill: var(--folder-hover-bg);
+    }
+    .folder-edge-highlight {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0);
+      stroke-width: 2.2;
+      pointer-events: none;
+      transition: stroke 450ms cubic-bezier(.2,.8,.2,1);
+    }
+    .folder-layer.is-active .folder-edge-highlight {
+      stroke: rgba(255, 255, 255, 0.38);
+    }
+    .folder-layer[data-index="3"].is-active .folder-edge-highlight {
+      stroke: rgba(255, 255, 255, 0.72);
+    }
+
+    /* Accessible Folder Tab Button */
+    .folder-tab-btn {
+      position: absolute;
+      top: 28px;
+      height: 58px;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      font-family: "Jost", sans-serif;
+      font-size: clamp(12px, 1.08vw, 16px);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ffffff;
+      white-space: nowrap;
+      pointer-events: auto;
+      cursor: pointer;
+      z-index: 3;
+      border-radius: 14px 14px 0 0;
+      transition: transform 420ms cubic-bezier(.2,.8,.2,1), color 300ms var(--ease);
+    }
+    .folder-layer[data-index="3"] .folder-tab-btn {
+      color: #ffffff;
+      text-shadow: 0 1px 2.5px rgba(56, 47, 28, 0.34);
+    }
+    .folder-tab-btn:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: -4px;
+    }
+    .folder-layer[data-index="3"] .folder-tab-btn:focus-visible {
+      outline-color: #242333;
+    }
+
+    /* Subtle tonal debossed emblem on Folder 04 (matching reference bottom folder) */
+    .folder-watermark {
+      position: absolute;
+      left: 50%;
+      top: 120px;
+      width: clamp(148px, 15vw, 200px);
+      height: clamp(148px, 15vw, 200px);
+      transform: translateX(-50%);
+      pointer-events: none;
+      opacity: 0.22;
+      transition: opacity 420ms cubic-bezier(.2,.8,.2,1);
+      z-index: 2;
+    }
+    .folder-layer[data-index="3"].is-active .folder-watermark {
+      opacity: 0.07;
+    }
+
+    /* Expanded Hover / Active Panel Content inside each Folder */
+    .folder-panel {
+      position: absolute;
+      left: 50%;
+      top: 102px;
+      transform: translate3d(-50%, 14px, 0);
+      width: min(1060px, 88%);
+      height: 214px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(20px, 3.2vw, 44px);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 4;
+      transition: opacity 420ms cubic-bezier(.2,.8,.2,1), transform 460ms cubic-bezier(.2,.8,.2,1);
+    }
+    .folder-layer.is-active .folder-panel {
+      opacity: 1;
+      transform: translate3d(-50%, 0, 0);
+      pointer-events: auto;
+    }
+    .folder-panel-copy {
+      flex: 1;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      color: #f7f6f2;
+    }
+    .folder-layer[data-index="3"] .folder-panel-copy {
+      color: #242333;
+    }
+    .folder-panel-meta {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.72;
+    }
+    .folder-panel-title {
+      font-family: "Cormorant Garamond", "Georgia", serif;
+      font-size: clamp(28px, 2.6vw, 40px);
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .folder-panel-desc {
+      font-size: clamp(14px, 1.05vw, 16px);
+      line-height: 1.48;
+      font-weight: 400;
+      opacity: 0.9;
+      max-width: 46ch;
+    }
+    .folder-learn-btn {
+      margin-top: 4px;
+      height: 38px;
+      padding: 0 18px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      transition: background 260ms var(--ease), color 260ms var(--ease), border-color 260ms var(--ease);
+    }
+    .folder-learn-btn:hover,
+    .folder-learn-btn:focus-visible {
+      background: #ffffff;
+      color: #16193a;
+      border-color: #ffffff;
+    }
+    .folder-layer[data-index="3"] .folder-learn-btn {
+      background: #242333;
+      color: #f7f6f2;
+      border-color: #242333;
+    }
+    .folder-layer[data-index="3"] .folder-learn-btn:hover,
+    .folder-layer[data-index="3"] .folder-learn-btn:focus-visible {
+      background: #303A87;
+      border-color: #303A87;
+      color: #ffffff;
+    }
+    .folder-panel-visual {
+      flex: 0 0 clamp(210px, 24vw, 310px);
+      height: 184px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(0, 0, 0, 0.14);
+    }
+    .folder-layer[data-index="3"] .folder-panel-visual {
+      border-color: rgba(36, 35, 51, 0.14);
+    }
+    .folder-panel-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .folder-layer,
+      .folder-fill,
+      .folder-edge-highlight,
+      .folder-tab-btn,
+      .folder-panel {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Footer & Clinic Info bar (#foot) */
+    #foot {
+      width: var(--w);
+      min-height: 68px;
+      margin: 0 auto;
+      padding: 14px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 13px;
+      color: rgba(22, 25, 58, 0.72);
+    }
+    #foot .f-brand {
+      font-weight: 500;
+      color: var(--ink);
+    }
+    #foot .f-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    #foot .f-links a:hover,
+    #foot .f-links button:hover {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+
+    /* Configurable Appointment & Contact Modal */
+    dialog#booking-modal {
+      margin: auto;
+      width: min(460px, calc(100vw - 32px));
+      border: 1px solid rgba(22, 25, 58, 0.1);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      padding: 24px;
+    }
+    dialog#booking-modal::backdrop {
+      background: rgba(20, 26, 74, 0.45);
+    }
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .modal-head h3 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .modal-loc {
+      font-size: 13px;
+      color: rgba(22, 25, 58, 0.68);
+      margin-top: 2px;
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: rgba(22, 25, 58, 0.65);
+    }
+    .modal-close:hover {
+      background: rgba(22, 25, 58, 0.06);
+      color: var(--ink);
+    }
+    .modal-form {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .modal-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .modal-field input,
+    .modal-field select,
+    .modal-field textarea {
+      font: inherit;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(22, 25, 58, 0.18);
+      background: #faf9f6;
+      color: var(--ink);
+    }
+    .modal-actions {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .modal-actions .nav-btn {
+      flex: 1;
+      justify-content: center;
+      height: 40px;
+    }
+    #booking-status {
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #165b33;
+      display: none;
+    }
+
+    /* Responsive / tablet & phone layout */
+    @media (max-width: 900px) {
+      #links {
+        gap: 1.5vw;
+      }
+      .nav-btn.ghost.hide-sm {
+        display: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --w: calc(100vw - 16px);
+        --gap: 10px;
+      }
+      #links,
+      #drop {
+        display: none;
+      }
+      #nav {
+        padding: 0 14px;
+        height: 54px;
+      }
+      #hero {
+        flex-direction: column;
+        height: auto;
+        padding-top: 62px;
+      }
+      #sky {
+        flex: none;
+        height: 68vh;
+      }
+      #sky .word {
+        font-size: 21vw;
+      }
+      #card {
+        flex: none;
+        height: 68vh;
+        padding: 18px;
+      }
+      #pots {
+        top: 55%;
+        width: 92%;
+        max-height: 76%;
+      }
+      #card .shop {
+        left: 18px;
+        right: 18px;
+      }
+      #kitchen {
+        height: 68vh;
+      }
+      #ktext {
+        white-space: normal;
+        width: 88%;
+        left: 50% !important;
+      }
+      #kactions {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .folder-stack {
+        height: 570px;
+      }
+      .folder-tab-btn {
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+        padding: 0 8px;
+      }
+      .folder-panel {
+        top: 94px;
+        width: 90%;
+        height: 226px;
+        gap: 14px;
+      }
+      .folder-panel-title {
+        font-size: 24px;
+      }
+      .folder-panel-desc {
+        font-size: 13px;
+        line-height: 1.38;
+      }
+      .folder-panel-visual {
+        flex: 0 0 132px;
+        height: 156px;
+      }
+      #foot {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px 8px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav id="nav">
+    <a href="#hero" class="logo">Memon Dental Clinic</a>
+    <div id="links">
+      <a href="#hero">Home</a>
+      <a href="#drop" class="shop">Treatments<svg viewBox="0 0 10 10" width="9" height="9" aria-hidden="true"><polyline points="1.5,3.5 5,7 8.5,3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      <a href="#kitchen" data-open-booking="dentists">Our Dentists</a>
+      <a href="#kitchen">About</a>
+      <a href="#foot" data-open-booking="contact">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <a href="#contact-whatsapp" id="nav-whatsapp" class="nav-btn ghost hide-sm" aria-label="WhatsApp">WhatsApp</a>
+      <a href="#contact-call" id="nav-call" class="nav-btn ghost hide-sm" aria-label="Call Us">Call Us</a>
+      <button type="button" id="nav-book" class="nav-btn primary" data-open-booking="appointment">Book Appointment</button>
+    </div>
+  </nav>
+
+  <div id="drop" role="region" aria-label="Dental Treatments">
+    <a href="#kitchen" data-treatment="General Dentistry">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <path d="M12,9 C9,9 7,12 7,16 C7,20 9,23 10,28 C10.6,30.5 13,30.5 14,27 C15,23.5 16.5,22 18,22 C19.5,22 21,23.5 22,27 C23,30.5 25.4,30.5 26,28 C27,23 29,20 29,16 C29,12 27,9 24,9 C21.5,9 19.8,10.5 18,10.5 C16.2,10.5 14.5,9 12,9 Z"/>
+      </svg>
+      <span>General Dentistry</span>
+    </a>
+    <a href="#kitchen" data-treatment="Clear Aligners">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <path d="M6,15 C6,10 11,8 18,8 C25,8 30,10 30,15 C30,22 25,27 18,27 C11,27 6,22 6,15 Z"/>
+        <path d="M10,16 C12.5,18.5 15,19.5 18,19.5 C21,19.5 23.5,18.5 26,16"/>
+        <line x1="14" y1="12" x2="14" y2="19"/>
+        <line x1="18" y1="12" x2="18" y2="19.5"/>
+        <line x1="22" y1="12" x2="22" y2="19"/>
+      </svg>
+      <span>Clear Aligners</span>
+    </a>
+    <a href="#kitchen" data-treatment="Cosmetic Care">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <path d="M7,17 C10,23 14,25 18,25 C22,25 26,23 29,17"/>
+        <path d="M9,17 C13,18.5 23,18.5 27,17"/>
+        <polyline points="26,7 27.5,10.5 31,12 27.5,13.5 26,17 24.5,13.5 21,12 24.5,10.5 26,7"/>
+      </svg>
+      <span>Cosmetic Care</span>
+    </a>
+    <a href="#kitchen" data-treatment="Restorative Care">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <path d="M10,14 C10,10 13,8 18,8 C23,8 26,10 26,14 C26,17 24,19 18,19 C12,19 10,17 10,14 Z"/>
+        <line x1="18" y1="19" x2="18" y2="30"/>
+        <line x1="14" y1="22" x2="22" y2="22"/>
+        <line x1="14.5" y1="25.5" x2="21.5" y2="25.5"/>
+        <line x1="15.5" y1="29" x2="20.5" y2="29"/>
+      </svg>
+      <span>Restorative Care</span>
+    </a>
+    <a href="#kitchen" data-treatment="Preventive Hygiene">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <path d="M18,6 L28,10 V18 C28,24.5 23.5,28.8 18,31 C12.5,28.8 8,24.5 8,18 V10 L18,6 Z"/>
+        <polyline points="13.5,18.5 16.8,21.8 23,15.5"/>
+      </svg>
+      <span>Preventive Hygiene</span>
+    </a>
+  </div>
+
+  <section id="hero">
+    <div id="sky">
+      <div class="cloud-layer" id="cloudBack"></div>
+      <div class="cloud-layer" id="cloudFront"></div>
+      <div class="tag">
+        Thoughtful dental care.
+        <span class="loc">Federal B Area, Karachi</span>
+      </div>
+      <div id="balloons"></div>
+      <canvas class="grill" id="gS"></canvas>
+      <div class="word">MEMON</div>
+    </div>
+    <aside id="card">
+      <span class="new">DENTAL CARE</span>
+      <p>Care designed around your smile.</p>
+      <video id="pots" poster="/dentist-card.jpg" muted loop playsinline autoplay crossorigin="anonymous"></video>
+      <a href="#booking" class="shop" data-open-booking="visit">Book a Visit</a>
+    </aside>
+  </section>
+
+  <section id="kitchen">
+    <canvas id="envK"></canvas>
+    <div id="tshadow"></div>
+    <canvas class="grill" id="gK"></canvas>
+    <div id="ktext">
+      <h2>A healthier smile starts here.</h2>
+      <p>Thoughtful dental care, focused on your comfort and confidence.</p>
+      <div id="kactions">
+        <button type="button" class="kbtn primary" data-open-booking="appointment">Book Appointment</button>
+        <a href="#whatsapp" id="k-whatsapp" class="kbtn secondary">WhatsApp</a>
+        <a href="#call" id="k-call" class="kbtn secondary">Call Us</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" aria-labelledby="services-heading">
+    <header class="services-header">
+      <h2 id="services-heading">services we offer</h2>
+      <p class="services-subtitle">swipe to discover the full list</p>
+    </header>
+    <div class="folder-stack" id="folder-stack" role="region" aria-label="Dental service categories"></div>
+  </section>
+
+  <footer id="foot">
+    <div class="f-brand">Memon Dental Clinic · Federal B Area, Karachi</div>
+    <div class="f-links">
+      <button type="button" data-open-booking="appointment">Book Appointment</button>
+      <a href="#whatsapp" id="foot-whatsapp">WhatsApp</a>
+      <a href="#call" id="foot-call">Call Us</a>
+    </div>
+  </footer>
+
+  <dialog id="booking-modal" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <div>
+        <h3 id="modal-title">Book a Visit — Memon Dental Clinic</h3>
+        <div class="modal-loc">Federal B Area, Karachi</div>
+      </div>
+      <button type="button" class="modal-close" id="modal-close-btn" aria-label="Close dialog">✕</button>
+    </div>
+    <form class="modal-form" id="booking-form">
+      <label class="modal-field">
+        <span>Full Name</span>
+        <input type="text" name="name" id="booking-name" required placeholder="Your name">
+      </label>
+      <label class="modal-field">
+        <span>Phone or WhatsApp Number</span>
+        <input type="tel" name="phone" id="booking-phone" required placeholder="+92 300 0000000">
+      </label>
+      <label class="modal-field">
+        <span>Treatment Interest</span>
+        <select name="treatment" id="booking-treatment">
+          <option value="General Consultation">General Consultation</option>
+          <option value="Dental Implants">Dental Implants</option>
+          <option value="Orthodontics">Orthodontics</option>
+          <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
+          <option value="General Dentistry">General Dentistry</option>
+          <option value="Clear Aligners">Clear Aligners</option>
+          <option value="Cosmetic Care">Cosmetic Care</option>
+          <option value="Restorative Care">Restorative Care</option>
+          <option value="Preventive Hygiene">Preventive Hygiene</option>
+        </select>
+      </label>
+      <label class="modal-field">
+        <span>Preferred Timing or Note</span>
+        <textarea name="notes" id="booking-notes" rows="2" placeholder="Preferred day or time for your visit"></textarea>
+      </label>
+      <div class="modal-actions">
+        <button type="submit" class="nav-btn primary">Confirm Request</button>
+        <a href="#whatsapp" id="modal-whatsapp" class="nav-btn ghost">WhatsApp</a>
+        <a href="#call" id="modal-call" class="nav-btn ghost">Call Us</a>
+      </div>
+      <div id="booking-status" role="status">Thank you. Your visit request for Memon Dental Clinic (Federal B Area, Karachi) has been recorded.</div>
+    </form>
+  </dialog>
+
+  <script>
+    // Configurable clinic contact endpoints (update phone/WhatsApp when verified)
+    const CLINIC_CONFIG = {
+      name: "Memon Dental Clinic",
+      location: "Federal B Area, Karachi",
+      phoneHref: "",     // e.g. "tel:+92..." when verified
+      whatsappHref: "",  // e.g. "https://wa.me/92..." when verified
+    };
+
+    const SKY = "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261109_013341_08629ffd-6ab5-44a8-bec8-f1939ab3a6cd.png&w=2048&q=88";
+    const BALLOONS = "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261109_013346_9a3e7023-d72b-4572-a9b2-cc7a8f57a248.png&w=1024&q=90";
+    const KITCHEN = "/dental_clinic_room.jpg";
+    const GRILL_CLIP = "TOOTH_GREENSCREEN_VIDEO_URL_HERE";
+    const POTS_CLIP = "/dentist-card.mp4";
+
+    const skyEl = document.getElementById("sky");
+    const cloudBackEl = document.getElementById("cloudBack");
+    const cloudFrontEl = document.getElementById("cloudFront");
+    const balloonsEl = document.getElementById("balloons");
+    const kitchenEl = document.getElementById("kitchen");
+    const envK = document.getElementById("envK");
+    const ctxEnv = envK.getContext("2d");
+    const tshadowEl = document.getElementById("tshadow");
+    const cardEl = document.getElementById("card");
+    const potsEl = document.getElementById("pots");
+    const ktextEl = document.getElementById("ktext");
+    const gS = document.getElementById("gS");
+    const gK = document.getElementById("gK");
+    const ctxS = gS.getContext("2d");
+    const ctxK = gK.getContext("2d");
+
+    const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    skyEl.style.backgroundImage = `url("${SKY}")`;
+    cloudBackEl.style.backgroundImage = `url("${SKY}")`;
+    cloudFrontEl.style.backgroundImage = `url("${SKY}")`;
+    balloonsEl.style.backgroundImage = `url("${BALLOONS}")`;
+    kitchenEl.style.backgroundImage = `url("${KITCHEN}")`;
+
+    // Treatments mega-menu open/close behaviour
+    const shopLink = document.querySelector("#links a.shop");
+    const dropEl = document.getElementById("drop");
+    let closeTimer = null;
+    let hoverOpenedAt = 0;
+
+    function openMenu() {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      if (!document.body.classList.contains("menu")) {
+        hoverOpenedAt = performance.now();
+        document.body.classList.add("menu");
+      }
+    }
+
+    function scheduleClose() {
+      if (closeTimer) clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        document.body.classList.remove("menu");
+        closeTimer = null;
+      }, 160);
+    }
+
+    if (shopLink && dropEl) {
+      shopLink.addEventListener("mouseenter", openMenu);
+      shopLink.addEventListener("mouseleave", scheduleClose);
+      dropEl.addEventListener("mouseenter", openMenu);
+      dropEl.addEventListener("mouseleave", scheduleClose);
+      shopLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+        if (performance.now() - hoverOpenedAt < 300) {
+          document.body.classList.add("menu");
+        } else {
+          document.body.classList.toggle("menu");
+        }
+      });
+    }
+
+    // Configurable booking & contact dialog handlers
+    const bookingModal = document.getElementById("booking-modal");
+    const bookingForm = document.getElementById("booking-form");
+    const bookingStatus = document.getElementById("booking-status");
+    const bookingTreatment = document.getElementById("booking-treatment");
+    const modalCloseBtn = document.getElementById("modal-close-btn");
+
+    function openBookingModal(treatmentName) {
+      document.body.classList.remove("menu");
+      if (bookingStatus) bookingStatus.style.display = "none";
+      if (treatmentName && bookingTreatment) {
+        for (const opt of bookingTreatment.options) {
+          if (opt.value === treatmentName) {
+            bookingTreatment.value = treatmentName;
+            break;
+          }
+        }
+      }
+      if (bookingModal && typeof bookingModal.showModal === "function" && !bookingModal.open) {
+        bookingModal.showModal();
+      }
+    }
+
+    document.querySelectorAll("[data-open-booking]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        openBookingModal();
+      });
+    });
+
+    document.querySelectorAll("#drop a[data-treatment]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        const tr = el.getAttribute("data-treatment");
+        openBookingModal(tr);
+      });
+    });
+
+    ["nav-whatsapp", "k-whatsapp", "foot-whatsapp", "modal-whatsapp"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("click", (e) => {
+        if (CLINIC_CONFIG.whatsappHref) {
+          el.setAttribute("href", CLINIC_CONFIG.whatsappHref);
+        } else {
+          e.preventDefault();
+          openBookingModal();
+        }
+      });
+    });
+
+    ["nav-call", "k-call", "foot-call", "modal-call"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("click", (e) => {
+        if (CLINIC_CONFIG.phoneHref) {
+          el.setAttribute("href", CLINIC_CONFIG.phoneHref);
+        } else {
+          e.preventDefault();
+          openBookingModal();
+        }
+      });
+    });
+
+    if (modalCloseBtn && bookingModal) {
+      modalCloseBtn.addEventListener("click", () => bookingModal.close());
+      bookingModal.addEventListener("click", (e) => {
+        if (e.target === bookingModal) bookingModal.close();
+      });
+    }
+
+    if (bookingForm) {
+      bookingForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (bookingStatus) bookingStatus.style.display = "block";
+        bookingForm.reset();
+      });
+    }
+
+    // Supporting Pakistani female dentist card video & seamless background colour sampling
+    potsEl.crossOrigin = "anonymous";
+    potsEl.src = POTS_CLIP;
+    potsEl.addEventListener("loadeddata", () => {
+      try {
+        const vw = potsEl.videoWidth;
+        const vh = potsEl.videoHeight;
+        if (vw > 0 && vh > 0) {
+          const c = document.createElement("canvas");
+          c.width = 8;
+          c.height = 8;
+          const cx = c.getContext("2d");
+          cx.drawImage(potsEl, 0, 0, vw * 0.12, vh * 0.12, 0, 0, 8, 8);
+          const data = cx.getImageData(0, 0, 8, 8).data;
+          let r = 0, g = 0, b = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+          }
+          r = (r / 64) | 0;
+          g = (g / 64) | 0;
+          b = (b / 64) | 0;
+          cardEl.style.background = `rgb(${r}, ${g}, ${b})`;
+        }
+      } catch (_) {}
+    }, { once: true });
+    potsEl.play().catch(() => {});
+
+    // Tooth frame caching & chroma key (preserved 48-frame scrub engine)
+    const NF = 48;
+    const FS = 560;
+    const frames = [];
+    let ready = false;
+    let lastFrame = -1;
+
+    function drawFrame(f, force) {
+      if (!ready || frames.length === 0) return;
+      const idx = Math.min(Math.max(0, f), frames.length - 1);
+      if (!force && idx === lastFrame) return;
+      lastFrame = idx;
+      const src = frames[idx];
+      ctxS.clearRect(0, 0, gS.width, gS.height);
+      ctxS.drawImage(src, 0, 0, gS.width, gS.height);
+      ctxK.clearRect(0, 0, gK.width, gK.height);
+      ctxK.drawImage(src, 0, 0, gK.width, gK.height);
+    }
+
+    (async function cacheToothFrames() {
+      try {
+        const v = document.createElement("video");
+        v.crossOrigin = "anonymous";
+        v.muted = true;
+        v.playsInline = true;
+        v.preload = "auto";
+
+        await new Promise((resolve, reject) => {
+          let triedFallback = false;
+          v.addEventListener("loadeddata", resolve, { once: true });
+          v.addEventListener("error", () => {
+            if (!triedFallback && GRILL_CLIP === "TOOTH_GREENSCREEN_VIDEO_URL_HERE") {
+              triedFallback = true;
+              v.src = "/tooth.mp4";
+            } else {
+              reject(new Error("video load error"));
+            }
+          });
+          v.src = GRILL_CLIP;
+        });
+
+        const dur = Math.max(0.01, v.duration - 0.05);
+        for (let i = 0; i < NF; i++) {
+          await new Promise((resolve) => {
+            const onSeeked = () => {
+              v.removeEventListener("seeked", onSeeked);
+              resolve();
+            };
+            v.addEventListener("seeked", onSeeked);
+            v.currentTime = (dur * i) / 47;
+          });
+
+          const c = document.createElement("canvas");
+          c.width = FS;
+          c.height = FS;
+          const cx = c.getContext("2d", { willReadFrequently: true });
+          cx.drawImage(v, 0, 0, FS, FS);
+          const img = cx.getImageData(0, 0, FS, FS);
+          const d = img.data;
+          for (let p = 0; p < d.length; p += 4) {
+            const r = d[p];
+            const g = d[p + 1];
+            const b = d[p + 2];
+            const m = r > b ? r : b;
+            const k = g - m;
+            if (k > 18) {
+              const alpha = Math.max(0, 1 - (k - 18) / 52);
+              d[p + 3] = (alpha * 255) | 0;
+              const maxG = m + 6;
+              if (g > maxG) d[p + 1] = maxG;
+            }
+          }
+          cx.putImageData(img, 0, 0);
+          frames.push(c);
+
+          if (i === 0) {
+            ready = true;
+            drawFrame(currentFrameIndex, true);
+          }
+        }
+        drawFrame(currentFrameIndex, true);
+      } catch (_) {}
+    })();
+
+    // Geometry measurement & dental room cover-fit mapping
+    const KI_W = 1376;
+    const KI_H = 768;
+    let S = { x: 0, y: 0, w: 1, h: 1 };
+    let K = { x: 0, y: 0, w: 1, h: 1 };
+    let kOx = 0, kOy = 0, kSc = 1, envDpr = 1;
+    let x0 = 0, y0 = 0, c0 = 100;
+    let x1 = 0, y1 = 0, c1 = 100;
+    let m = 105;
+    let end = 200;
+    let sp = 0;
+    let currentFrameIndex = 0;
+
+    // Visibility state for pausing off-screen environmental animations
+    let skyInView = true;
+    let kitchenInView = false;
+    let waterFlowProgress = 0;
+    let lastEnvTime = performance.now() / 1000;
+
+    if ("IntersectionObserver" in window) {
+      const obs = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.target === skyEl) skyInView = entry.isIntersecting;
+          if (entry.target === kitchenEl) kitchenInView = entry.isIntersecting;
+        }
+      }, { threshold: 0.02 });
+      obs.observe(skyEl);
+      obs.observe(kitchenEl);
+    } else {
+      kitchenInView = true;
+    }
+
+    // Initialize snow particles in normalized window-glass space (0..1)
+    const SNOW_COUNT = 38;
+    const snowflakes = [];
+    for (let i = 0; i < SNOW_COUNT; i++) {
+      const depth = (i % 3); // 0 = far, 1 = mid, 2 = near
+      snowflakes.push({
+        u: (i * 0.6180339887) % 1,
+        v: (i * 0.3819660112) % 1,
+        speed: 0.042 + depth * 0.024 + (i % 5) * 0.004,
+        driftAmp: 0.018 + depth * 0.008,
+        driftFreq: 0.7 + (i % 4) * 0.22,
+        phase: i * 1.37,
+        radius: 1.0 + depth * 0.65 + (i % 3) * 0.2,
+        alpha: 0.42 + depth * 0.18,
+      });
+    }
+
+    function clamp(v, a = 0, b = 1) {
+      return Math.min(b, Math.max(a, v));
+    }
+
+    function smoothstep(q) {
+      return q * q * (3 - 2 * q);
+    }
+
+    function computeLampIntensity(tSeconds) {
+      const cycle = 9.0;
+      const phase = ((tSeconds % cycle) + cycle) % cycle;
+      if (phase < 1.8) return smoothstep(phase / 1.8);
+      if (phase < 5.2) return 0.97 + 0.03 * Math.sin(((phase - 1.8) / 3.4) * Math.PI);
+      if (phase < 7.0) return 1 - smoothstep((phase - 5.2) / 1.8);
+      return 0;
+    }
+
+    function measure() {
+      const sy = window.scrollY || window.pageYOffset || 0;
+      const sr = skyEl.getBoundingClientRect();
+      S = { x: sr.left + window.scrollX, y: sr.top + sy, w: sr.width, h: sr.height };
+
+      const kr = kitchenEl.getBoundingClientRect();
+      K = { x: kr.left + window.scrollX, y: kr.top + sy, w: kr.width, h: kr.height };
+
+      // Tooth start (hanging in the sky panel)
+      x0 = S.x + 0.79 * S.w;
+      y0 = S.y + 0.525 * S.h;
+      c0 = 0.42 * S.h;
+
+      // Balloons (strings meet the tooth crown at 7.5% of frame height)
+      const bw = 0.29 * S.w;
+      const bh = (bw * 2048) / 1360;
+      balloonsEl.style.left = `${0.79 * S.w - bw * 0.494}px`;
+      balloonsEl.style.top = `${0.525 * S.h - c0 / 2 + c0 * 0.075 - bh * 0.946}px`;
+
+      // Dental treatment room cover-fit mapping (intrinsic 1376 x 768)
+      kSc = Math.max(K.w / KI_W, K.h / KI_H);
+      kOx = (K.w - KI_W * kSc) / 2;
+      kOy = (K.h - KI_H * kSc) / 2;
+      const H = KI_H * kSc;
+
+      // White display pedestal top surface at image point (0.504, 0.575)
+      const gx = K.x + kOx + 0.504 * KI_W * kSc;
+      const gy = K.y + kOy + 0.575 * KI_H * kSc;
+
+      c1 = (H * 0.19) / 0.835;
+      x1 = gx;
+      y1 = gy - c1 * 0.91 + c1 / 2;
+
+      // Position pedestal contact shadow right on the pedestal surface
+      tshadowEl.style.left = `${gx - K.x}px`;
+      tshadowEl.style.top = `${gy - K.y}px`;
+      tshadowEl.style.width = `${Math.round(c1 * 0.52)}px`;
+      tshadowEl.style.height = `${Math.round(c1 * 0.12)}px`;
+
+      // Calm wall above the countertop hosts the headline block
+      const isMobile = window.innerWidth <= 760;
+      const hx = K.x + kOx + (isMobile ? 0.504 : 0.545) * KI_W * kSc;
+      const hy = K.y + kOy + (isMobile ? 0.185 : 0.215) * KI_H * kSc;
+      ktextEl.style.left = `${hx - K.x}px`;
+      ktextEl.style.top = `${hy - K.y}px`;
+      kitchenEl.style.setProperty("--kh", `${(H * (isMobile ? 0.032 : 0.036)).toFixed(1)}px`);
+      kitchenEl.style.setProperty("--kp", `${(H * (isMobile ? 0.019 : 0.021)).toFixed(1)}px`);
+
+      const maxScroll = Math.max(200, document.documentElement.scrollHeight - window.innerHeight);
+      end = Math.max(200, Math.min(maxScroll, K.y - 68));
+
+      // Tooth canvas sizing
+      m = Math.ceil(Math.max(c0, c1) * 1.05);
+      envDpr = Math.min(window.devicePixelRatio || 1, 2);
+      const backing = Math.round(m * envDpr);
+
+      gS.style.width = `${m}px`;
+      gS.style.height = `${m}px`;
+      gK.style.width = `${m}px`;
+      gK.style.height = `${m}px`;
+      gS.width = backing;
+      gS.height = backing;
+      gK.width = backing;
+      gK.height = backing;
+
+      // Environmental overlay canvas sizing (#envK)
+      envK.width = Math.max(1, Math.round(K.w * envDpr));
+      envK.height = Math.max(1, Math.round(K.h * envDpr));
+
+      drawFrame(currentFrameIndex, true);
+    }
+
+    // Helper: map normalized dental room image coordinates (nx, ny) to #kitchen local CSS pixels
+    function mapRoomX(nx) {
+      return kOx + nx * KI_W * kSc;
+    }
+    function mapRoomY(ny) {
+      return kOy + ny * KI_H * kSc;
+    }
+
+    // Render environmental micro-animations in #kitchen (lamp, sink water, exterior window snow)
+    function renderDentalEnvironment(t, dt) {
+      if (!ctxEnv) return;
+      ctxEnv.save();
+      ctxEnv.scale(envDpr, envDpr);
+      ctxEnv.clearRect(0, 0, K.w, K.h);
+
+      // 1. Overhead Dental Examination Light (left side, above dental chair)
+      const lampInt = reducedMotion ? 0.85 : computeLampIntensity(t);
+      if (lampInt > 0.005) {
+        const lx = mapRoomX(0.2170);
+        const ly = mapRoomY(0.3301);
+        const chairX = mapRoomX(0.205);
+        const chairY = mapRoomY(0.555);
+        const armChairX = mapRoomX(0.165);
+        const armChairY = mapRoomY(0.675);
+
+        ctxEnv.save();
+        ctxEnv.globalCompositeOperation = "screen";
+
+        // Volumetric warm-white light cone from lamp reflector downward toward dental chair
+        const beamGrad = ctxEnv.createLinearGradient(lx, ly, chairX, armChairY);
+        beamGrad.addColorStop(0, `rgba(255, 250, 232, ${(0.42 * lampInt).toFixed(3)})`);
+        beamGrad.addColorStop(0.35, `rgba(255, 248, 224, ${(0.20 * lampInt).toFixed(3)})`);
+        beamGrad.addColorStop(0.75, `rgba(255, 246, 218, ${(0.08 * lampInt).toFixed(3)})`);
+        beamGrad.addColorStop(1, "rgba(255, 246, 218, 0)");
+
+        ctxEnv.fillStyle = beamGrad;
+        ctxEnv.beginPath();
+        ctxEnv.moveTo(lx - 20 * kSc, ly - 2 * kSc);
+        ctxEnv.lineTo(lx + 24 * kSc, ly + 4 * kSc);
+        ctxEnv.lineTo(chairX + 105 * kSc, armChairY);
+        ctxEnv.lineTo(armChairX - 95 * kSc, armChairY);
+        ctxEnv.closePath();
+        ctxEnv.fill();
+
+        // Soft reflector halo around the lamp face
+        const headHalo = ctxEnv.createRadialGradient(lx, ly, 2 * kSc, lx, ly, 36 * kSc);
+        headHalo.addColorStop(0, `rgba(255, 253, 242, ${(0.65 * lampInt).toFixed(3)})`);
+        headHalo.addColorStop(0.45, `rgba(255, 248, 222, ${(0.28 * lampInt).toFixed(3)})`);
+        headHalo.addColorStop(1, "rgba(255, 248, 222, 0)");
+        ctxEnv.fillStyle = headHalo;
+        ctxEnv.beginPath();
+        ctxEnv.arc(lx, ly, 36 * kSc, 0, Math.PI * 2);
+        ctxEnv.fill();
+
+        // Individual 4 lamp bulbs illuminating inside the reflector head
+        const bulbs = [
+          [0.2108, 0.3242],
+          [0.2064, 0.3320],
+          [0.2297, 0.3281],
+          [0.2209, 0.3359],
+        ];
+        for (const [bx, by] of bulbs) {
+          const px = mapRoomX(bx);
+          const py = mapRoomY(by);
+          const bGrad = ctxEnv.createRadialGradient(px, py, 0.5 * kSc, px, py, 7.5 * kSc);
+          bGrad.addColorStop(0, `rgba(255, 255, 250, ${(0.96 * lampInt).toFixed(3)})`);
+          bGrad.addColorStop(0.45, `rgba(255, 249, 218, ${(0.72 * lampInt).toFixed(3)})`);
+          bGrad.addColorStop(1, "rgba(255, 245, 200, 0)");
+          ctxEnv.fillStyle = bGrad;
+          ctxEnv.beginPath();
+          ctxEnv.arc(px, py, 7.5 * kSc, 0, Math.PI * 2);
+          ctxEnv.fill();
+        }
+
+        // Restrained warm illumination on the dental chair headrest, backrest, and seat cushion
+        const chairGlow = ctxEnv.createRadialGradient(chairX, chairY, 8 * kSc, chairX, chairY, 115 * kSc);
+        chairGlow.addColorStop(0, `rgba(255, 249, 228, ${(0.24 * lampInt).toFixed(3)})`);
+        chairGlow.addColorStop(0.55, `rgba(255, 246, 220, ${(0.11 * lampInt).toFixed(3)})`);
+        chairGlow.addColorStop(1, "rgba(255, 246, 220, 0)");
+        ctxEnv.fillStyle = chairGlow;
+        ctxEnv.beginPath();
+        ctxEnv.arc(chairX, chairY, 115 * kSc, 0, Math.PI * 2);
+        ctxEnv.fill();
+
+        ctxEnv.restore();
+      }
+
+      // 2. Dental Clinic Sink — Flowing Water (right side of countertop)
+      waterFlowProgress = clamp(waterFlowProgress + dt * 1.35, 0, 1);
+      const fx = mapRoomX(0.7929);
+      const fyTop = mapRoomY(0.5221);
+      const fyBotFull = mapRoomY(0.5859);
+      const fyBot = fyTop + (fyBotFull - fyTop) * smoothstep(waterFlowProgress);
+
+      if (waterFlowProgress > 0.02) {
+        const streamLen = fyBot - fyTop;
+        const topW = 2.1 * kSc;
+        const botW = 1.45 * kSc;
+
+        // Translucent base water column
+        const wGrad = ctxEnv.createLinearGradient(fx, fyTop, fx, fyBot);
+        wGrad.addColorStop(0, "rgba(248, 250, 252, 0.62)");
+        wGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.46)");
+        wGrad.addColorStop(0.92, "rgba(255, 255, 255, 0.54)");
+        wGrad.addColorStop(1, "rgba(255, 255, 255, 0.18)");
+
+        ctxEnv.fillStyle = wGrad;
+        ctxEnv.beginPath();
+        ctxEnv.moveTo(fx - topW * 0.5, fyTop);
+        ctxEnv.lineTo(fx + topW * 0.5, fyTop);
+        ctxEnv.lineTo(fx + botW * 0.5, fyBot);
+        ctxEnv.lineTo(fx - botW * 0.5, fyBot);
+        ctxEnv.closePath();
+        ctxEnv.fill();
+
+        // Moving downward specular water threads inside the stream
+        if (!reducedMotion && streamLen > 4) {
+          for (let s = 0; s < 4; s++) {
+            const prog = ((t * 4.2 + s * 0.25) % 1);
+            const sy1 = fyTop + prog * streamLen * 0.82;
+            const sy2 = sy1 + streamLen * 0.16;
+            const wobble = Math.sin(t * 18 + s * 2.1) * 0.35 * kSc;
+            ctxEnv.strokeStyle = `rgba(255, 255, 255, ${(0.58 * (1 - prog * 0.4)).toFixed(3)})`;
+            ctxEnv.lineWidth = 0.85 * kSc;
+            ctxEnv.beginPath();
+            ctxEnv.moveTo(fx + wobble, sy1);
+            ctxEnv.lineTo(fx - wobble * 0.5, Math.min(fyBot, sy2));
+            ctxEnv.stroke();
+          }
+        }
+
+        // Subtle reflections & small splashes at sink contact point
+        if (waterFlowProgress > 0.85) {
+          const splashAlpha = (waterFlowProgress - 0.85) / 0.15;
+          const rPulse = reducedMotion ? 0.5 : (0.5 + 0.5 * Math.sin(t * 14));
+          ctxEnv.strokeStyle = `rgba(255, 255, 255, ${(0.42 * splashAlpha).toFixed(3)})`;
+          ctxEnv.lineWidth = 0.8 * kSc;
+          ctxEnv.beginPath();
+          ctxEnv.ellipse(fx, fyBotFull, (3.2 + rPulse * 1.8) * kSc, (0.9 + rPulse * 0.4) * kSc, 0, 0, Math.PI * 2);
+          ctxEnv.stroke();
+
+          // 3 tiny micro-droplets jumping slightly at contact point
+          if (!reducedMotion) {
+            for (let d = 0; d < 3; d++) {
+              const dp = ((t * 5.5 + d * 0.33) % 1);
+              const dir = d === 0 ? -1 : d === 1 ? 1 : 0.4;
+              const dx = fx + dir * dp * 3.8 * kSc;
+              const dy = fyBotFull - Math.sin(dp * Math.PI) * 2.6 * kSc;
+              ctxEnv.fillStyle = `rgba(255, 255, 255, ${((1 - dp) * 0.55 * splashAlpha).toFixed(3)})`;
+              ctxEnv.beginPath();
+              ctxEnv.arc(dx, dy, 0.75 * kSc, 0, Math.PI * 2);
+              ctxEnv.fill();
+            }
+          }
+        }
+      }
+
+      // 3. Outside Window — Subtle Snowfall (confined strictly to visible window glass)
+      const winL = mapRoomX(0.918);
+      const winR = mapRoomX(0.980);
+      const winTL = mapRoomY(0.018);
+      const winTR = mapRoomY(0.004);
+      const winBot = mapRoomY(0.748);
+      const plantMaxX = mapRoomX(0.952);
+      const plantMinY = mapRoomY(0.635);
+
+      if (winR > 0 && winL < K.w) {
+        ctxEnv.save();
+        // Clip polygon to window glass, excluding the indoor potted plant on the windowsill
+        ctxEnv.beginPath();
+        ctxEnv.moveTo(winL, winTL);
+        ctxEnv.lineTo(winR, winTR);
+        ctxEnv.lineTo(winR, winBot);
+        ctxEnv.lineTo(plantMaxX, winBot);
+        ctxEnv.lineTo(plantMaxX, plantMinY);
+        ctxEnv.lineTo(winL, plantMinY);
+        ctxEnv.closePath();
+        ctxEnv.clip();
+
+        const winW = winR - winL;
+        const winH = winBot - winTR;
+
+        for (let i = 0; i < snowflakes.length; i++) {
+          const fl = snowflakes[i];
+          const v = reducedMotion ? fl.v : ((fl.v + t * fl.speed) % 1);
+          const u = (fl.u + Math.sin(t * fl.driftFreq + fl.phase) * fl.driftAmp + 1) % 1;
+          const sx = winL + u * winW;
+          const sy = winTR + v * winH;
+          const rad = fl.radius * kSc;
+
+          const fGrad = ctxEnv.createRadialGradient(sx, sy, 0, sx, sy, rad);
+          fGrad.addColorStop(0, `rgba(255, 255, 255, ${fl.alpha.toFixed(3)})`);
+          fGrad.addColorStop(0.6, `rgba(255, 255, 255, ${(fl.alpha * 0.65).toFixed(3)})`);
+          fGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
+          ctxEnv.fillStyle = fGrad;
+          ctxEnv.beginPath();
+          ctxEnv.arc(sx, sy, rad, 0, Math.PI * 2);
+          ctxEnv.fill();
+        }
+        ctxEnv.restore();
+      }
+
+      ctxEnv.restore();
+    }
+
+    // Main animation loop (runs every requestAnimationFrame)
+    function tick(now) {
+      const t = now / 1000;
+      const dt = Math.min(0.1, Math.max(0.001, t - lastEnvTime));
+      lastEnvTime = t;
+
+      const sy = window.scrollY || window.pageYOffset || 0;
+      const target = sy / end;
+      sp += (target - sp) * 0.18;
+      if (Math.abs(target - sp) < 0.0005) {
+        sp = target;
+      }
+      const p = clamp(sp, 0, 1);
+
+      const q = clamp((p - 0.02) / 0.9);
+      const fall = Math.pow(q, 1.75);
+      const sq = q * q * (3 - 2 * q);
+
+      const idle = 1 - clamp(p * 12);
+      const bob = idle * Math.sin(1.9 * t) * 6;
+      const sway = idle * Math.sin(1.3 * t) * 1.4;
+
+      const x = x0 + (x1 - x0) * sq;
+      const y = y0 + (y1 - y0) * fall + bob;
+      const size = c0 + (c1 - c0) * sq;
+      const tilt = Math.sin(q * Math.PI) * -9 + sway;
+
+      const rawF = Math.round(clamp((q - 0.12) / 0.72) * 47);
+      const f = ready && frames.length > 0 ? clamp(rawF, 0, frames.length - 1) : 0;
+      currentFrameIndex = f;
+      drawFrame(f, false);
+
+      const scl = size / m;
+      gS.style.transform = `translate(${x - S.x - m / 2}px, ${y - S.y - m / 2}px) rotate(${tilt}deg) scale(${scl})`;
+      gK.style.transform = `translate(${x - K.x - m / 2}px, ${y - K.y - m / 2}px) rotate(${tilt}deg) scale(${scl})`;
+
+      // Contact shadow scales and intensifies as the tooth settles onto the pedestal
+      const shProg = clamp((q - 0.55) / 0.45);
+      tshadowEl.style.opacity = `${(shProg * 0.42).toFixed(3)}`;
+      tshadowEl.style.transform = `translate(-50%, -50%) scale(${(0.4 + 0.6 * shProg).toFixed(3)})`;
+
+      const r = clamp(p * 1.25);
+      balloonsEl.style.transform = `translate(${r * -0.06 * S.w}px, ${bob - r * 1.25 * S.h}px) rotate(${sway * 1.6 - r * 6}deg)`;
+
+      // 4. Hero Sky — Cinematic Moving Clouds (multi-layered organic drift while in view)
+      if (skyInView && !reducedMotion) {
+        const c1x = Math.sin(t * 0.22) * 2.4;
+        const c1y = Math.cos(t * 0.17) * 0.8;
+        const c2x = Math.cos(t * 0.31 + 1.2) * 3.8;
+        const c2y = Math.sin(t * 0.24 + 0.6) * 1.1;
+        cloudBackEl.style.transform = `translate3d(${c1x.toFixed(2)}%, ${c1y.toFixed(2)}%, 0) scale(1.08)`;
+        cloudFrontEl.style.transform = `translate3d(${c2x.toFixed(2)}%, ${c2y.toFixed(2)}%, 0) scale(1.13)`;
+      }
+
+      // Render dental clinic environmental effects when #kitchen is in view
+      if (kitchenInView || p > 0.15) {
+        renderDentalEnvironment(t, dt);
+      } else {
+        waterFlowProgress = 0;
+      }
+
+      document.body.classList.toggle("landed", p > 0.9);
+
+      requestAnimationFrame(tick);
+    }
+
+    // Interactive Stacked Folder Services Section (#services)
+    const SERVICE_FOLDERS = [
+      {
+        index: 0,
+        code: "01",
+        id: "dental-implants",
+        label: "DENTAL IMPLANTS",
+        title: "Dental Implants",
+        description: "Precision-crafted tooth replacement options designed to restore natural function, stability, and long-term comfort.",
+        color: "#242333",
+        hoverColor: "#2d2c40",
+        tabCenter: 0.745,
+        tabWidth: 0.31,
+        image: "/service-implants.jpg",
+        treatmentValue: "Dental Implants",
+      },
+      {
+        index: 1,
+        code: "02",
+        id: "orthodontics",
+        label: "ORTHODONTICS",
+        title: "Orthodontics",
+        description: "Explore options designed to support healthier alignment and confident smiles.",
+        color: "#303A87",
+        hoverColor: "#38449c",
+        tabCenter: 0.355,
+        tabWidth: 0.30,
+        image: "/service-orthodontics.jpg",
+        treatmentValue: "Orthodontics",
+      },
+      {
+        index: 2,
+        code: "03",
+        id: "cosmetic-dentistry",
+        label: "COSMETIC DENTISTRY",
+        title: "Cosmetic Dentistry",
+        description: "Thoughtful aesthetic treatments tailored to brighten, refine, and harmonize your natural smile.",
+        color: "#596BA9",
+        hoverColor: "#6477b8",
+        tabCenter: 0.548,
+        tabWidth: 0.325,
+        image: "/service-cosmetic.jpg",
+        treatmentValue: "Cosmetic Dentistry",
+      },
+      {
+        index: 3,
+        code: "04",
+        id: "general-dentistry",
+        label: "GENERAL DENTISTRY",
+        title: "General Dentistry",
+        description: "Comprehensive exams, gentle preventive hygiene, and restorative care focused on everyday oral wellness.",
+        color: "#E5DDC6",
+        hoverColor: "#ece5d0",
+        tabCenter: 0.302,
+        tabWidth: 0.305,
+        image: "/service-general.jpg",
+        treatmentValue: "General Dentistry",
+      },
+    ];
+
+    function buildFolderSvgPaths(tabCenterNorm, tabWidthNorm, viewWidth = 1440, viewHeight = 680, tabHeight = 56, shoulderWidth = 44) {
+      const topY = 2;
+      const shoulderY = topY + tabHeight;
+      const halfW = (tabWidthNorm * viewWidth) / 2;
+      const cx = tabCenterNorm * viewWidth;
+      const L = Math.max(shoulderWidth + 12, cx - halfW);
+      const R = Math.min(viewWidth - shoulderWidth - 12, cx + halfW);
+      const S = shoulderWidth;
+
+      const x0 = +(L - S).toFixed(1);
+      const c1x = +(L - S * 0.32).toFixed(1);
+      const c2x = +(L - S * 0.42).toFixed(1);
+      const x1 = +(L + S * 0.36).toFixed(1);
+
+      const x2 = +(R - S * 0.36).toFixed(1);
+      const c3x = +(R + S * 0.42).toFixed(1);
+      const c4x = +(R + S * 0.32).toFixed(1);
+      const x3 = +(R + S).toFixed(1);
+
+      const edgeD = `M 0,${shoulderY} L ${x0},${shoulderY} C ${c1x},${shoulderY} ${c2x},${topY} ${x1},${topY} L ${x2},${topY} C ${c3x},${topY} ${c4x},${shoulderY} ${x3},${shoulderY} L ${viewWidth},${shoulderY}`;
+      const d = `${edgeD} L ${viewWidth},${viewHeight} L 0,${viewHeight} Z`;
+      return { d, edgeD };
+    }
+
+    function computeFolderStackOffsets(activeIndex) {
+      if (activeIndex === null || activeIndex < 0 || activeIndex > 3) {
+        return [0, 0, 0, 0];
+      }
+      switch (activeIndex) {
+        case 0:
+          return [-24, 196, 142, 86];
+        case 1:
+          return [-12, -20, 146, 90];
+        case 2:
+          return [-16, -24, -86, 82];
+        case 3:
+          return [-16, -24, -86, -148];
+        default:
+          return [0, 0, 0, 0];
+      }
+    }
+
+    const folderStackEl = document.getElementById("folder-stack");
+    const folderLayerEls = [];
+    const folderTabBtns = [];
+    let folderState = { hovered: null, locked: null, active: null };
+    let folderLeaveTimer = null;
+
+    function applyFolderState() {
+      const activeIdx = folderState.hovered !== null ? folderState.hovered : folderState.locked;
+      folderState.active = activeIdx;
+      const offsets = computeFolderStackOffsets(activeIdx);
+
+      folderLayerEls.forEach((layerEl, idx) => {
+        const isActive = activeIdx === idx;
+        layerEl.style.transform = `translate3d(0, ${offsets[idx]}px, 0)`;
+        layerEl.classList.toggle("is-active", isActive);
+        const btn = folderTabBtns[idx];
+        if (btn) {
+          btn.setAttribute("aria-expanded", isActive ? "true" : "false");
+        }
+        const panel = layerEl.querySelector(".folder-panel");
+        if (panel) {
+          panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+        }
+      });
+    }
+
+    function setFolderHover(index) {
+      if (folderLeaveTimer) {
+        clearTimeout(folderLeaveTimer);
+        folderLeaveTimer = null;
+      }
+      if (folderState.hovered !== index) {
+        folderState.hovered = index;
+        applyFolderState();
+      }
+    }
+
+    function scheduleFolderLeave() {
+      if (folderLeaveTimer) clearTimeout(folderLeaveTimer);
+      folderLeaveTimer = setTimeout(() => {
+        folderState.hovered = null;
+        applyFolderState();
+        folderLeaveTimer = null;
+      }, 45);
+    }
+
+    function toggleFolderClick(index, isTouch) {
+      if (folderLeaveTimer) {
+        clearTimeout(folderLeaveTimer);
+        folderLeaveTimer = null;
+      }
+      if (isTouch) {
+        if (folderState.active === index) {
+          folderState.locked = null;
+          folderState.hovered = null;
+        } else {
+          folderState.locked = index;
+          folderState.hovered = index;
+        }
+      } else {
+        if (folderState.locked === index) {
+          folderState.locked = null;
+          folderState.hovered = null;
+        } else {
+          folderState.locked = index;
+          folderState.hovered = index;
+        }
+      }
+      applyFolderState();
+    }
+
+    if (folderStackEl) {
+      SERVICE_FOLDERS.forEach((f) => {
+        const { d, edgeD } = buildFolderSvgPaths(f.tabCenter, f.tabWidth);
+        const layer = document.createElement("article");
+        layer.className = "folder-layer";
+        layer.setAttribute("data-index", String(f.index));
+        layer.setAttribute("data-folder", f.code);
+        layer.style.setProperty("--folder-bg", f.color);
+        layer.style.setProperty("--folder-hover-bg", f.hoverColor);
+
+        const watermarkSvg = f.index === 3 ? `
+          <svg class="folder-watermark" viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="78" fill="none" stroke="#c9bf9f" stroke-width="14"/>
+            <path d="M58,86 L100,128 L142,86 M76,62 L100,86 L124,62" fill="none" stroke="#c9bf9f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        ` : "";
+
+        layer.innerHTML = `
+          <svg class="folder-svg" viewBox="0 0 1440 680" preserveAspectRatio="none" aria-hidden="true">
+            <path class="folder-fill" d="${d}"></path>
+            <path class="folder-edge-highlight" d="${edgeD}"></path>
+          </svg>
+          <button
+            type="button"
+            class="folder-tab-btn"
+            id="folder-tab-${f.code}"
+            aria-expanded="false"
+            aria-controls="folder-panel-${f.code}"
+            style="left: ${(f.tabCenter * 100).toFixed(2)}%; width: ${(f.tabWidth * 100).toFixed(2)}%;"
+          >
+            <span>${f.label}</span>
+          </button>
+          ${watermarkSvg}
+          <div class="folder-panel" id="folder-panel-${f.code}" role="region" aria-labelledby="folder-tab-${f.code}" aria-hidden="true">
+            <div class="folder-panel-copy">
+              <span class="folder-panel-meta">Folder ${f.code} · Provisional Service</span>
+              <h3 class="folder-panel-title">${f.title}</h3>
+              <p class="folder-panel-desc">${f.description}</p>
+              <button type="button" class="folder-learn-btn" data-folder-learn="${f.treatmentValue}">
+                <span>Learn More</span>
+                <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+                  <path d="M3.5 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <div class="folder-panel-visual">
+              <img src="${f.image}" alt="${f.title} preview" loading="lazy">
+            </div>
+          </div>
+        `;
+
+        const fillPath = layer.querySelector(".folder-fill");
+        const tabBtn = layer.querySelector(".folder-tab-btn");
+        const panelEl = layer.querySelector(".folder-panel");
+        const learnBtn = layer.querySelector(".folder-learn-btn");
+        let lastPointerWasTouch = false;
+
+        const onPointerDown = (e) => {
+          lastPointerWasTouch = e.pointerType === "touch" || e.pointerType === "pen";
+        };
+        tabBtn.addEventListener("pointerdown", onPointerDown);
+        fillPath.addEventListener("pointerdown", onPointerDown);
+
+        tabBtn.addEventListener("mouseenter", () => {
+          if (!lastPointerWasTouch) setFolderHover(f.index);
+        });
+        fillPath.addEventListener("mouseenter", () => {
+          if (!lastPointerWasTouch) setFolderHover(f.index);
+        });
+        panelEl.addEventListener("mouseenter", () => {
+          if (folderLeaveTimer) {
+            clearTimeout(folderLeaveTimer);
+            folderLeaveTimer = null;
+          }
+        });
+
+        tabBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          toggleFolderClick(f.index, lastPointerWasTouch);
+        });
+        fillPath.addEventListener("click", (e) => {
+          e.preventDefault();
+          toggleFolderClick(f.index, lastPointerWasTouch);
+        });
+
+        tabBtn.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+            e.preventDefault();
+            const next = (f.index + 1) % SERVICE_FOLDERS.length;
+            folderTabBtns[next].focus();
+          } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+            e.preventDefault();
+            const prev = (f.index - 1 + SERVICE_FOLDERS.length) % SERVICE_FOLDERS.length;
+            folderTabBtns[prev].focus();
+          } else if (e.key === "Escape") {
+            folderState.locked = null;
+            folderState.hovered = null;
+            applyFolderState();
+          }
+        });
+
+        if (learnBtn) {
+          learnBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openBookingModal(f.treatmentValue);
+          });
+        }
+
+        folderLayerEls.push(layer);
+        folderTabBtns.push(tabBtn);
+        folderStackEl.appendChild(layer);
+      });
+
+      folderStackEl.addEventListener("mouseleave", scheduleFolderLeave);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && (folderState.active !== null || folderState.locked !== null)) {
+          folderState.locked = null;
+          folderState.hovered = null;
+          applyFolderState();
+        }
+      });
+    }
+
+    function updateFolderGeometry() {
+      if (!folderLayerEls.length) return;
+      const isMob = window.innerWidth <= 760;
+      const mobCenters = [0.70, 0.32, 0.56, 0.33];
+      const mobWidths = [0.46, 0.42, 0.52, 0.50];
+      const shoulder = isMob ? 34 : 44;
+
+      SERVICE_FOLDERS.forEach((f, idx) => {
+        const layer = folderLayerEls[idx];
+        const btn = folderTabBtns[idx];
+        if (!layer || !btn) return;
+        const tc = isMob ? mobCenters[idx] : f.tabCenter;
+        const tw = isMob ? mobWidths[idx] : f.tabWidth;
+        const { d, edgeD } = buildFolderSvgPaths(tc, tw, 1440, 680, 56, shoulder);
+        const fillPath = layer.querySelector(".folder-fill");
+        const edgePath = layer.querySelector(".folder-edge-highlight");
+        if (fillPath) fillPath.setAttribute("d", d);
+        if (edgePath) edgePath.setAttribute("d", edgeD);
+        btn.style.left = `${(tc * 100).toFixed(2)}%`;
+        btn.style.width = `${(tw * 100).toFixed(2)}%`;
+      });
+    }
+
+    window.addEventListener("resize", () => {
+      measure();
+      updateFolderGeometry();
+    });
+    window.addEventListener("load", () => {
+      measure();
+      updateFolderGeometry();
+    });
+    updateFolderGeometry();
+
+    window.__olla = {
+      get p() {
+        return clamp(sp, 0, 1);
+      },
+      get ready() {
+        return frames.length;
+      },
+      get waterFlow() {
+        return waterFlowProgress;
+      },
+      get lampIntensity() {
+        return computeLampIntensity(performance.now() / 1000);
+      },
+      get activeFolder() {
+        return folderState.active;
+      },
+      get lockedFolder() {
+        return folderState.locked;
+      },
+      measure,
+      config: CLINIC_CONFIG
+    };
+
+    measure();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        measure();
+        requestAnimationFrame(tick);
+      });
+    } else {
+      requestAnimationFrame(tick);
+    }
+  </script>
+</body>
+</html>

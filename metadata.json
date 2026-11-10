@@ -1,0 +1,6 @@
+{
+  "name": "olla — Stack-smart kitchenware",
+  "description": "Minimal, warm-beige kitchenware landing page for olla featuring interactive scroll-scrubbed balloon-drop choreography.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
