@@ -366,3 +366,73 @@ export function applyChromaKey(data: Uint8ClampedArray): void {
     }
   }
 }
+
+export const BOOKING_GRADIENT_STOPS = [
+  '#FFBE83', // Warm peach / orange
+  '#FF8F8F', // Soft coral
+  '#F78FB8', // Rose pink
+  '#B38DF6', // Lavender purple
+  '#7A60FF', // Electric violet
+  '#5754F5', // Soft blue
+] as const;
+
+export const BOOKING_ILLUSTRATIVE_SERVICES = [
+  'General Checkup',
+  'Consultation',
+  'Treatment Planning',
+] as const;
+
+export interface BookingRequestInput {
+  name: string;
+  phone: string;
+  treatment: string;
+  preferredDate?: string;
+  preferredTime?: string;
+  notes?: string;
+}
+
+export function validateBookingRequest(input: BookingRequestInput): {
+  valid: boolean;
+  error?: string;
+  sanitized?: BookingRequestInput;
+} {
+  const name = (input.name || '').trim();
+  const phone = (input.phone || '').trim();
+  const treatment = (input.treatment || 'General Checkup').trim() || 'General Checkup';
+  const preferredDate = (input.preferredDate || '').trim();
+  const preferredTime = (input.preferredTime || '').trim();
+  const notes = (input.notes || '').trim();
+
+  if (name.length < 2) {
+    return { valid: false, error: 'Please enter your name so our clinic team can address your request.' };
+  }
+  if (phone.length < 6) {
+    return { valid: false, error: 'Please provide a valid phone or WhatsApp number for appointment confirmation.' };
+  }
+
+  return {
+    valid: true,
+    sanitized: {
+      name,
+      phone,
+      treatment,
+      preferredDate,
+      preferredTime,
+      notes,
+    },
+  };
+}
+
+export function formatBookingRequestMessage(input: BookingRequestInput): string {
+  const validation = validateBookingRequest(input);
+  if (!validation.valid || !validation.sanitized) {
+    return validation.error || 'Please complete your appointment request details.';
+  }
+  const { name, treatment, preferredDate, preferredTime } = validation.sanitized;
+  const prefParts: string[] = [];
+  if (preferredDate) prefParts.push(preferredDate);
+  if (preferredTime) prefParts.push(preferredTime);
+  const prefText = prefParts.length > 0 ? ` (preferred timing: ${prefParts.join(', ')})` : '';
+  return `Thank you, ${name}. Your appointment request for ${treatment}${prefText} at Memon Dental Clinic (Federal B Area, Karachi) has been recorded. This is a timing preference request — our team will contact you to confirm your appointment.`;
+}
+

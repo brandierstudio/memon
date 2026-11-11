@@ -22,6 +22,17 @@
       --gap: 10px;
       --w: calc(100vw - 24px);
       --ease: cubic-bezier(.2,.8,.2,1);
+
+      /* Global Motion Design System Tokens */
+      --motion-fast: 180ms;
+      --motion-standard: 350ms;
+      --motion-reveal: 700ms;
+      --motion-slow: 1000ms;
+      --motion-ease: cubic-bezier(.2,.8,.2,1);
+      --motion-out: cubic-bezier(.16,1,.3,1);
+      --motion-lift: -6px;
+      --motion-reveal-distance: 24px;
+      --focus-color: #4056ca;
     }
     *, *::before, *::after {
       box-sizing: border-box;
@@ -30,7 +41,10 @@
     }
     html {
       background: var(--page);
-      scroll-behavior: auto;
+      scroll-behavior: smooth;
+    }
+    section[id] {
+      scroll-margin-top: 80px;
     }
     body {
       font-family: "Jost", "Futura", "Century Gothic", Arial, sans-serif;
@@ -46,29 +60,167 @@
       cursor: pointer;
       text-decoration: none;
     }
+    :where(button, a, input, select, textarea):focus-visible {
+      outline: 3px solid var(--focus-color);
+      outline-offset: 3px;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .interactive-button:hover {
+        transform: translateY(-2px);
+      }
+    }
 
-    /* Integrated full-width Navigation bar (#nav) */
+    /* Progressive Editorial Reveal Foundation */
+    .motion-ready .reveal-heading {
+      opacity: 0;
+      transform: translate3d(0, var(--motion-reveal-distance, 24px), 0);
+    }
+    .motion-ready .reveal-subhead {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+    }
+    .motion-ready .reveal-copy {
+      opacity: 0;
+      transform: translate3d(0, 14px, 0);
+    }
+    .motion-ready .reveal-heading,
+    .motion-ready .reveal-subhead,
+    .motion-ready .reveal-copy {
+      transition:
+        opacity var(--motion-reveal, 700ms) var(--motion-out),
+        transform var(--motion-reveal, 700ms) var(--motion-out);
+    }
+    .motion-ready .reveal-heading.is-visible,
+    .motion-ready .reveal-subhead.is-visible,
+    .motion-ready .reveal-copy.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    .motion-ready .reveal-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+      transition:
+        opacity 650ms var(--motion-out) var(--word-delay, 0ms),
+        transform 650ms var(--motion-out) var(--word-delay, 0ms);
+    }
+    .motion-ready .is-visible .reveal-word {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    @keyframes subtle-section-rise {
+      from {
+        opacity: .75;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @supports (animation-timeline: view()) {
+      .scroll-polish {
+        animation: subtle-section-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 75%;
+      }
+    }
+
+    /* Progressive Top Viewport Blur Veil under the Liquid Glass Navbar */
+    .nav-blur-veil {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 78px;
+      z-index: 48;
+      pointer-events: none;
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+    }
+
+    /* Liquid Glass Navigation Bar (#nav) */
     #nav {
       position: fixed;
       left: 50%;
       margin-left: calc(var(--w) / -2);
-      top: 0;
+      top: 8px;
       width: var(--w);
       height: 58px;
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 0 0 12px 12px;
-      border-bottom: 1px solid rgba(22, 25, 58, 0.06);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.58) 0%,
+        rgba(255, 255, 255, 0.30) 50%,
+        rgba(242, 247, 255, 0.50) 100%
+      );
+      backdrop-filter: blur(26px) saturate(185%) contrast(104%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%) contrast(104%);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow:
+        0 12px 34px -8px rgba(16, 22, 58, 0.16),
+        0 2px 10px rgba(16, 22, 58, 0.06),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.94),
+        inset 0 -1px 1.5px rgba(255, 255, 255, 0.44);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 2.2vw;
+      padding: 0 1.8vw;
       z-index: 50;
+      overflow: hidden;
+      transition: background .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+    }
+    #nav::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        radial-gradient(
+          340px circle at var(--nav-mx, 50%) var(--nav-my, 0%),
+          rgba(255, 255, 255, 0.62) 0%,
+          rgba(255, 255, 255, 0.18) 42%,
+          transparent 76%
+        ),
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.64) 0%,
+          rgba(255, 255, 255, 0.08) 40%,
+          rgba(255, 255, 255, 0) 68%,
+          rgba(255, 255, 255, 0.26) 100%
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+    #nav::after {
+      content: "";
+      position: absolute;
+      left: 5%;
+      right: 5%;
+      top: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.96) 24%,
+        rgba(214, 232, 255, 0.98) 50%,
+        rgba(255, 246, 220, 0.96) 76%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: 0;
     }
     #nav .logo {
+      position: relative;
+      z-index: 1;
       font-size: clamp(16px, 1.2vw, 21px);
       font-weight: 600;
       letter-spacing: -0.02em;
       color: var(--ink);
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.65);
       white-space: nowrap;
       flex-shrink: 0;
     }
@@ -78,46 +230,84 @@
       transform: translateX(-50%);
       display: flex;
       align-items: center;
-      gap: 2.2vw;
+      gap: 0.6vw;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      box-shadow: inset 0 1px 0.5px rgba(255, 255, 255, 0.78);
       font-size: clamp(13px, 0.92vw, 15px);
       font-weight: 500;
+      z-index: 1;
     }
-    #links a {
+    #links a,
+    .nav-link {
       position: relative;
       display: flex;
       align-items: center;
       gap: 5px;
+      padding: 6px 13px;
+      border-radius: 999px;
       white-space: nowrap;
-      transition: opacity .3s var(--ease);
+      text-decoration: none;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+      transition: background .28s var(--motion-ease), box-shadow .28s var(--motion-ease), opacity .3s var(--motion-ease), transform .28s var(--motion-ease);
     }
-    #links a::after {
+    .nav-link::after {
       content: "";
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -3px;
+      left: 13px;
+      right: 13px;
+      bottom: 3px;
       height: 1.5px;
       background: currentColor;
       transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .35s var(--ease);
+      transform-origin: left center;
+      transition: transform 320ms cubic-bezier(.2,.8,.2,1);
     }
-    #links a:hover::after {
+    .nav-link:hover::after,
+    .nav-link:focus-visible::after,
+    .nav-link[aria-current="page"]::after {
       transform: scaleX(1);
+    }
+    #links a:hover,
+    #links a[aria-current="page"] {
+      background: rgba(255, 255, 255, 0.68);
+      box-shadow:
+        0 2px 8px rgba(16, 22, 58, 0.08),
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.95);
+    }
+    #nav.is-scrolled {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.78) 0%,
+        rgba(255, 255, 255, 0.56) 50%,
+        rgba(244, 248, 255, 0.72) 100%
+      );
+      border-color: rgba(255, 255, 255, 0.88);
+      box-shadow:
+        0 14px 36px -8px rgba(16, 22, 58, 0.20),
+        0 2px 10px rgba(16, 22, 58, 0.08),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.98);
     }
     #links a.shop svg {
       width: 9px;
       height: 9px;
-      transition: transform .3s var(--ease);
+      transition: transform .3s var(--motion-ease);
     }
     body.menu #links a.shop {
-      opacity: 0.55;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow:
+        0 2px 8px rgba(16, 22, 58, 0.08),
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.95);
     }
     body.menu #links a.shop svg {
       transform: rotate(180deg);
     }
 
     .nav-actions {
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -125,52 +315,138 @@
     }
     .nav-btn {
       height: 36px;
-      padding: 0 14px;
-      border-radius: 10px;
+      padding: 0 15px;
+      border-radius: 12px;
       font-size: 13px;
       font-weight: 500;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       white-space: nowrap;
-      transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+      transition: background .28s var(--motion-ease), color .28s var(--motion-ease), border-color .28s var(--motion-ease), box-shadow .28s var(--motion-ease), transform .28s var(--motion-ease);
     }
     .nav-btn.ghost {
-      border: 1px solid rgba(22, 25, 58, 0.14);
+      background: rgba(255, 255, 255, 0.44);
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      box-shadow:
+        inset 0 1px 0.5px rgba(255, 255, 255, 0.92),
+        0 2px 8px rgba(16, 22, 58, 0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       color: var(--ink);
     }
     .nav-btn.ghost:hover {
-      background: rgba(22, 25, 58, 0.05);
+      background: rgba(255, 255, 255, 0.78);
+      border-color: rgba(255, 255, 255, 0.95);
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 1),
+        0 4px 12px rgba(16, 22, 58, 0.10);
     }
     .nav-btn.primary {
-      background: var(--navy);
+      background: linear-gradient(180deg, rgba(28, 37, 102, 0.92) 0%, rgba(18, 24, 68, 0.96) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.42),
+        0 6px 16px -3px rgba(20, 26, 74, 0.34);
       color: var(--white);
       font-weight: 600;
     }
     .nav-btn.primary:hover {
-      background: #1f286b;
+      background: linear-gradient(180deg, rgba(36, 48, 124, 0.96) 0%, rgba(22, 30, 84, 0.98) 100%);
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.55),
+        0 8px 20px -3px rgba(20, 26, 74, 0.42);
     }
 
-    /* Dental Treatments mega-menu strip (#drop) */
+    /* Mobile Navigation Toggle & Liquid Glass Drawer */
+    .mobile-nav-toggle {
+      display: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.52);
+      border: 1px solid rgba(255, 255, 255, 0.80);
+      color: var(--ink);
+      align-items: center;
+      justify-content: center;
+      transition: background 240ms var(--motion-ease), transform 240ms var(--motion-ease);
+    }
+    .mobile-nav-drawer {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      margin-left: calc(var(--w) / -2);
+      width: var(--w);
+      z-index: 49;
+      border-radius: 18px;
+      padding: 16px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.92) 0%, rgba(242, 246, 255, 0.88) 100%);
+      backdrop-filter: blur(26px) saturate(180%);
+      -webkit-backdrop-filter: blur(26px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      box-shadow: 0 20px 44px -10px rgba(16, 22, 58, 0.22);
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      opacity: 0;
+      transform: translate3d(0, -10px, 0);
+      pointer-events: none;
+      transition: opacity 280ms var(--motion-ease), transform 280ms var(--motion-ease);
+    }
+    .mobile-nav-drawer.is-open {
+      display: flex;
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      pointer-events: auto;
+    }
+    .mobile-nav-drawer a {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 220ms var(--motion-ease);
+    }
+    .mobile-nav-drawer a:hover,
+    .mobile-nav-drawer a[aria-current="page"] {
+      background: rgba(64, 86, 202, 0.10);
+      font-weight: 600;
+    }
+
+    /* Liquid Glass Dental Treatments Mega-Menu (#drop) */
     #drop {
       position: fixed;
       left: 50%;
       margin-left: calc(var(--w) / -2);
       width: var(--w);
-      top: 64px;
-      height: 86px;
-      background: #fff;
-      border-radius: 12px;
+      top: 72px;
+      height: 88px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.66) 0%,
+        rgba(255, 255, 255, 0.40) 50%,
+        rgba(242, 247, 255, 0.58) 100%
+      );
+      backdrop-filter: blur(28px) saturate(185%);
+      -webkit-backdrop-filter: blur(28px) saturate(185%);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      box-shadow:
+        0 18px 42px -10px rgba(16, 22, 58, 0.20),
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.94);
+      border-radius: 18px;
       z-index: 49;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 5.5vw;
-      clip-path: inset(0 0 100% 0 round 12px);
+      clip-path: inset(0 0 100% 0 round 18px);
       transition: clip-path .45s var(--ease);
     }
     body.menu #drop {
-      clip-path: inset(0 0 0 0 round 12px);
+      clip-path: inset(0 0 0 0 round 18px);
     }
     #drop a {
       display: flex;
@@ -207,12 +483,42 @@
       stroke: #3a49c9;
     }
 
+    /* Progressive Top & Bottom Blur Overlays (.blur-overlay) */
+    .blur-overlay {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 10vh;
+      z-index: 2;
+      pointer-events: none;
+      backdrop-filter: blur(25px) saturate(1.5);
+      -webkit-backdrop-filter: blur(25px) saturate(1.5);
+    }
+    .blur-overlay-top {
+      top: 0;
+      mask-image: linear-gradient(
+        to bottom, black 70%, transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to bottom, black 70%, transparent 100%
+      );
+    }
+    .blur-overlay-bottom {
+      bottom: 0;
+      mask-image: linear-gradient(
+        to top, black 70%, transparent 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to top, black 70%, transparent 100%
+      );
+    }
+
     /* Near edge-to-edge Hero row (#hero) */
     #hero {
       position: relative;
       width: var(--w);
       margin: 0 auto;
-      padding-top: 68px;
+      padding-top: 74px;
       height: 100vh;
       display: flex;
       gap: var(--gap);
@@ -220,7 +526,7 @@
     #sky {
       position: relative;
       flex: 0 0 71.1%;
-      height: calc(100vh - 78px);
+      height: calc(100vh - 84px);
       border-radius: 14px;
       overflow: hidden;
       background: #0d1650 center / cover no-repeat;
@@ -253,7 +559,7 @@
       font-weight: 500;
       line-height: 1.12;
       letter-spacing: -0.01em;
-      z-index: 3;
+      z-index: 4;
     }
     #sky .tag .loc {
       display: block;
@@ -272,7 +578,7 @@
       font-weight: 600;
       line-height: .78;
       letter-spacing: -0.035em;
-      z-index: 3;
+      z-index: 4;
       user-select: none;
     }
     #balloons {
@@ -281,14 +587,14 @@
       aspect-ratio: 1360 / 2048;
       background: center / contain no-repeat;
       transform-origin: 49.4% 94.6%;
-      z-index: 2;
+      z-index: 3;
       will-change: transform;
     }
     .grill {
       position: absolute;
       left: 0;
       top: 0;
-      z-index: 2;
+      z-index: 3;
       pointer-events: none;
       will-change: transform;
     }
@@ -297,7 +603,7 @@
     #card {
       position: relative;
       flex: 1;
-      height: calc(100vh - 78px);
+      height: calc(100vh - 84px);
       border-radius: 14px;
       overflow: hidden;
       background: var(--card);
@@ -330,14 +636,14 @@
     #pots {
       position: absolute;
       left: 50%;
-      top: 56%;
-      width: 106%;
-      aspect-ratio: 1;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
+      bottom: 0;
+      top: auto;
+      width: 100%;
+      height: 83%;
+      transform: translateX(-50%);
+      object-fit: contain;
+      object-position: center bottom;
       pointer-events: none;
-      -webkit-mask: radial-gradient(closest-side, #000 78%, transparent 99%);
-      mask: radial-gradient(closest-side, #000 78%, transparent 99%);
       z-index: 1;
     }
     #card .shop {
@@ -365,7 +671,7 @@
     #kitchen {
       position: relative;
       width: var(--w);
-      height: calc(100vh - 78px);
+      height: calc(100vh - 84px);
       margin: var(--gap) auto 0;
       border-radius: 14px;
       overflow: hidden;
@@ -521,7 +827,8 @@
       height: 590px;
       overflow: hidden;
     }
-    .folder-layer {
+    .folder-layer,
+    .service-folder {
       position: absolute;
       left: 0;
       width: 100%;
@@ -529,7 +836,9 @@
       padding-top: 28px;
       pointer-events: none;
       will-change: transform;
-      transition: transform 480ms cubic-bezier(.2,.8,.2,1);
+      transition:
+        transform 450ms cubic-bezier(.2,.8,.2,1),
+        filter 450ms cubic-bezier(.2,.8,.2,1);
     }
     .folder-layer[data-index="0"] { top: 0px;   z-index: 1; }
     .folder-layer[data-index="1"] { top: 82px;  z-index: 2; }
@@ -732,51 +1041,2247 @@
       .folder-fill,
       .folder-edge-highlight,
       .folder-tab-btn,
-      .folder-panel {
+      .folder-panel,
+      .doctors-heading h2,
+      .doctors-visual {
         transition-duration: 0.01ms !important;
       }
     }
 
-    /* Footer & Clinic Info bar (#foot) */
-    #foot {
-      width: var(--w);
-      min-height: 68px;
+    /* Meet Our Doctors Section (#doctors) */
+    #doctors.doctors-section {
+      position: relative;
+      width: 100%;
+      margin: var(--gap) auto 0;
+      padding: clamp(56px, 7.5vw, 108px) 0 0;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+    .doctors-heading {
+      width: min(1240px, 92%);
       margin: 0 auto;
-      padding: 14px 8px;
+      position: relative;
+      z-index: 2;
+    }
+    .doctors-heading h2 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.8rem, 5.8vw, 6.2rem);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      text-align: center;
+      color: #161616;
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+      transition: opacity 700ms cubic-bezier(.2,.8,.2,1), transform 700ms cubic-bezier(.2,.8,.2,1);
+    }
+    #doctors.is-visible .doctors-heading h2 {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    .doctors-visual {
+      position: relative;
+      width: 100%;
+      max-width: 1380px;
+      margin: clamp(8px, 1.4vw, 22px) auto 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      background: #ffffff;
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+      transition: opacity 850ms cubic-bezier(.2,.8,.2,1) 100ms, transform 850ms cubic-bezier(.2,.8,.2,1) 100ms;
+    }
+    #doctors.is-visible .doctors-visual {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    .doctors-visual img {
+      width: 100%;
+      max-width: 1280px;
+      height: auto;
+      object-fit: contain;
+      object-position: center bottom;
+      display: block;
+      user-select: none;
+    }
+
+    /* ==========================================================================
+       MEMON DENTAL CLINIC — PREMIUM INTERACTIVE PATIENT SHOWCASE (#patient-showcase)
+       ========================================================================== */
+    :root {
+      --showcase-ink: #111d43;
+      --showcase-white: #ffffff;
+      --showcase-bg: #f8f7fc;
+      --showcase-blue: #4f8ff7;
+      --showcase-purple: #a678e8;
+      --showcase-pink: #f3b6d5;
+      --showcase-radius: 32px;
+      --showcase-ease: cubic-bezier(.2,.8,.2,1);
+    }
+
+    @keyframes showcaseAtmosphere {
+      from {
+        transform: translate3d(-3%, 0, 0) rotate(-4deg);
+      }
+      to {
+        transform: translate3d(3%, 3%, 0) rotate(4deg);
+      }
+    }
+
+    @keyframes showcaseAtmosphereReverse {
+      from {
+        transform: translate3d(2.5%, -2%, 0) rotate(3deg);
+      }
+      to {
+        transform: translate3d(-2.5%, 2.5%, 0) rotate(-3deg);
+      }
+    }
+
+    #patient-showcase {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      width: var(--w);
+      margin: var(--gap) auto 0;
+      border-radius: 14px;
+      padding: clamp(64px, 5.8vw, 84px) 24px clamp(52px, 5vw, 72px);
+      background: var(--showcase-bg);
+    }
+
+    #patient-showcase::before {
+      content: "";
+      position: absolute;
+      width: 75vw;
+      height: 75vw;
+      right: -22vw;
+      top: -16vw;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(153, 172, 255, 0.24),
+        rgba(230, 180, 245, 0.14) 50%,
+        transparent 72%
+      );
+      filter: blur(45px);
+      animation: showcaseAtmosphere 26s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: -2;
+      will-change: transform;
+    }
+
+    #patient-showcase::after {
+      content: "";
+      position: absolute;
+      width: 68vw;
+      height: 68vw;
+      left: -24vw;
+      bottom: -18vw;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(138, 175, 252, 0.22),
+        rgba(243, 182, 213, 0.14) 52%,
+        transparent 74%
+      );
+      filter: blur(45px);
+      animation: showcaseAtmosphereReverse 28s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: -2;
+      will-change: transform;
+    }
+
+    #patient-showcase.is-offscreen::before,
+    #patient-showcase.is-offscreen::after {
+      animation-play-state: paused;
+    }
+
+    .showcase-bg-waves {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .showcase-bg-waves svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .showcase-heading {
+      font-family: "Jost", Arial, sans-serif;
+      font-size: clamp(2.3rem, 4.5vw, 4.6rem);
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      line-height: 1.08;
+      text-align: center;
+      color: var(--showcase-ink);
+      margin: 0 auto clamp(32px, 3.4vw, 48px);
+      text-wrap: balance;
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+      transition:
+        opacity 720ms var(--showcase-ease),
+        transform 720ms var(--showcase-ease);
+    }
+
+    #patient-showcase.is-visible .showcase-heading {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .showcase-stage {
+      position: relative;
+      width: 100%;
+      min-height: 750px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .showcase-stack {
+      position: relative;
+      width: min(100%, 790px);
+      height: var(--stack-h, 760px);
+    }
+
+    .showcase-card,
+    .patient-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: var(--card-w, 385px);
+      height: var(--card-h, 558px);
+      border-radius: var(--showcase-radius);
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow:
+        0 20px 50px rgba(30, 35, 75, 0.13),
+        0 4px 14px rgba(30, 35, 75, 0.05);
+      transform-origin: bottom left;
+      opacity: 0;
+      transform:
+        translate3d(
+          var(--card-x, 0px),
+          calc(var(--card-y, 0px) + 22px),
+          0
+        )
+        scale(var(--card-scale, 1));
+      transition:
+        transform 480ms cubic-bezier(.2,.8,.2,1),
+        box-shadow 480ms cubic-bezier(.2,.8,.2,1),
+        opacity 680ms var(--showcase-ease) var(--stagger-delay, 0ms);
+      will-change: transform;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #patient-showcase.is-visible .showcase-card,
+    #patient-showcase.is-visible .patient-card {
+      opacity: 1;
+      transform:
+        translate3d(
+          var(--card-x, 0px),
+          var(--card-y, 0px),
+          0
+        )
+        scale(var(--card-scale, 1));
+    }
+
+    #patient-showcase.is-visible .showcase-card.is-hovered,
+    #patient-showcase.is-visible .showcase-card.is-active,
+    #patient-showcase.is-visible .patient-card.is-hovered,
+    #patient-showcase.is-visible .patient-card.is-active {
+      transform:
+        translate3d(
+          var(--card-x, 0px),
+          calc(var(--card-y, 0px) - 18px),
+          0
+        )
+        scale(calc(var(--card-scale, 1) * 1.025));
+      box-shadow:
+        0 24px 55px rgba(30, 35, 75, 0.16),
+        0 8px 22px rgba(30, 35, 75, 0.08);
+    }
+
+    .showcase-card:focus-visible,
+    .patient-card:focus-visible {
+      outline: 3px solid #272e75;
+      outline-offset: 4px;
+    }
+
+    .showcase-photo,
+    .patient-photo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      transform: none;
+      filter: none;
+      backface-visibility: hidden;
+      pointer-events: none;
+    }
+
+    .showcase-card[data-case-id="case-01"] .showcase-photo {
+      object-position: center 22%;
+    }
+    .showcase-card[data-case-id="case-02"] .showcase-photo {
+      object-position: 64% 25%;
+    }
+    .showcase-card[data-case-id="case-03"] .showcase-photo {
+      object-position: 66% 24%;
+    }
+    .showcase-card[data-case-id="case-04"] .showcase-photo {
+      object-position: 64% 25%;
+    }
+    .showcase-card[data-case-id="case-05"] .showcase-photo {
+      object-position: 66% 24%;
+    }
+
+    @media (min-width: 768px) {
+      .showcase-card[data-rear-card="true"]:not(.is-hovered):not(.is-active) .showcase-card-footer {
+        padding-left: 28px;
+      }
+    }
+
+    .showcase-card-footer {
+      position: absolute;
+      inset: auto 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 28px 22px 18px;
+      background: linear-gradient(
+        to top,
+        rgba(245, 231, 250, 0.96),
+        rgba(245, 231, 250, 0.78) 58%,
+        transparent
+      );
+      transition: padding-left 450ms var(--showcase-ease), background 450ms var(--showcase-ease);
+    }
+
+    .showcase-card[data-theme="blue"] .showcase-card-footer {
+      background: linear-gradient(
+        to top,
+        rgba(156, 182, 228, 0.96),
+        rgba(172, 194, 232, 0.78) 58%,
+        transparent
+      );
+    }
+    .showcase-card[data-theme="sand"] .showcase-card-footer {
+      background: linear-gradient(
+        to top,
+        rgba(222, 204, 188, 0.96),
+        rgba(230, 214, 200, 0.78) 58%,
+        transparent
+      );
+    }
+    .showcase-card[data-theme="slate"] .showcase-card-footer {
+      background: linear-gradient(
+        to top,
+        rgba(140, 150, 168, 0.96),
+        rgba(156, 165, 182, 0.78) 58%,
+        transparent
+      );
+    }
+    .showcase-card[data-theme="mauve"] .showcase-card-footer {
+      background: linear-gradient(
+        to top,
+        rgba(194, 164, 192, 0.96),
+        rgba(208, 180, 206, 0.78) 58%,
+        transparent
+      );
+    }
+
+    .showcase-case-details {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .showcase-tooth-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.72);
+      color: #1c2442;
+      box-shadow: 0 4px 12px rgba(20, 28, 66, 0.08);
+      transition: background 320ms var(--showcase-ease), color 320ms var(--showcase-ease);
+    }
+
+    .showcase-card.is-active .showcase-tooth-icon,
+    .showcase-card.is-hovered .showcase-tooth-icon {
+      background: linear-gradient(135deg, #47a1ff 0%, #9b7cf6 65%, #f3a6d0 100%);
+      color: #ffffff;
+    }
+
+    .showcase-tooth-icon svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .showcase-case-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .showcase-case-text strong {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: #111d43;
+      white-space: nowrap;
+    }
+
+    .showcase-case-text span {
+      font-size: 12.5px;
+      font-weight: 400;
+      line-height: 1.22;
+      color: #273256;
+      white-space: nowrap;
+    }
+
+    .showcase-card[data-theme="slate"]:not(.is-active):not(.is-hovered) .showcase-case-text strong,
+    .showcase-card[data-theme="mauve"]:not(.is-active):not(.is-hovered) .showcase-case-text strong {
+      color: #ffffff;
+    }
+    .showcase-card[data-theme="slate"]:not(.is-active):not(.is-hovered) .showcase-case-text span,
+    .showcase-card[data-theme="mauve"]:not(.is-active):not(.is-hovered) .showcase-case-text span {
+      color: rgba(255, 255, 255, 0.90);
+    }
+
+    .showcase-view-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      background: rgba(255, 255, 255, 0.94);
+      color: #111d43;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(17, 29, 67, 0.10);
+      transition:
+        transform 250ms var(--showcase-ease),
+        box-shadow 250ms var(--showcase-ease),
+        background 250ms var(--showcase-ease),
+        color 250ms var(--showcase-ease);
+    }
+
+    .showcase-card.is-active .showcase-view-btn,
+    .showcase-card.is-hovered .showcase-view-btn {
+      color: #ffffff;
+      background: linear-gradient(110deg, #4f8ff7 0%, #8f7bf2 58%, #c983e8 100%);
+      padding: 10px 18px;
+      box-shadow: 0 8px 20px rgba(79, 143, 247, 0.30);
+    }
+
+    .showcase-view-btn .showcase-btn-arrow {
+      display: none;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .showcase-card.is-active .showcase-view-btn .showcase-btn-arrow,
+    .showcase-card.is-hovered .showcase-view-btn .showcase-btn-arrow {
+      display: inline;
+    }
+
+    .showcase-view-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(85, 95, 220, 0.24);
+    }
+
+    .showcase-view-btn:focus-visible {
+      outline: 3px solid #272e75;
+      outline-offset: 3px;
+    }
+
+    /* Case Detail Modal */
+    .showcase-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(17, 29, 67, 0.46);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 280ms var(--showcase-ease);
+    }
+
+    .showcase-modal-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .showcase-modal-dialog {
+      position: relative;
+      width: min(560px, 100%);
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 28px 70px rgba(17, 29, 67, 0.26);
+      color: var(--showcase-ink);
+      transform: translate3d(0, 14px, 0) scale(0.96);
+      transition: transform 320ms var(--showcase-ease);
+    }
+
+    .showcase-modal-backdrop.is-open .showcase-modal-dialog {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    .showcase-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .showcase-modal-title {
+      font-size: clamp(20px, 2.2vw, 25px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--showcase-ink);
+    }
+
+    .showcase-modal-sub {
+      font-size: 14px;
+      color: #556080;
+      margin-top: 2px;
+    }
+
+    .showcase-modal-close {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #f2f3f9;
+      color: var(--showcase-ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background 200ms var(--showcase-ease);
+    }
+    .showcase-modal-close:hover {
+      background: #e4e7f4;
+    }
+    .showcase-modal-close:focus-visible {
+      outline: 3px solid #272e75;
+      outline-offset: 2px;
+    }
+
+    .showcase-modal-body {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .showcase-modal-thumb {
+      width: 150px;
+      height: 205px;
+      border-radius: 20px;
+      object-fit: cover;
+      object-position: center 24%;
+      transform: none;
+      filter: none;
+      backface-visibility: hidden;
+      display: block;
+      box-shadow: 0 10px 24px rgba(17, 29, 67, 0.12);
+    }
+
+    .showcase-modal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .showcase-modal-notice {
+      font-size: 13px;
+      line-height: 1.48;
+      color: #3d4868;
+      background: #f5f4fb;
+      border: 1px solid rgba(166, 120, 232, 0.24);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .showcase-modal-desc {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #273256;
+    }
+
+    .showcase-modal-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .showcase-modal-cta {
+      border-radius: 999px;
+      padding: 11px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #ffffff;
+      background: linear-gradient(110deg, #4f8ff7, #a678e8);
+      box-shadow: 0 8px 20px rgba(79, 143, 247, 0.25);
+    }
+
+    /* Tablet & Mobile Responsive Rules for #patient-showcase */
+    @media (max-width: 1023px) and (min-width: 768px) {
+      .showcase-stage {
+        min-height: 690px;
+      }
+      .showcase-stack {
+        width: min(100%, 690px);
+      }
+    }
+
+    @media (max-width: 767px) {
+      #patient-showcase {
+        padding: 64px 0 56px;
+      }
+      .showcase-heading {
+        padding: 0 20px;
+        font-size: clamp(2rem, 8vw, 3.1rem);
+        margin-bottom: 24px;
+      }
+      .showcase-stage {
+        min-height: auto;
+        display: block;
+      }
+      .showcase-stack {
+        display: flex;
+        gap: 16px;
+        position: relative;
+        width: 100%;
+        height: auto !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 20px 18px 40px;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 18px;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        scrollbar-width: none;
+      }
+      .showcase-stack::-webkit-scrollbar {
+        display: none;
+      }
+      .showcase-card {
+        position: relative;
+        flex: 0 0 min(82vw, 340px);
+        width: min(82vw, 340px) !important;
+        height: min(116vw, 490px) !important;
+        transform: none !important;
+        scroll-snap-align: center;
+      }
+      .showcase-card.is-active {
+        box-shadow: 0 20px 45px rgba(30, 35, 75, 0.18);
+      }
+      .showcase-modal-body {
+        grid-template-columns: 1fr;
+      }
+      .showcase-modal-thumb {
+        width: 100%;
+        height: 190px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #patient-showcase *,
+      #patient-showcase *::before,
+      #patient-showcase *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* =========================================================================
+       MEMON DENTAL CLINIC — IMMERSIVE LIQUID GLASS APPOINTMENT SYSTEM (#appointment-booking)
+       ========================================================================= */
+    @keyframes bookingGlassDrift {
+      from {
+        transform: translate3d(-2%, 0, 0) scale(1);
+      }
+      to {
+        transform: translate3d(3%, 2%, 0) scale(1.05);
+      }
+    }
+
+    @keyframes bookingButtonFlow {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    #appointment-booking {
+      position: relative;
+      width: 100%;
+      min-height: 100svh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      scroll-margin-top: 64px;
+    }
+
+    .booking-compat-anchor {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .booking-glass-shell {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      width: 100%;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(18px, 2.2vw, 32px);
+      padding: clamp(28px, 3.8vw, 56px) clamp(24px, 4.2vw, 68px);
+      background:
+        radial-gradient(
+          ellipse 54% 58% at 6% 78%,
+          rgba(255, 242, 161, 0.88) 0%,
+          rgba(255, 198, 154, 0.72) 34%,
+          rgba(246, 177, 226, 0.48) 62%,
+          transparent 84%
+        ),
+        radial-gradient(
+          ellipse 48% 46% at 10% 18%,
+          rgba(149, 244, 230, 0.92) 0%,
+          rgba(69, 224, 230, 0.72) 45%,
+          transparent 78%
+        ),
+        radial-gradient(
+          ellipse 52% 48% at 90% 14%,
+          rgba(183, 149, 255, 0.85) 0%,
+          rgba(128, 96, 247, 0.65) 48%,
+          transparent 80%
+        ),
+        radial-gradient(
+          ellipse 56% 50% at 88% 88%,
+          rgba(246, 177, 226, 0.74) 0%,
+          rgba(183, 149, 255, 0.56) 46%,
+          transparent 78%
+        ),
+        linear-gradient(
+          115deg,
+          #45E0E6 0%,
+          #368DF9 38%,
+          #3657EE 68%,
+          #8060F7 88%,
+          #B795FF 100%
+        );
+      box-shadow:
+        inset 0 2px 3px rgba(255, 255, 255, 0.78),
+        inset 0 -2px 6px rgba(246, 177, 226, 0.45);
+    }
+
+    .booking-glass-shell::before {
+      content: "";
+      position: absolute;
+      inset: -15%;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          circle at 18% 84%,
+          rgba(255, 198, 154, 0.70),
+          transparent 38%
+        ),
+        radial-gradient(
+          circle at 78% 18%,
+          rgba(128, 96, 247, 0.60),
+          transparent 42%
+        ),
+        radial-gradient(
+          circle at 52% 12%,
+          rgba(69, 224, 230, 0.52),
+          transparent 40%
+        );
+      animation: bookingGlassDrift 22s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    /* Subtle luminous glass specular sheen along top & left edges */
+    .booking-glass-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.34) 0%,
+          rgba(255, 255, 255, 0.06) 14%,
+          transparent 36%
+        );
+    }
+
+    .booking-shell-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(18px, 2.1vw, 28px);
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      transition:
+        opacity 720ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    #appointment-booking.is-visible .booking-shell-inner {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    /* 6. TOP TOOLBAR — Functional step progress, selected date/time status & calendar controls */
+    .booking-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      font-size: 13px;
-      color: rgba(22, 25, 58, 0.72);
+      padding-bottom: clamp(14px, 1.6vw, 22px);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.36);
     }
-    #foot .f-brand {
+
+    .booking-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 1.6vw, 22px);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .booking-icon-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.48);
+      background: rgba(255, 255, 255, 0.22);
+      color: #101A42;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition:
+        background 240ms ease,
+        transform 240ms ease,
+        box-shadow 240ms ease;
+    }
+
+    .booking-icon-btn--light {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.20);
+      border-color: rgba(255, 255, 255, 0.52);
+    }
+
+    .booking-icon-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.36);
+      box-shadow: 0 6px 18px rgba(16, 26, 66, 0.10);
+    }
+
+    .booking-icon-btn:focus-visible {
+      outline: 3px solid #FFFFFF;
+      outline-offset: 2px;
+    }
+
+    .booking-toolbar-track {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 1.8vw, 24px);
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      flex: 0 1 620px;
+      min-width: 0;
+      justify-content: space-between;
+    }
+
+    .booking-progress-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.52);
+      min-width: 0;
+    }
+
+    .booking-progress-bars {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .booking-progress-seg {
+      height: 10px;
+      border-radius: 999px;
+      transition: background 280ms ease, width 280ms ease;
+    }
+
+    .booking-progress-seg--primary {
+      width: 34px;
+      background: #101A42;
+    }
+
+    .booking-progress-seg--secondary {
+      width: 82px;
+      background: linear-gradient(90deg, #FFFFFF 0%, #FFFFFF var(--booking-progress-pct, 66%), rgba(102, 113, 140, 0.38) var(--booking-progress-pct, 66%), rgba(102, 113, 140, 0.38) 100%);
+    }
+
+    .booking-progress-text {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #101A42;
+      white-space: nowrap;
+    }
+
+    .booking-selection-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 12px 7px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.46);
+      color: #101A42;
+      font-size: 13.5px;
+      font-weight: 600;
+      min-width: 0;
+      flex: 1;
+      max-width: 310px;
+    }
+
+    .booking-selection-summary {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .booking-selection-orb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(16, 26, 66, 0.14);
+      flex-shrink: 0;
+    }
+
+    /* 8. TIME SLOT SELECTION (.booking-time-strip) */
+    .booking-time-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(10px, 1.4vw, 18px);
+      width: 100%;
+    }
+
+    .booking-time-nav-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.92);
+      color: #101A42;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 8px 22px rgba(16, 26, 66, 0.10);
+      transition:
+        background 250ms ease,
+        color 250ms ease,
+        transform 250ms ease,
+        box-shadow 250ms ease;
+    }
+
+    .booking-time-nav-btn:hover {
+      transform: translateY(-2px);
+      background: #FFFFFF;
+      box-shadow: 0 12px 26px rgba(16, 26, 66, 0.15);
+    }
+
+    .booking-time-nav-btn:focus-visible {
+      outline: 3px solid #101A42;
+      outline-offset: 2px;
+    }
+
+    .booking-time-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(10px, 1.4vw, 18px);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .booking-time-slot {
+      flex: 1 1 0;
+      min-height: 56px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #121B43;
+      padding: 13px 22px;
+      font: inherit;
+      font-size: clamp(15px, 1.2vw, 18px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      white-space: nowrap;
+      text-align: center;
+      box-shadow:
+        0 8px 24px rgba(16, 26, 66, 0.09),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+      transition:
+        background 300ms ease,
+        color 300ms ease,
+        transform 300ms ease,
+        box-shadow 300ms ease;
+    }
+
+    .booking-time-slot:hover {
+      transform: translateY(-2px);
+      background: #FFFFFF;
+      box-shadow: 0 12px 28px rgba(16, 26, 66, 0.14);
+    }
+
+    .booking-time-slot[aria-pressed="true"] {
+      background: #101B48;
+      color: #FFFFFF;
+      border-color: rgba(16, 27, 72, 0.95);
+      box-shadow: 0 12px 28px rgba(16, 27, 72, 0.28);
+    }
+
+    .booking-time-slot:focus-visible {
+      outline: 3px solid #FFFFFF;
+      outline-offset: 3px;
+    }
+
+    /* 5. GLASS SURFACE MATERIAL (.booking-content) */
+    .booking-content {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(24px, 3.4vw, 56px);
+      padding: clamp(24px, 3.2vw, 48px);
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow:
+        0 16px 48px rgba(25, 45, 105, 0.11),
+        inset 0 1px 0 rgba(255, 255, 255, 0.90);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      align-items: center;
+    }
+
+    /* Subtle center vertical divider on desktop/tablet */
+    @media (min-width: 768px) {
+      .booking-content::before {
+        content: "";
+        position: absolute;
+        top: clamp(28px, 3.4vw, 48px);
+        bottom: clamp(28px, 3.4vw, 48px);
+        left: 50%;
+        width: 1px;
+        background: rgba(16, 26, 66, 0.08);
+        pointer-events: none;
+      }
+    }
+
+    /* 7. DATE SELECTION (.booking-calendar) */
+    .booking-calendar {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 1.8vw, 24px);
+      padding-right: clamp(0px, 1.2vw, 18px);
+    }
+
+    .booking-calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .booking-calendar-title-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #101A42;
+    }
+
+    .booking-calendar-title-icon {
+      width: 28px;
+      height: 28px;
+      color: #101A42;
+      flex-shrink: 0;
+    }
+
+    .booking-calendar-title {
+      font-size: clamp(20px, 1.75vw, 25px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #101A42;
+      margin: 0;
+    }
+
+    .booking-month-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .booking-month-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 0;
+      background: transparent;
+      color: #101A42;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 200ms ease, transform 200ms ease, opacity 200ms ease;
+    }
+
+    .booking-month-btn:hover:not(:disabled) {
+      background: #EEF1FA;
+      transform: scale(1.06);
+    }
+
+    .booking-month-btn:disabled {
+      opacity: 0.32;
+      cursor: not-allowed;
+    }
+
+    .booking-month-btn:focus-visible {
+      outline: 2px solid #3657EE;
+      outline-offset: 2px;
+    }
+
+    .booking-month-label {
+      min-width: 128px;
+      text-align: center;
+      font-size: clamp(15px, 1.2vw, 17.5px);
+      font-weight: 600;
+      color: #101A42;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .booking-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: clamp(6px, 0.8vw, 12px);
+      text-align: center;
+    }
+
+    .booking-weekday {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #66718C;
+      padding: 4px 0;
+    }
+
+    .booking-calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: clamp(8px, 0.95vw, 14px);
+      min-height: 292px;
+      align-content: start;
+    }
+
+    #appointment-booking.is-offscreen .booking-glass-shell::before,
+    #appointment-booking.is-offscreen .booking-submit {
+      animation-play-state: paused;
+    }
+
+    .booking-calendar-day,
+    .booking-day {
+      aspect-ratio: 1;
+      min-height: 42px;
+      width: 100%;
+      max-width: 54px;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: #F0F2F8;
+      color: #111A3F;
+      font: inherit;
+      font-size: clamp(14px, 1.1vw, 16.5px);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      transition:
+        background 250ms ease,
+        color 250ms ease,
+        transform 250ms ease,
+        box-shadow 250ms ease;
+    }
+
+    .booking-calendar-day:hover:not(:disabled),
+    .booking-day:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: #DFE8FF;
+    }
+
+    .booking-calendar-day[data-today="true"]:not([aria-pressed="true"]),
+    .booking-day.is-today:not(.is-selected) {
+      background: #A8F2AC;
+      color: #101A42;
+    }
+
+    .booking-calendar-day[aria-pressed="true"],
+    .booking-day.is-selected {
+      background: #1ECB84;
+      color: #FFFFFF;
+      box-shadow: 0 6px 16px rgba(30, 203, 132, 0.34);
+    }
+
+    .booking-calendar-day:disabled,
+    .booking-day:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+      background: #F4F5FA;
+      color: #7E87A1;
+    }
+
+    .booking-calendar-day--outside,
+    .booking-day--empty {
+      opacity: 0 !important;
+      background: transparent !important;
+      pointer-events: none;
+    }
+
+    .booking-calendar-day:focus-visible,
+    .booking-day:focus-visible {
+      outline: 3px solid #3657EE;
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* 9. PATIENT DETAILS FORM (.booking-form) */
+    .booking-form {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px, 1.45vw, 20px);
+      padding-left: clamp(0px, 1.2vw, 18px);
+    }
+
+    .booking-field-group {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .booking-field-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .booking-field-icon {
+      position: absolute;
+      left: 18px;
+      width: 22px;
+      height: 22px;
+      color: #101A42;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .booking-field-chevron {
+      position: absolute;
+      right: 18px;
+      width: 20px;
+      height: 20px;
+      color: #101A42;
+      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .booking-field {
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 18px 14px 52px;
+      border: 1.5px solid transparent;
+      border-radius: 999px;
+      background: #EEF1FA;
+      color: #111A3F;
+      font: inherit;
+      font-size: clamp(15px, 1.15vw, 17px);
       font-weight: 500;
+      appearance: none;
+      -webkit-appearance: none;
+      transition:
+        border-color 250ms ease,
+        box-shadow 250ms ease,
+        background 250ms ease;
+    }
+
+    .booking-field--select {
+      padding-right: 46px;
+      cursor: pointer;
+    }
+
+    .booking-field::placeholder {
+      color: #364163;
+      opacity: 0.88;
+    }
+
+    .booking-field:focus-visible {
+      outline: none;
+      background: #F5F7FD;
+      border-color: #6679EE;
+      box-shadow: 0 0 0 3px rgba(102, 121, 238, 0.16);
+    }
+
+    .booking-field[aria-invalid="true"] {
+      border-color: #D9385A;
+      background: #FDF2F5;
+    }
+
+    .booking-field-error {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #C42847;
+      padding-left: 18px;
+      min-height: 0;
+    }
+
+    .booking-field-error:empty {
+      display: none;
+    }
+
+    /* 11. BOOK APPOINTMENT BUTTON (.booking-submit) */
+    .booking-submit {
+      width: 100%;
+      min-height: 64px;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(
+        110deg,
+        #43D768,
+        #12C78E,
+        #20C8C8,
+        #43D768
+      );
+      background-size: 300% 300%;
+      animation: bookingButtonFlow 9s ease-in-out infinite;
+      color: #FFFFFF;
+      font: inherit;
+      font-weight: 700;
+      font-size: clamp(17px, 1.35vw, 20px);
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      box-shadow:
+        0 12px 28px rgba(18, 199, 142, 0.30),
+        inset 0 1px 1px rgba(255, 255, 255, 0.45);
+      transition:
+        transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 250ms ease;
+    }
+
+    .booking-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow:
+        0 16px 34px rgba(12, 180, 150, 0.36),
+        inset 0 1px 1px rgba(255, 255, 255, 0.55);
+    }
+
+    .booking-submit:active:not(:disabled) {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .booking-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .booking-submit:focus-visible {
+      outline: 3px solid #101A42;
+      outline-offset: 3px;
+    }
+
+    .booking-submit-icon {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .booking-submit-arrow {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      transition: transform 250ms ease;
+    }
+
+    .booking-submit:hover:not(:disabled) .booking-submit-arrow {
+      transform: translateX(4px);
+    }
+
+    /* Appointment Request Status / Feedback Banner */
+    .booking-feedback {
+      border-radius: 18px;
+      padding: 13px 18px;
+      font-size: 13.5px;
+      line-height: 1.48;
+      font-weight: 500;
+      display: none;
+      background: #ECFDF5;
+      border: 1px solid rgba(18, 199, 142, 0.38);
+      color: #0E543C;
+    }
+
+    .booking-feedback.is-visible {
+      display: block;
+    }
+
+    .booking-feedback strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #083D2B;
+    }
+
+    .booking-feedback--error {
+      background: #FDF1F4;
+      border: 1px solid rgba(217, 56, 90, 0.30);
+      color: #9E1C38;
+    }
+
+    .booking-feedback--success {
+      background: #ECFDF5;
+      border: 1px solid rgba(18, 199, 142, 0.38);
+      color: #0E543C;
+    }
+
+    .booking-feedback-actions {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .booking-feedback-btn,
+    .booking-feedback-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #101A42;
+      color: #FFFFFF;
+      font-size: 12.5px;
+      font-weight: 600;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* Tablet — 768px to 1023px */
+    @media (max-width: 1023px) and (min-width: 768px) {
+      .booking-glass-shell {
+        padding: 28px 22px;
+        gap: 20px;
+      }
+      .booking-content {
+        gap: 24px;
+        padding: 26px 22px;
+      }
+      .booking-time-slot {
+        padding: 12px 14px;
+        font-size: 14.5px;
+      }
+    }
+
+    /* Mobile — below 768px */
+    @media (max-width: 767px) {
+      #appointment-booking {
+        min-height: auto;
+      }
+      .booking-glass-shell {
+        min-height: auto;
+        padding: 22px 14px 32px;
+        gap: 18px;
+      }
+      .booking-toolbar {
+        gap: 10px;
+        padding-bottom: 12px;
+      }
+      .booking-toolbar-track {
+        padding: 6px 10px;
+        gap: 8px;
+      }
+      .booking-progress-pill {
+        padding: 6px 10px;
+      }
+      .booking-progress-seg--primary {
+        width: 22px;
+      }
+      .booking-progress-seg--secondary {
+        width: 44px;
+      }
+      .booking-progress-text {
+        display: none;
+      }
+      .booking-selection-pill {
+        padding: 6px 10px 6px 12px;
+        font-size: 12px;
+      }
+      .booking-time-row {
+        gap: 8px;
+      }
+      .booking-time-nav-btn {
+        width: 42px;
+        height: 42px;
+      }
+      .booking-time-strip {
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        padding: 4px 2px;
+      }
+      .booking-time-strip::-webkit-scrollbar {
+        display: none;
+      }
+      .booking-time-slot {
+        flex: 0 0 auto;
+        min-height: 46px;
+        padding: 10px 18px;
+        font-size: 14px;
+        white-space: nowrap;
+        scroll-snap-align: center;
+      }
+      .booking-content {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        padding: 22px 16px;
+        border-radius: 26px;
+      }
+      .booking-calendar,
+      .booking-form {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .booking-calendar-grid {
+        min-height: 252px;
+      }
+      .booking-calendar-day {
+        min-height: 38px;
+        font-size: 13.5px;
+      }
+      .booking-field {
+        min-height: 52px;
+        font-size: 15px;
+      }
+      .booking-submit {
+        min-height: 56px;
+        font-size: 16.5px;
+      }
+    }
+
+    /* Small mobile — 320px to 374px */
+    @media (max-width: 374px) {
+      .booking-glass-shell {
+        padding: 18px 10px 26px;
+      }
+      .booking-time-nav-btn {
+        width: 36px;
+        height: 36px;
+      }
+      .booking-content {
+        padding: 18px 12px;
+      }
+      .booking-calendar-grid,
+      .booking-weekdays {
+        gap: 4px;
+      }
+      .booking-calendar-day {
+        min-height: 34px;
+        font-size: 12.5px;
+      }
+      .booking-month-label {
+        min-width: 104px;
+        font-size: 14px;
+      }
+    }
+
+    /* =========================================================================
+       CLINIC LOCATION & VISITING HOURS SECTION (#location)
+       ========================================================================= */
+    #location {
+      position: relative;
+      width: var(--w);
+      margin: var(--gap) auto 0;
+      border-radius: 18px;
+      overflow: hidden;
+      padding: clamp(56px, 6.4vw, 96px) clamp(20px, 4vw, 64px);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(79, 143, 247, 0.12) 0%, transparent 48%),
+        radial-gradient(circle at 88% 82%, rgba(166, 120, 232, 0.12) 0%, transparent 52%),
+        linear-gradient(180deg, #F6F5F0 0%, #EFECE4 100%);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+    }
+
+    .location-header {
+      max-width: 720px;
+      margin: 0 auto clamp(36px, 4vw, 56px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .location-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(20, 26, 74, 0.10);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #303A87;
+    }
+
+    .location-heading {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+      font-weight: 600;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
       color: var(--ink);
     }
+
+    .location-sub {
+      font-size: clamp(15px, 1.15vw, 18px);
+      line-height: 1.55;
+      color: rgba(22, 25, 58, 0.76);
+      max-width: 56ch;
+    }
+
+    .location-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(20px, 2.4vw, 32px);
+      align-items: stretch;
+    }
+
+    .location-card {
+      position: relative;
+      border-radius: 26px;
+      padding: clamp(24px, 2.8vw, 38px);
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      box-shadow:
+        0 18px 44px rgba(16, 25, 58, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .location-map-visual {
+      position: relative;
+      width: 100%;
+      height: 248px;
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, #E6ECFA 0%, #D9E4FA 50%, #EAE4F8 100%);
+      border: 1px solid rgba(48, 58, 135, 0.12);
+    }
+
+    .location-map-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .location-pin-badge {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(16, 26, 66, 0.94);
+      color: #FFFFFF;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 12px 28px rgba(16, 26, 66, 0.28);
+      white-space: nowrap;
+    }
+
+    .location-pin-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1ECB84;
+      box-shadow: 0 0 0 4px rgba(30, 203, 132, 0.28);
+      flex-shrink: 0;
+    }
+
+    .location-info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .location-card-title {
+      font-size: clamp(20px, 1.65vw, 24px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .location-address-text {
+      font-size: 15px;
+      line-height: 1.52;
+      color: rgba(22, 25, 58, 0.78);
+    }
+
+    .location-feature-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .location-feature-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #F1F4FB;
+      color: #1F285E;
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+
+    .location-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .location-btn {
+      min-height: 44px;
+      padding: 0 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition:
+        transform var(--motion-standard) var(--motion-ease),
+        background var(--motion-standard) var(--motion-ease),
+        box-shadow var(--motion-standard) var(--motion-ease);
+    }
+
+    .location-btn--primary {
+      background: var(--navy);
+      color: #FFFFFF;
+      box-shadow: 0 8px 20px rgba(20, 26, 74, 0.22);
+    }
+
+    .location-btn--primary:hover {
+      background: #232E7A;
+      transform: translateY(-2px);
+    }
+
+    .location-btn--ghost {
+      background: #EEF1FA;
+      color: var(--ink);
+      border: 1px solid rgba(20, 26, 74, 0.12);
+    }
+
+    .location-btn--ghost:hover {
+      background: #E2E8F8;
+      transform: translateY(-2px);
+    }
+
+    .location-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      align-self: flex-start;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #ECFDF5;
+      border: 1px solid rgba(30, 203, 132, 0.35);
+      color: #0D593E;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .location-status-pill.is-closed {
+      background: #F3F4F9;
+      border-color: rgba(102, 113, 140, 0.28);
+      color: #364163;
+    }
+
+    .location-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1ECB84;
+    }
+
+    .location-status-pill.is-closed .location-status-dot {
+      background: #66718C;
+    }
+
+    .location-hours-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      list-style: none;
+      margin: 4px 0;
+    }
+
+    .location-hours-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid rgba(22, 25, 58, 0.08);
+      font-size: 14.5px;
+    }
+
+    .location-hours-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .location-hours-day {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .location-hours-time {
+      color: rgba(22, 25, 58, 0.78);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* =========================================================================
+       COMPLETE EDITORIAL & LIQUID-GLASS FOOTER (#foot)
+       ========================================================================= */
+    #foot {
+      width: var(--w);
+      margin: var(--gap) auto 14px;
+      padding: clamp(40px, 4.8vw, 64px) clamp(22px, 3.8vw, 56px) clamp(24px, 2.8vw, 36px);
+      border-radius: 18px;
+      background: linear-gradient(155deg, #13183F 0%, #192154 55%, #1F2866 100%);
+      color: rgba(255, 255, 255, 0.86);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(32px, 3.6vw, 48px);
+      box-shadow: 0 20px 48px rgba(14, 18, 48, 0.18);
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr 1fr 1.1fr;
+      gap: clamp(24px, 3vw, 44px);
+      align-items: start;
+    }
+
+    .foot-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .foot-brand-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(26px, 2.3vw, 34px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      line-height: 1.05;
+    }
+
+    .foot-brand-desc {
+      font-size: 14px;
+      line-height: 1.58;
+      color: rgba(255, 255, 255, 0.74);
+      max-width: 34ch;
+    }
+
+    .foot-col-heading {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(149, 244, 230, 0.92);
+      margin-bottom: 2px;
+    }
+
+    .foot-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      font-size: 14px;
+    }
+
+    .foot-nav-list a,
+    .foot-nav-list button {
+      color: rgba(255, 255, 255, 0.80);
+      text-align: left;
+      transition: color 220ms var(--motion-ease), transform 220ms var(--motion-ease);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .foot-nav-list a:hover,
+    .foot-nav-list button:hover {
+      color: #FFFFFF;
+      transform: translateX(3px);
+    }
+
+    .foot-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .foot-pill-btn {
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #FFFFFF;
+      transition: background 240ms var(--motion-ease), transform 240ms var(--motion-ease);
+    }
+
+    .foot-pill-btn--primary {
+      background: linear-gradient(110deg, #43D768, #12C78E);
+      border-color: transparent;
+      color: #FFFFFF;
+    }
+
+    .foot-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .foot-pill-btn--primary:hover {
+      background: linear-gradient(110deg, #36C85B, #0FB480);
+    }
+
+    .foot-bottom {
+      padding-top: 22px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .foot- .f-brand {
+      font-weight: 500;
+      color: #FFFFFF;
+    }
+
+    .foot- .f-links,
     #foot .f-links {
       display: flex;
       align-items: center;
       gap: 18px;
     }
-    #foot .f-links a:hover,
-    #foot .f-links button:hover {
-      color: var(--ink);
-      text-decoration: underline;
+
+    .foot-top-btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      color: #FFFFFF;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: background 220ms var(--motion-ease), transform 220ms var(--motion-ease);
+    }
+
+    .foot-top-btn:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    /* =========================================================================
+       FLOATING WHATSAPP BUTTON — BOTTOM RIGHT (#floating-whatsapp)
+       ========================================================================= */
+    .floating-whatsapp {
+      position: fixed;
+      right: clamp(18px, 2.2vw, 28px);
+      bottom: clamp(18px, 2.2vw, 28px);
+      z-index: 95;
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
+      box-shadow:
+        0 14px 32px rgba(18, 140, 126, 0.36),
+        0 4px 12px rgba(37, 211, 102, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.45);
+      transition:
+        transform var(--motion-standard) var(--motion-ease),
+        box-shadow var(--motion-standard) var(--motion-ease),
+        background var(--motion-standard) var(--motion-ease);
+    }
+
+    .floating-whatsapp::before {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.34) 0%, transparent 72%);
+      z-index: -1;
+      opacity: 0.85;
+      transition: transform var(--motion-standard) var(--motion-ease), opacity var(--motion-standard) var(--motion-ease);
+      pointer-events: none;
+    }
+
+    .floating-whatsapp:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow:
+        0 18px 38px rgba(18, 140, 126, 0.46),
+        0 6px 16px rgba(37, 211, 102, 0.36),
+        inset 0 1px 2px rgba(255, 255, 255, 0.65);
+    }
+
+    .floating-whatsapp:hover::before {
+      transform: scale(1.14);
+      opacity: 1;
+    }
+
+    .floating-whatsapp:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    .floating-whatsapp:focus-visible {
+      outline: 3px solid var(--focus-color);
+      outline-offset: 4px;
+    }
+
+    .floating-whatsapp-icon {
+      width: 31px;
+      height: 31px;
+      fill: currentColor;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(9, 64, 56, 0.22));
+    }
+
+    .floating-whatsapp-tooltip {
+      position: absolute;
+      right: calc(100% + 12px);
+      top: 50%;
+      transform: translateY(-50%) translateX(6px);
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(19, 24, 63, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      box-shadow: 0 10px 24px rgba(14, 18, 48, 0.24);
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity var(--motion-fast) var(--motion-ease),
+        transform var(--motion-fast) var(--motion-ease);
+    }
+
+    .floating-whatsapp:hover .floating-whatsapp-tooltip,
+    .floating-whatsapp:focus-visible .floating-whatsapp-tooltip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    @media (max-width: 760px) {
+      .floating-whatsapp {
+        width: 52px;
+        height: 52px;
+        right: 16px;
+        bottom: 16px;
+      }
+      .floating-whatsapp-icon {
+        width: 28px;
+        height: 28px;
+      }
+      .floating-whatsapp-tooltip {
+        display: none;
+      }
+    }
+
+    /* Global Reduced Motion Support (Part 16) */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      .reveal-heading,
+      .reveal-subhead,
+      .reveal-copy,
+      .reveal-heading.is-visible,
+      .reveal-subhead.is-visible,
+      .reveal-copy.is-visible,
+      .reveal-word,
+      .is-visible .reveal-word {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .booking-glass-shell::before,
+      .booking-submit,
+      .ambient-gradient,
+      .decorative-motion {
+        animation: none !important;
+      }
+      .booking-shell-inner {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
 
     /* Configurable Appointment & Contact Modal */
     dialog#booking-modal {
       margin: auto;
       width: min(460px, calc(100vw - 32px));
-      border: 1px solid rgba(22, 25, 58, 0.1);
-      border-radius: 14px;
-      background: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.88);
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.94) 0%, rgba(244, 245, 250, 0.90) 100%);
+      backdrop-filter: blur(28px) saturate(170%);
+      -webkit-backdrop-filter: blur(28px) saturate(170%);
+      box-shadow:
+        0 24px 54px -12px rgba(18, 22, 54, 0.28),
+        inset 0 2px 4px rgba(255, 255, 255, 0.96);
       color: var(--ink);
-      padding: 24px;
+      padding: 26px;
     }
     dialog#booking-modal::backdrop {
-      background: rgba(20, 26, 74, 0.45);
+      background: rgba(20, 26, 74, 0.38);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .modal-head {
       display: flex;
@@ -849,12 +3354,21 @@
     }
 
     /* Responsive / tablet & phone layout */
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       #links {
-        gap: 1.5vw;
+        gap: 0.4vw;
       }
       .nav-btn.ghost.hide-sm {
         display: none;
+      }
+      #doctors.doctors-section {
+        padding-top: clamp(44px, 6vw, 72px);
+      }
+      .location-grid {
+        grid-template-columns: 1fr;
+      }
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
       }
     }
 
@@ -862,13 +3376,17 @@
       :root {
         --w: calc(100vw - 16px);
         --gap: 10px;
+        --motion-reveal-distance: 12px;
       }
       #links,
       #drop {
         display: none;
       }
+      .mobile-nav-toggle {
+        display: inline-flex;
+      }
       #nav {
-        padding: 0 14px;
+        padding: 0 12px;
         height: 54px;
       }
       #hero {
@@ -889,25 +3407,42 @@
         padding: 18px;
       }
       #pots {
-        top: 55%;
-        width: 92%;
-        max-height: 76%;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        height: 82%;
+        max-height: none;
+        transform: translateX(-50%);
       }
       #card .shop {
         left: 18px;
         right: 18px;
       }
+      /* Full uncropped dental clinic view on mobile */
       #kitchen {
-        height: 68vh;
+        height: auto;
+        aspect-ratio: 1376 / 768;
+        background-size: 100% 100%;
       }
       #ktext {
         white-space: normal;
-        width: 88%;
+        width: 90%;
         left: 50% !important;
       }
+      #ktext p {
+        margin-top: 0.2em;
+      }
       #kactions {
+        margin-top: 0.45em;
+        gap: 6px;
         flex-wrap: wrap;
         justify-content: center;
+      }
+      #kactions .kbtn {
+        height: 24px;
+        padding: 0 10px;
+        font-size: 10px;
+        border-radius: 7px;
       }
       .folder-stack {
         height: 570px;
@@ -934,30 +3469,68 @@
         flex: 0 0 132px;
         height: 156px;
       }
-      #foot {
+      #doctors.doctors-section {
+        padding-top: 38px;
+      }
+      .doctors-heading h2 {
+        font-size: clamp(2.2rem, 9.2vw, 3.2rem);
+      }
+      .doctors-visual {
+        margin-top: 6px;
+      }
+      .foot-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .foot-bottom {
         flex-direction: column;
-        text-align: center;
-        padding: 16px 8px 24px;
+        align-items: flex-start;
       }
     }
   </style>
 </head>
 <body>
-  <nav id="nav">
+  <div class="nav-blur-veil" aria-hidden="true"></div>
+  <nav id="nav" aria-label="Primary Navigation">
     <a href="#hero" class="logo">Memon Dental Clinic</a>
     <div id="links">
-      <a href="#hero">Home</a>
-      <a href="#drop" class="shop">Treatments<svg viewBox="0 0 10 10" width="9" height="9" aria-hidden="true"><polyline points="1.5,3.5 5,7 8.5,3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
-      <a href="#kitchen" data-open-booking="dentists">Our Dentists</a>
-      <a href="#kitchen">About</a>
-      <a href="#foot" data-open-booking="contact">Contact</a>
+      <a href="#hero" class="nav-link" data-nav-section="hero" aria-current="page">Home</a>
+      <a href="#drop" class="nav-link shop" data-nav-section="services">Treatments<svg viewBox="0 0 10 10" width="9" height="9" aria-hidden="true"><polyline points="1.5,3.5 5,7 8.5,3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+      <a href="#doctors" class="nav-link" data-nav-section="doctors">Our Dentists</a>
+      <a href="#patient-showcase" class="nav-link" data-nav-section="patient-showcase">Smiles</a>
+      <a href="#location" class="nav-link" data-nav-section="location">Location</a>
+      <a href="#appointment-booking" class="nav-link" data-nav-section="appointment-booking">Contact</a>
     </div>
     <div class="nav-actions">
       <a href="#contact-whatsapp" id="nav-whatsapp" class="nav-btn ghost hide-sm" aria-label="WhatsApp">WhatsApp</a>
       <a href="#contact-call" id="nav-call" class="nav-btn ghost hide-sm" aria-label="Call Us">Call Us</a>
       <button type="button" id="nav-book" class="nav-btn primary" data-open-booking="appointment">Book Appointment</button>
+      <button
+        type="button"
+        id="mobile-nav-toggle"
+        class="mobile-nav-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+      </button>
     </div>
   </nav>
+
+  <div id="mobile-nav-drawer" class="mobile-nav-drawer" role="region" aria-label="Mobile Navigation Menu">
+    <a href="#hero" data-mobile-nav="hero"><span>Home</span><span>→</span></a>
+    <a href="#kitchen" data-mobile-nav="kitchen"><span>Clinic Overview</span><span>→</span></a>
+    <a href="#services" data-mobile-nav="services"><span>Services We Offer</span><span>→</span></a>
+    <a href="#doctors" data-mobile-nav="doctors"><span>Meet Our Doctors</span><span>→</span></a>
+    <a href="#patient-showcase" data-mobile-nav="patient-showcase"><span>Real Clients. Real Smiles.</span><span>→</span></a>
+    <a href="#location" data-mobile-nav="location"><span>Location &amp; Hours (Federal B Area)</span><span>→</span></a>
+    <a href="#appointment-booking" data-mobile-nav="appointment-booking"><span>Book Appointment</span><span>→</span></a>
+  </div>
 
   <div id="drop" role="region" aria-label="Dental Treatments">
     <a href="#kitchen" data-treatment="General Dentistry">
@@ -1007,6 +3580,8 @@
     <div id="sky">
       <div class="cloud-layer" id="cloudBack"></div>
       <div class="cloud-layer" id="cloudFront"></div>
+      <div class="blur-overlay blur-overlay-top" aria-hidden="true"></div>
+      <div class="blur-overlay blur-overlay-bottom" aria-hidden="true"></div>
       <div class="tag">
         Thoughtful dental care.
         <span class="loc">Federal B Area, Karachi</span>
@@ -1025,6 +3600,8 @@
 
   <section id="kitchen">
     <canvas id="envK"></canvas>
+    <div class="blur-overlay blur-overlay-top" aria-hidden="true"></div>
+    <div class="blur-overlay blur-overlay-bottom" aria-hidden="true"></div>
     <div id="tshadow"></div>
     <canvas class="grill" id="gK"></canvas>
     <div id="ktext">
@@ -1040,20 +3617,834 @@
 
   <section id="services" aria-labelledby="services-heading">
     <header class="services-header">
-      <h2 id="services-heading">services we offer</h2>
-      <p class="services-subtitle">swipe to discover the full list</p>
+      <h2 id="services-heading" class="reveal-heading">services we offer</h2>
+      <p class="services-subtitle reveal-copy">swipe to discover the full list</p>
     </header>
     <div class="folder-stack" id="folder-stack" role="region" aria-label="Dental service categories"></div>
   </section>
 
-  <footer id="foot">
-    <div class="f-brand">Memon Dental Clinic · Federal B Area, Karachi</div>
-    <div class="f-links">
-      <button type="button" data-open-booking="appointment">Book Appointment</button>
-      <a href="#whatsapp" id="foot-whatsapp">WhatsApp</a>
-      <a href="#call" id="foot-call">Call Us</a>
+  <section id="doctors" class="doctors-section" aria-labelledby="doctors-heading">
+    <div class="doctors-heading">
+      <h2 id="doctors-heading">Meet Our Doctors</h2>
+    </div>
+    <div class="doctors-visual">
+      <img
+        src="/assets/memon-doctors-team.webp"
+        alt="Memon Dental Clinic team standing together"
+        loading="lazy"
+        decoding="async"
+      >
+    </div>
+  </section>
+
+  <section id="patient-showcase" aria-labelledby="showcase-title">
+    <div class="showcase-bg-waves" aria-hidden="true">
+      <svg viewBox="0 0 1440 1200" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="showcaseWaveGrad1" x1="0%" y1="75%" x2="100%" y2="10%">
+            <stop offset="0%" stop-color="#c3c8fb" stop-opacity="0.52"/>
+            <stop offset="48%" stop-color="#b6ccf9" stop-opacity="0.44"/>
+            <stop offset="100%" stop-color="#f3c6e2" stop-opacity="0.48"/>
+          </linearGradient>
+          <linearGradient id="showcaseWaveGrad2" x1="15%" y1="0%" x2="95%" y2="100%">
+            <stop offset="0%" stop-color="#dce4fd" stop-opacity="0.38"/>
+            <stop offset="60%" stop-color="#d2bbf8" stop-opacity="0.30"/>
+            <stop offset="100%" stop-color="#f7d4e8" stop-opacity="0.42"/>
+          </linearGradient>
+          <linearGradient id="showcaseWaveBottom" x1="0%" y1="40%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#b4c8fc" stop-opacity="0.54"/>
+            <stop offset="65%" stop-color="#cfb9f7" stop-opacity="0.40"/>
+            <stop offset="100%" stop-color="#f5cee6" stop-opacity="0.18"/>
+          </linearGradient>
+        </defs>
+        <!-- Upper-right & diagonal flowing silk ribbon -->
+        <path
+          d="M -120,660 C 260,560 760,410 1120,160 C 1260,65 1370,-20 1520,-60 L 1520,380 C 1220,440 840,560 440,680 C 160,765 -20,810 -120,830 Z"
+          fill="url(#showcaseWaveGrad1)"
+        />
+        <path
+          d="M 880,-40 C 980,140 1120,250 1500,320 L 1500,-40 Z"
+          fill="url(#showcaseWaveGrad2)"
+        />
+        <!-- Crisp white-lavender specular silk lines matching reference -->
+        <path
+          d="M -100,665 C 290,565 810,410 1480,130"
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.88)"
+          stroke-width="2.4"
+        />
+        <path
+          d="M 870,-30 C 965,155 1135,260 1490,325"
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.82)"
+          stroke-width="2"
+        />
+        <!-- Bottom-left flowing ribbon -->
+        <path
+          d="M -100,960 C 95,975 265,1065 445,1220 L -100,1220 Z"
+          fill="url(#showcaseWaveBottom)"
+        />
+        <path
+          d="M -90,962 C 100,978 270,1068 450,1220"
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.90)"
+          stroke-width="2.2"
+        />
+      </svg>
+    </div>
+
+    <h2 id="showcase-title" class="showcase-heading">
+      Real Clients. Real Smiles.
+    </h2>
+
+    <div class="showcase-stage">
+      <div class="showcase-stack" id="showcase-stack">
+        <article
+          class="showcase-card is-active"
+          data-case-id="case-01"
+          data-case-index="0"
+          data-theme="lavender"
+          tabindex="0"
+          aria-label="Client 01 — Smile Makeover"
+        >
+          <img
+            class="showcase-photo"
+            src="/assets/cases/client-01.webp"
+            alt="Illustrative dental showcase portrait for Client 01"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="showcase-card-footer">
+            <div class="showcase-case-details">
+              <span class="showcase-tooth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.2,4.5 C5.6,4.5 4,6.6 4,9.5 C4,12.4 5.3,14.8 6.2,18.5 C6.6,20.2 8.4,20.2 9.2,17.7 C9.9,15.2 10.9,14 12,14 C13.1,14 14.1,15.2 14.8,17.7 C15.6,20.2 17.4,20.2 17.8,18.5 C18.7,14.8 20,12.4 20,9.5 C20,6.6 18.4,4.5 15.8,4.5 C14.1,4.5 13.1,5.6 12,5.6 C10.9,5.6 9.9,4.5 8.2,4.5 Z"/>
+                </svg>
+              </span>
+              <div class="showcase-case-text">
+                <strong>Client 01</strong>
+                <span>Smile Makeover</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="showcase-view-btn"
+              data-view-case="case-01"
+              aria-label="View Case for Client 01 Smile Makeover"
+            >
+              <span>View Case</span>
+              <span class="showcase-btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="showcase-card"
+          data-case-id="case-02"
+          data-case-index="1"
+          data-rear-card="true"
+          data-theme="blue"
+          tabindex="0"
+          aria-label="Client 02 — Teeth Alignment"
+        >
+          <img
+            class="showcase-photo"
+            src="/assets/cases/client-02.webp"
+            alt="Illustrative dental showcase portrait for Client 02"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="showcase-card-footer">
+            <div class="showcase-case-details">
+              <span class="showcase-tooth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.2,4.5 C5.6,4.5 4,6.6 4,9.5 C4,12.4 5.3,14.8 6.2,18.5 C6.6,20.2 8.4,20.2 9.2,17.7 C9.9,15.2 10.9,14 12,14 C13.1,14 14.1,15.2 14.8,17.7 C15.6,20.2 17.4,20.2 17.8,18.5 C18.7,14.8 20,12.4 20,9.5 C20,6.6 18.4,4.5 15.8,4.5 C14.1,4.5 13.1,5.6 12,5.6 C10.9,5.6 9.9,4.5 8.2,4.5 Z"/>
+                </svg>
+              </span>
+              <div class="showcase-case-text">
+                <strong>Client 02</strong>
+                <span>Teeth Alignment</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="showcase-view-btn"
+              data-view-case="case-02"
+              aria-label="View Case for Client 02 Teeth Alignment"
+            >
+              <span>View Case</span>
+              <span class="showcase-btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="showcase-card"
+          data-case-id="case-03"
+          data-case-index="2"
+          data-rear-card="true"
+          data-theme="sand"
+          tabindex="0"
+          aria-label="Client 03 — Dental Implants"
+        >
+          <img
+            class="showcase-photo"
+            src="/assets/cases/client-03.webp"
+            alt="Illustrative dental showcase portrait for Client 03"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="showcase-card-footer">
+            <div class="showcase-case-details">
+              <span class="showcase-tooth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.2,4.5 C5.6,4.5 4,6.6 4,9.5 C4,12.4 5.3,14.8 6.2,18.5 C6.6,20.2 8.4,20.2 9.2,17.7 C9.9,15.2 10.9,14 12,14 C13.1,14 14.1,15.2 14.8,17.7 C15.6,20.2 17.4,20.2 17.8,18.5 C18.7,14.8 20,12.4 20,9.5 C20,6.6 18.4,4.5 15.8,4.5 C14.1,4.5 13.1,5.6 12,5.6 C10.9,5.6 9.9,4.5 8.2,4.5 Z"/>
+                </svg>
+              </span>
+              <div class="showcase-case-text">
+                <strong>Client 03</strong>
+                <span>Dental Implants</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="showcase-view-btn"
+              data-view-case="case-03"
+              aria-label="View Case for Client 03 Dental Implants"
+            >
+              <span>View Case</span>
+              <span class="showcase-btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="showcase-card"
+          data-case-id="case-04"
+          data-case-index="3"
+          data-rear-card="true"
+          data-theme="slate"
+          tabindex="0"
+          aria-label="Client 04 — Full Mouth Rehabilitation"
+        >
+          <img
+            class="showcase-photo"
+            src="/assets/cases/client-04.webp"
+            alt="Illustrative dental showcase portrait for Client 04"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="showcase-card-footer">
+            <div class="showcase-case-details">
+              <span class="showcase-tooth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.2,4.5 C5.6,4.5 4,6.6 4,9.5 C4,12.4 5.3,14.8 6.2,18.5 C6.6,20.2 8.4,20.2 9.2,17.7 C9.9,15.2 10.9,14 12,14 C13.1,14 14.1,15.2 14.8,17.7 C15.6,20.2 17.4,20.2 17.8,18.5 C18.7,14.8 20,12.4 20,9.5 C20,6.6 18.4,4.5 15.8,4.5 C14.1,4.5 13.1,5.6 12,5.6 C10.9,5.6 9.9,4.5 8.2,4.5 Z"/>
+                </svg>
+              </span>
+              <div class="showcase-case-text">
+                <strong>Client 04</strong>
+                <span>Full Mouth Rehabilitation</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="showcase-view-btn"
+              data-view-case="case-04"
+              aria-label="View Case for Client 04 Full Mouth Rehabilitation"
+            >
+              <span>View Case</span>
+              <span class="showcase-btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+
+        <article
+          class="showcase-card"
+          data-case-id="case-05"
+          data-case-index="4"
+          data-rear-card="true"
+          data-theme="mauve"
+          tabindex="0"
+          aria-label="Client 05 — Cosmetic Dentistry"
+        >
+          <img
+            class="showcase-photo"
+            src="/assets/cases/client-05.webp"
+            alt="Illustrative dental showcase portrait for Client 05"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="showcase-card-footer">
+            <div class="showcase-case-details">
+              <span class="showcase-tooth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.2,4.5 C5.6,4.5 4,6.6 4,9.5 C4,12.4 5.3,14.8 6.2,18.5 C6.6,20.2 8.4,20.2 9.2,17.7 C9.9,15.2 10.9,14 12,14 C13.1,14 14.1,15.2 14.8,17.7 C15.6,20.2 17.4,20.2 17.8,18.5 C18.7,14.8 20,12.4 20,9.5 C20,6.6 18.4,4.5 15.8,4.5 C14.1,4.5 13.1,5.6 12,5.6 C10.9,5.6 9.9,4.5 8.2,4.5 Z"/>
+                </svg>
+              </span>
+              <div class="showcase-case-text">
+                <strong>Client 05</strong>
+                <span>Cosmetic Dentistry</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="showcase-view-btn"
+              data-view-case="case-05"
+              aria-label="View Case for Client 05 Cosmetic Dentistry"
+            >
+              <span>View Case</span>
+              <span class="showcase-btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Accessible Case Detail Modal -->
+    <div
+      class="showcase-modal-backdrop"
+      id="showcase-case-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="showcase-modal-title"
+      aria-hidden="true"
+    >
+      <div class="showcase-modal-dialog">
+        <div class="showcase-modal-header">
+          <div>
+            <h3 id="showcase-modal-title" class="showcase-modal-title">Client 01 — Smile Makeover</h3>
+            <p id="showcase-modal-sub" class="showcase-modal-sub">Treatment Category · Smile Makeover</p>
+          </div>
+          <button
+            type="button"
+            class="showcase-modal-close"
+            id="showcase-modal-close"
+            aria-label="Close case details"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="showcase-modal-body">
+          <img
+            id="showcase-modal-img"
+            class="showcase-modal-thumb"
+            src="/assets/cases/client-01.webp"
+            alt="Illustrative portrait preview"
+          />
+          <div class="showcase-modal-info">
+            <div id="showcase-modal-notice" class="showcase-modal-notice">
+              Demonstration placeholder — verified clinical case documentation is not yet available for this entry.
+            </div>
+            <p id="showcase-modal-desc" class="showcase-modal-desc">
+              Consult with our dental specialists at Memon Dental Clinic to explore personalized treatment options.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-modal-actions">
+          <button
+            type="button"
+            class="showcase-modal-cta"
+            id="showcase-modal-book"
+          >
+            Book Consultation
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="appointment-booking" aria-label="Book an appointment">
+    <span id="appointment-bento" class="booking-compat-anchor" aria-hidden="true"></span>
+    <div class="booking-glass-shell">
+      <div class="booking-shell-inner">
+
+        <!-- 6. TOP TOOLBAR — Functional step progress, selected date/time status & calendar controls -->
+        <div class="booking-toolbar" role="toolbar" aria-label="Booking progress and calendar controls">
+          <div class="booking-toolbar-left">
+            <button
+              type="button"
+              class="booking-icon-btn"
+              id="booking-reset-preferences"
+              aria-label="Reset date and preferred time to defaults"
+              title="Reset date & preferred time"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="4" y1="6" x2="20" y2="6"></line>
+                <circle cx="9" cy="6" r="2.2" fill="#101A42"></circle>
+                <line x1="4" y1="12" x2="20" y2="12"></line>
+                <circle cx="15" cy="12" r="2.2" fill="#101A42"></circle>
+                <line x1="4" y1="18" x2="20" y2="18"></line>
+                <circle cx="11" cy="18" r="2.2" fill="#101A42"></circle>
+              </svg>
+            </button>
+
+            <div class="booking-toolbar-track">
+              <div class="booking-progress-pill" aria-live="polite">
+                <div class="booking-progress-bars" aria-hidden="true">
+                  <span class="booking-progress-seg booking-progress-seg--primary"></span>
+                  <span class="booking-progress-seg booking-progress-seg--secondary" id="booking-progress-bar"></span>
+                </div>
+                <span class="booking-progress-text" id="booking-progress-text">Step 2 of 3</span>
+              </div>
+
+              <div class="booking-selection-pill" aria-live="polite">
+                <span class="booking-selection-summary" id="booking-selection-summary">Preferred: Select Date &amp; Time</span>
+                <span class="booking-selection-orb" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="booking-icon-btn booking-icon-btn--light"
+            id="booking-jump-today"
+            aria-label="Jump calendar to current month and today"
+            title="Jump to current month"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="17" rx="3.5"></rect>
+              <line x1="3" y1="9.5" x2="21" y2="9.5"></line>
+              <line x1="8" y1="2.5" x2="8" y2="6"></line>
+              <line x1="16" y1="2.5" x2="16" y2="6"></line>
+              <circle cx="12" cy="15" r="1.6" fill="currentColor"></circle>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 8. TIME SLOT SELECTION — Preferred Appointment Time Strip -->
+        <div class="booking-time-row">
+          <button
+            type="button"
+            class="booking-time-nav-btn"
+            id="booking-time-prev"
+            aria-label="Select previous preferred time"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <div
+            class="booking-time-strip"
+            id="booking-time-strip"
+            role="group"
+            aria-label="Preferred Time (Pending clinic confirmation)"
+          >
+            <button type="button" class="booking-time-slot" data-time-slot="9:00 AM" aria-pressed="false">9:00 AM</button>
+            <button type="button" class="booking-time-slot" data-time-slot="11:30 AM" aria-pressed="false">11:30 AM</button>
+            <button type="button" class="booking-time-slot" data-time-slot="2:00 PM" aria-pressed="false">2:00 PM</button>
+            <button type="button" class="booking-time-slot" data-time-slot="4:30 PM" aria-pressed="false">4:30 PM</button>
+            <button type="button" class="booking-time-slot" data-time-slot="3:00 PM" aria-pressed="true">3:00 PM</button>
+          </div>
+
+          <button
+            type="button"
+            class="booking-time-nav-btn"
+            id="booking-time-clear"
+            aria-label="Cycle or reset preferred time selection"
+            title="Reset preferred time"
+          >
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 5. MAIN FROSTED GLASS SURFACE (.booking-content) -->
+        <div class="booking-content">
+
+          <!-- 7. INTERACTIVE CALENDAR (.booking-calendar) -->
+          <div class="booking-calendar" role="region" aria-label="Select preferred appointment date">
+            <div class="booking-calendar-header">
+              <div class="booking-calendar-title-wrap">
+                <svg class="booking-calendar-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="17" rx="3.5"></rect>
+                  <line x1="3" y1="9.5" x2="21" y2="9.5"></line>
+                  <line x1="8" y1="2.5" x2="8" y2="6"></line>
+                  <line x1="16" y1="2.5" x2="16" y2="6"></line>
+                  <circle cx="9.5" cy="14" r="1" fill="currentColor"></circle>
+                  <circle cx="13.5" cy="16.5" r="1" fill="currentColor"></circle>
+                </svg>
+                <h2 class="booking-calendar-title">Select Date</h2>
+              </div>
+
+              <div class="booking-month-switcher">
+                <button
+                  type="button"
+                  class="booking-month-btn"
+                  id="booking-month-prev"
+                  aria-label="Previous month"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                <span class="booking-month-label" id="booking-month-label" aria-live="polite">November 2026</span>
+                <button
+                  type="button"
+                  class="booking-month-btn"
+                  id="booking-month-next"
+                  aria-label="Next month"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="booking-weekdays" aria-hidden="true">
+              <span class="booking-weekday">Mon</span>
+              <span class="booking-weekday">Tue</span>
+              <span class="booking-weekday">Wed</span>
+              <span class="booking-weekday">Thu</span>
+              <span class="booking-weekday">Fri</span>
+              <span class="booking-weekday">Sat</span>
+              <span class="booking-weekday">Sun</span>
+            </div>
+
+            <div
+              class="booking-calendar-grid"
+              id="booking-calendar-grid"
+              role="grid"
+              aria-label="Appointment dates"
+            >
+              <!-- Dynamically populated by JS with accurate current month/year -->
+            </div>
+            <div class="booking-field-error" id="booking-date-error" role="alert"></div>
+          </div>
+
+          <!-- 9. PATIENT DETAILS FORM (.booking-form) -->
+          <form class="booking-form" id="appointment-glass-form" novalidate>
+            <div class="booking-field-group">
+              <label class="sr-only" for="booking-fullname">Full Name</label>
+              <div class="booking-field-wrap">
+                <span class="booking-field-icon" aria-hidden="true">
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M5 20c0-3.8 3.1-6.5 7-6.5s7 2.7 7 6.5"></path>
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  id="booking-fullname"
+                  name="fullName"
+                  class="booking-field"
+                  placeholder="Full Name"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+              <div class="booking-field-error" id="booking-fullname-error" role="alert"></div>
+            </div>
+
+            <div class="booking-field-group">
+              <label class="sr-only" for="booking-phonenumber">Phone Number</label>
+              <div class="booking-field-wrap">
+                <span class="booking-field-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </span>
+                <input
+                  type="tel"
+                  id="booking-phonenumber"
+                  name="phone"
+                  class="booking-field"
+                  placeholder="Phone Number"
+                  autocomplete="tel"
+                  required
+                />
+              </div>
+              <div class="booking-field-error" id="booking-phone-error" role="alert"></div>
+            </div>
+
+            <div class="booking-field-group">
+              <label class="sr-only" for="booking-email">Email Address</label>
+              <div class="booking-field-wrap">
+                <span class="booking-field-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="5" width="18" height="14" rx="2.5"></rect>
+                    <polyline points="3 7 12 13 21 7"></polyline>
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  id="booking-email"
+                  name="email"
+                  class="booking-field"
+                  placeholder="Email Address"
+                  autocomplete="email"
+                />
+              </div>
+              <div class="booking-field-error" id="booking-email-error" role="alert"></div>
+            </div>
+
+            <div class="booking-field-group">
+              <label class="sr-only" for="booking-treatment-select">Select Treatment</label>
+              <div class="booking-field-wrap">
+                <span class="booking-field-icon" aria-hidden="true">
+                  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8.2,4.5 C5.6,4.5 4,6.6 4,9.5 C4,12.4 5.3,14.8 6.2,18.5 C6.6,20.2 8.4,20.2 9.2,17.7 C9.9,15.2 10.9,14 12,14 C13.1,14 14.1,15.2 14.8,17.7 C15.6,20.2 17.4,20.2 17.8,18.5 C18.7,14.8 20,12.4 20,9.5 C20,6.6 18.4,4.5 15.8,4.5 C14.1,4.5 13.1,5.6 12,5.6 C10.9,5.6 9.9,4.5 8.2,4.5 Z"></path>
+                  </svg>
+                </span>
+                <select
+                  id="booking-treatment-select"
+                  name="treatment"
+                  class="booking-field booking-field--select"
+                  aria-label="Select Treatment"
+                >
+                  <option value="General Consultation">Select Treatment (General Consultation)</option>
+                  <option value="General Consultation">General Consultation</option>
+                  <option value="Dental Implants">Dental Implants</option>
+                  <option value="Orthodontics">Orthodontics</option>
+                  <option value="Cosmetic Dentistry">Cosmetic Dentistry</option>
+                  <option value="General Dentistry">General Dentistry</option>
+                  <option value="Smile Makeover">Smile Makeover</option>
+                  <option value="Teeth Alignment">Teeth Alignment</option>
+                  <option value="Full Mouth Rehabilitation">Full Mouth Rehabilitation</option>
+                </select>
+                <span class="booking-field-chevron" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </div>
+              <div class="booking-field-error" id="booking-treatment-error" role="alert"></div>
+            </div>
+
+            <button type="submit" class="booking-submit" id="booking-submit-btn">
+              <svg class="booking-submit-icon" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3.5" y="5" width="21" height="19.5" rx="4"></rect>
+                <line x1="3.5" y1="11" x2="24.5" y2="11"></line>
+                <line x1="9.5" y1="2.8" x2="9.5" y2="7"></line>
+                <line x1="18.5" y1="2.8" x2="18.5" y2="7"></line>
+                <circle cx="11" cy="16.5" r="1.2" fill="currentColor"></circle>
+                <circle cx="16" cy="19.5" r="1.2" fill="currentColor"></circle>
+              </svg>
+              <span id="booking-submit-label">Book Appointment</span>
+              <svg class="booking-submit-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="13 6 19 12 13 18"></polyline>
+              </svg>
+            </button>
+
+            <div class="booking-feedback" id="booking-form-feedback" role="status" aria-live="polite"></div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CLINIC LOCATION & VISITING HOURS SECTION (#location) -->
+  <section id="location" aria-labelledby="location-heading">
+    <header class="location-header">
+      <span class="location-eyebrow reveal-copy">Visit Our Clinic</span>
+      <h2 id="location-heading" class="location-heading reveal-heading">Memon Dental Clinic — Federal B Area</h2>
+      <p class="location-sub reveal-copy">
+        Thoughtful, unhurried dental care in the heart of Federal B Area, Karachi. Designed for patient comfort, strict clinical sterilization, and effortless family visits.
+      </p>
+    </header>
+
+    <div class="location-grid">
+      <article class="location-card reveal-copy" aria-label="Clinic Location and Directions">
+        <div class="location-map-visual" role="img" aria-label="Architectural neighbourhood map of Federal B Area, Karachi">
+          <svg class="location-map-svg" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="locRoadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.92"/>
+                <stop offset="100%" stop-color="#F2F6FF" stop-opacity="0.78"/>
+              </linearGradient>
+            </defs>
+            <rect width="800" height="320" fill="#E3EAF8"/>
+            <!-- Subtle neighbourhood blocks -->
+            <rect x="34" y="28" width="180" height="105" rx="14" fill="#D5DFF3"/>
+            <rect x="242" y="28" width="240" height="105" rx="14" fill="#DAE3F6"/>
+            <rect x="510" y="28" width="256" height="105" rx="14" fill="#D5DFF3"/>
+            <rect x="34" y="172" width="220" height="120" rx="14" fill="#DAE3F6"/>
+            <rect x="284" y="172" width="230" height="120" rx="14" fill="#D2DCF1"/>
+            <rect x="542" y="172" width="224" height="120" rx="14" fill="#DAE3F6"/>
+            <!-- Arterial avenues (Shahrah-e-Pakistan / Federal B Area grid) -->
+            <path d="M 0,152 L 800,152" stroke="url(#locRoadGrad)" stroke-width="22"/>
+            <path d="M 228,0 L 268,320" stroke="url(#locRoadGrad)" stroke-width="18"/>
+            <path d="M 498,0 L 528,320" stroke="url(#locRoadGrad)" stroke-width="18"/>
+            <circle cx="400" cy="152" r="46" fill="rgba(30, 203, 132, 0.16)"/>
+            <circle cx="400" cy="152" r="24" fill="rgba(30, 203, 132, 0.28)"/>
+          </svg>
+          <div class="location-pin-badge">
+            <span class="location-pin-dot" aria-hidden="true"></span>
+            <span>Memon Dental Clinic · Federal B Area, Karachi</span>
+          </div>
+        </div>
+
+        <div class="location-info-row">
+          <h3 class="location-card-title">Federal B Area, Karachi</h3>
+          <p class="location-address-text">
+            Centrally situated in Federal B Area, Karachi with convenient access from main arterial avenues, ground-floor patient entry, and welcoming consultation suites.
+          </p>
+          <ul class="location-feature-list" aria-label="Clinic amenities">
+            <li class="location-feature-item">✓ Autoclave Sterilization Protocol</li>
+            <li class="location-feature-item">✓ Private Consultation Suites</li>
+            <li class="location-feature-item">✓ Digital Dental Imaging</li>
+            <li class="location-feature-item">✓ Family &amp; Pediatric Friendly</li>
+          </ul>
+        </div>
+
+        <div class="location-actions">
+          <a
+            href="https://www.google.com/maps/search/?api=1&amp;query=Memon+Dental+Clinic+Federal+B+Area+Karachi"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="location-btn location-btn--primary"
+            id="location-directions-link"
+          >
+            <span>Open in Google Maps</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <button
+            type="button"
+            class="location-btn location-btn--ghost"
+            data-open-booking="appointment"
+          >
+            Book Your Visit
+          </button>
+        </div>
+      </article>
+
+      <article class="location-card reveal-copy" aria-label="Clinic Visiting Hours and Schedule">
+        <div class="location-info-row">
+          <div class="location-status-pill" id="clinic-hours-badge" aria-live="polite">
+            <span class="location-status-dot" aria-hidden="true"></span>
+            <span id="clinic-hours-status-text">Checking Karachi Clinic Hours…</span>
+          </div>
+          <h3 class="location-card-title">Visiting Hours &amp; Patient Care</h3>
+          <p class="location-address-text" id="clinic-hours-detail-text">
+            Appointments are scheduled to minimize waiting room time and give every patient unhurried clinical attention.
+          </p>
+
+          <ul class="location-hours-list" aria-label="Weekly clinic schedule">
+            <li class="location-hours-row">
+              <span class="location-hours-day">Monday – Thursday</span>
+              <span class="location-hours-time">11:00 AM – 9:00 PM</span>
+            </li>
+            <li class="location-hours-row">
+              <span class="location-hours-day">Friday</span>
+              <span class="location-hours-time">11:00 AM – 1:00 PM · 3:00 PM – 9:00 PM</span>
+            </li>
+            <li class="location-hours-row">
+              <span class="location-hours-day">Saturday</span>
+              <span class="location-hours-time">11:00 AM – 9:00 PM</span>
+            </li>
+            <li class="location-hours-row">
+              <span class="location-hours-day">Sunday</span>
+              <span class="location-hours-time">By Prior Appointment</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="location-actions">
+          <button
+            type="button"
+            class="location-btn location-btn--primary"
+            data-open-booking="General Consultation"
+          >
+            Schedule Consultation
+          </button>
+          <a href="#whatsapp" id="loc-whatsapp" class="location-btn location-btn--ghost">WhatsApp</a>
+          <a href="#call" id="loc-call" class="location-btn location-btn--ghost">Call Us</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- COMPLETE EDITORIAL & LIQUID-GLASS FOOTER (#foot) -->
+  <footer id="foot" aria-label="Memon Dental Clinic Footer">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <div class="foot-brand-title">Memon Dental Clinic</div>
+        <p class="foot-brand-desc">
+          Thoughtful dental care in Federal B Area, Karachi — blending modern restorative, orthodontic, and cosmetic dentistry with calm, patient-first comfort.
+        </p>
+        <div class="foot-cta-row">
+          <button type="button" class="foot-pill-btn foot-pill-btn--primary" data-open-booking="appointment">
+            Book Appointment
+          </button>
+          <a href="#whatsapp" id="foot-whatsapp" class="foot-pill-btn">WhatsApp</a>
+          <a href="#call" id="foot-call" class="foot-pill-btn">Call Us</a>
+        </div>
+      </div>
+
+      <div class="foot-col">
+        <div class="foot-col-heading">Explore Clinic</div>
+        <ul class="foot-nav-list">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#kitchen">Treatment Suite</a></li>
+          <li><a href="#services">Services We Offer</a></li>
+          <li><a href="#doctors">Meet Our Doctors</a></li>
+          <li><a href="#patient-showcase">Real Clients. Real Smiles.</a></li>
+          <li><a href="#location">Location &amp; Hours</a></li>
+          <li><a href="#appointment-booking">Book Appointment</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <div class="foot-col-heading">Dental Treatments</div>
+        <ul class="foot-nav-list">
+          <li><button type="button" data-bento-treatment="Dental Implants">Dental Implants</button></li>
+          <li><button type="button" data-bento-treatment="Orthodontics">Orthodontics &amp; Aligners</button></li>
+          <li><button type="button" data-bento-treatment="Cosmetic Dentistry">Cosmetic Dentistry</button></li>
+          <li><button type="button" data-bento-treatment="Smile Makeover">Smile Makeover</button></li>
+          <li><button type="button" data-bento-treatment="Full Mouth Rehabilitation">Full Mouth Rehabilitation</button></li>
+          <li><button type="button" data-bento-treatment="General Dentistry">General &amp; Preventive Care</button></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <div class="foot-col-heading">Visit Us in Karachi</div>
+        <ul class="foot-nav-list">
+          <li><span>Federal B Area, Karachi, Pakistan</span></li>
+          <li><span>Mon – Sat: 11:00 AM – 9:00 PM PKT</span></li>
+          <li><span>Sunday: By Prior Appointment</span></li>
+          <li>
+            <a
+              href="https://www.google.com/maps/search/?api=1&amp;query=Memon+Dental+Clinic+Federal+B+Area+Karachi"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Directions on Google Maps ↗
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <div class="f-brand">© 2026 Memon Dental Clinic · Federal B Area, Karachi. All rights reserved.</div>
+      <div class="f-links">
+        <button type="button" class="foot-top-btn" id="foot-back-to-top" aria-label="Scroll back to top">
+          Back to Top ↑
+        </button>
+      </div>
     </div>
   </footer>
+
+  <!-- Real Floating WhatsApp Button (Bottom Right, No Phone Number) -->
+  <a
+    href="https://wa.me/?text=Hello%20Memon%20Dental%20Clinic%2C%20I%20would%20like%20to%20inquire%20about%20an%20appointment."
+    id="floating-whatsapp"
+    class="floating-whatsapp"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Chat on WhatsApp with Memon Dental Clinic"
+  >
+    <span class="floating-whatsapp-tooltip" aria-hidden="true">Chat on WhatsApp</span>
+    <svg class="floating-whatsapp-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path d="M16.004 3.2c-7.068 0-12.8 5.732-12.8 12.8 0 2.257.59 4.461 1.71 6.404L3.09 28.8l6.564-1.721a12.742 12.742 0 0 0 6.35 1.689h.005c7.067 0 12.799-5.732 12.799-12.8 0-3.42-1.332-6.636-3.75-9.054A12.714 12.714 0 0 0 16.004 3.2Zm0 23.408h-.004a10.61 10.61 0 0 1-5.408-1.48l-.388-.23-4.022 1.055 1.073-3.92-.252-.402a10.596 10.596 0 0 1-1.635-5.647c0-5.862 4.77-10.632 10.636-10.632 2.84 0 5.51 1.106 7.517 3.115a10.564 10.564 0 0 1 3.115 7.518c0 5.863-4.77 10.623-10.632 10.623Zm5.832-7.959c-.319-.16-1.89-.933-2.183-1.04-.293-.106-.506-.16-.719.16-.213.32-.825 1.04-1.012 1.253-.186.213-.372.24-.692.08-.32-.16-1.349-.497-2.57-1.586-.95-.847-1.592-1.894-1.778-2.214-.187-.32-.02-.493.14-.652.144-.143.32-.373.48-.56.16-.186.213-.32.32-.533.106-.213.053-.399-.027-.56-.08-.16-.719-1.732-.985-2.371-.26-.623-.524-.538-.719-.548l-.612-.01c-.213 0-.56.08-.852.399-.293.32-1.119 1.093-1.119 2.665 0 1.572 1.145 3.091 1.305 3.304.16.213 2.254 3.442 5.46 4.827.763.33 1.358.526 1.822.674.766.243 1.463.209 2.014.127.614-.092 1.89-.773 2.156-1.519.267-.746.267-1.386.187-1.519-.08-.133-.293-.213-.612-.373Z"/>
+    </svg>
+  </a>
 
   <dialog id="booking-modal" aria-labelledby="modal-title">
     <div class="modal-head">
@@ -1114,6 +4505,7 @@
     const GRILL_CLIP = "TOOTH_GREENSCREEN_VIDEO_URL_HERE";
     const POTS_CLIP = "/dentist-card.mp4";
 
+    const navEl = document.getElementById("nav");
     const skyEl = document.getElementById("sky");
     const cloudBackEl = document.getElementById("cloudBack");
     const cloudFrontEl = document.getElementById("cloudFront");
@@ -1131,6 +4523,17 @@
     const ctxK = gK.getContext("2d");
 
     const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Interactive Liquid Glass specular pointer reflection on #nav
+    if (navEl && !reducedMotion) {
+      navEl.addEventListener("pointermove", (e) => {
+        const rect = navEl.getBoundingClientRect();
+        const mx = (((e.clientX - rect.left) / Math.max(1, rect.width)) * 100).toFixed(1);
+        const my = (((e.clientY - rect.top) / Math.max(1, rect.height)) * 100).toFixed(1);
+        navEl.style.setProperty("--nav-mx", `${mx}%`);
+        navEl.style.setProperty("--nav-my", `${my}%`);
+      });
+    }
 
     skyEl.style.backgroundImage = `url("${SKY}")`;
     cloudBackEl.style.backgroundImage = `url("${SKY}")`;
@@ -1182,7 +4585,7 @@
       });
     }
 
-    // Configurable booking & contact dialog handlers
+    // Configurable booking & contact section routing
     const bookingModal = document.getElementById("booking-modal");
     const bookingForm = document.getElementById("booking-form");
     const bookingStatus = document.getElementById("booking-status");
@@ -1191,6 +4594,35 @@
 
     function openBookingModal(treatmentName) {
       document.body.classList.remove("menu");
+      const bookingSectionEl = document.getElementById("appointment-booking");
+      const glassTreatmentSelect = document.getElementById("booking-treatment-select");
+      const glassFullNameInput = document.getElementById("booking-fullname");
+
+      if (treatmentName && glassTreatmentSelect) {
+        let matched = false;
+        for (const opt of glassTreatmentSelect.options) {
+          if (opt.value.toLowerCase() === treatmentName.toLowerCase()) {
+            glassTreatmentSelect.value = opt.value;
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          glassTreatmentSelect.value = "General Consultation";
+        }
+        glassTreatmentSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
+      if (bookingSectionEl) {
+        bookingSectionEl.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+        if (glassFullNameInput) {
+          setTimeout(() => {
+            glassFullNameInput.focus({ preventScroll: true });
+          }, reducedMotion ? 20 : 420);
+        }
+        return;
+      }
+
       if (bookingStatus) bookingStatus.style.display = "none";
       if (treatmentName && bookingTreatment) {
         for (const opt of bookingTreatment.options) {
@@ -1220,7 +4652,15 @@
       });
     });
 
-    ["nav-whatsapp", "k-whatsapp", "foot-whatsapp", "modal-whatsapp"].forEach((id) => {
+    document.querySelectorAll("[data-bento-treatment]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.preventDefault();
+        const tr = el.getAttribute("data-bento-treatment");
+        openBookingModal(tr);
+      });
+    });
+
+    ["nav-whatsapp", "k-whatsapp", "bento-whatsapp", "foot-whatsapp", "modal-whatsapp"].forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
       el.addEventListener("click", (e) => {
@@ -1481,15 +4921,18 @@
 
       // Calm wall above the countertop hosts the headline block
       const isMobile = window.innerWidth <= 760;
-      const hx = K.x + kOx + (isMobile ? 0.504 : 0.545) * KI_W * kSc;
-      const hy = K.y + kOy + (isMobile ? 0.185 : 0.215) * KI_H * kSc;
+      const hx = K.x + kOx + (isMobile ? 0.50 : 0.545) * KI_W * kSc;
+      const hy = K.y + kOy + (isMobile ? 0.215 : 0.215) * KI_H * kSc;
       ktextEl.style.left = `${hx - K.x}px`;
       ktextEl.style.top = `${hy - K.y}px`;
-      kitchenEl.style.setProperty("--kh", `${(H * (isMobile ? 0.032 : 0.036)).toFixed(1)}px`);
-      kitchenEl.style.setProperty("--kp", `${(H * (isMobile ? 0.019 : 0.021)).toFixed(1)}px`);
+      const khPx = isMobile ? Math.max(12.5, H * 0.056) : H * 0.036;
+      const kpPx = isMobile ? Math.max(9.5, H * 0.036) : H * 0.021;
+      kitchenEl.style.setProperty("--kh", `${khPx.toFixed(1)}px`);
+      kitchenEl.style.setProperty("--kp", `${kpPx.toFixed(1)}px`);
 
       const maxScroll = Math.max(200, document.documentElement.scrollHeight - window.innerHeight);
-      end = Math.max(200, Math.min(maxScroll, K.y - 68));
+      const targetAlignY = isMobile ? Math.round(window.innerHeight * 0.34) : 68;
+      end = Math.max(200, Math.min(maxScroll, K.y - targetAlignY));
 
       // Tooth canvas sizing
       m = Math.ceil(Math.max(c0, c1) * 1.05);
@@ -1898,8 +5341,10 @@
 
       folderLayerEls.forEach((layerEl, idx) => {
         const isActive = activeIdx === idx;
+        const isHovered = folderState.hovered === idx;
         layerEl.style.transform = `translate3d(0, ${offsets[idx]}px, 0)`;
         layerEl.classList.toggle("is-active", isActive);
+        layerEl.classList.toggle("is-hovered", isHovered);
         const btn = folderTabBtns[idx];
         if (btn) {
           btn.setAttribute("aria-expanded", isActive ? "true" : "false");
@@ -1960,7 +5405,7 @@
       SERVICE_FOLDERS.forEach((f) => {
         const { d, edgeD } = buildFolderSvgPaths(f.tabCenter, f.tabWidth);
         const layer = document.createElement("article");
-        layer.className = "folder-layer";
+        layer.className = "folder-layer service-folder";
         layer.setAttribute("data-index", String(f.index));
         layer.setAttribute("data-folder", f.code);
         layer.style.setProperty("--folder-bg", f.color);
@@ -2103,15 +5548,1087 @@
       });
     }
 
+    // =========================================================================
+    // PREMIUM INTERACTIVE PATIENT SHOWCASE (#patient-showcase)
+    // =========================================================================
+    const showcaseCases = [
+      {
+        id: "case-01",
+        label: "Client 01",
+        treatment: "Smile Makeover",
+        image: "/assets/cases/client-01.webp",
+        verified: false,
+        summary: "Demonstration placeholder for Comprehensive Smile Makeover planning (porcelain veneers, enamel contouring, and shade harmonization). Confirmed patient case photography will appear here once clinical consent is finalized."
+      },
+      {
+        id: "case-02",
+        label: "Client 02",
+        treatment: "Teeth Alignment",
+        image: "/assets/cases/client-02.webp",
+        verified: false,
+        summary: "Demonstration placeholder for Orthodontic Teeth Alignment (digital clear aligners and arch balance). Confirmed patient case photography will appear here once clinical consent is finalized."
+      },
+      {
+        id: "case-03",
+        label: "Client 03",
+        treatment: "Dental Implants",
+        image: "/assets/cases/client-03.webp",
+        verified: false,
+        summary: "Demonstration placeholder for Guided Dental Implant Restoration (biocompatible titanium fixtures and custom ceramic crowns). Confirmed patient case photography will appear here once clinical consent is finalized."
+      },
+      {
+        id: "case-04",
+        label: "Client 04",
+        treatment: "Full Mouth Rehabilitation",
+        image: "/assets/cases/client-04.webp",
+        verified: false,
+        summary: "Demonstration placeholder for Full Mouth Rehabilitation (occlusal bite restoration, prosthodontic crowns, and functional comfort). Confirmed patient case photography will appear here once clinical consent is finalized."
+      },
+      {
+        id: "case-05",
+        label: "Client 05",
+        treatment: "Cosmetic Dentistry",
+        image: "/assets/cases/client-05.webp",
+        verified: false,
+        summary: "Demonstration placeholder for Aesthetic & Cosmetic Dentistry (conservative composite bonding and professional whitening). Confirmed patient case photography will appear here once clinical consent is finalized."
+      }
+    ];
+
+    const showcaseSectionEl = document.getElementById("patient-showcase");
+    const showcaseStackEl = document.getElementById("showcase-stack");
+    const showcaseCards = [...document.querySelectorAll(".showcase-card")];
+    const showcaseBaseOffsets = [
+      { x: 0, y: 0, scale: 1.00 },
+      { x: 105, y: 60, scale: 0.96 },
+      { x: 205, y: 120, scale: 0.92 },
+      { x: 305, y: 180, scale: 0.88 },
+      { x: 405, y: 240, scale: 0.84 }
+    ];
+
+    let showcaseHoveredId = null;
+    let showcaseActiveId = "case-01";
+    let showcaseHoverTimer = null;
+    let showcaseLastTriggerBtn = null;
+
+    function updateShowcaseGeometry() {
+      if (!showcaseStackEl || !showcaseCards.length) return;
+      const vw = window.innerWidth;
+      if (vw < 768) {
+        showcaseStackEl.style.removeProperty("--stack-h");
+        showcaseCards.forEach((card, idx) => {
+          card.style.setProperty("--card-x", "0px");
+          card.style.setProperty("--card-y", "0px");
+          card.style.setProperty("--card-scale", "1");
+          card.style.setProperty("--stagger-delay", `${idx * 80}ms`);
+        });
+        return;
+      }
+
+      const isTablet = vw < 1024;
+      const stageRect = showcaseStackEl.getBoundingClientRect();
+      const containerW = Math.max(320, stageRect.width || (isTablet ? 680 : 790));
+      const cardW = isTablet
+        ? Math.max(270, Math.min(320, Math.round(containerW * 0.44)))
+        : Math.max(335, Math.min(362, Math.round(containerW * 0.455)));
+      const cardH = Math.round(cardW / 0.705);
+
+      const maxSpread = Math.max(180, containerW - cardW - 8);
+      const xRatio = Math.min(1, maxSpread / 405);
+      const yRatio = isTablet ? 0.84 : 1;
+
+      showcaseCards.forEach((card, idx) => {
+        const base = showcaseBaseOffsets[idx] || showcaseBaseOffsets[0];
+        const x = Math.round(base.x * xRatio);
+        const y = Math.round(base.y * yRatio);
+        card.style.setProperty("--card-w", `${cardW}px`);
+        card.style.setProperty("--card-h", `${cardH}px`);
+        card.style.setProperty("--card-x", `${x}px`);
+        card.style.setProperty("--card-y", `${y}px`);
+        card.style.setProperty("--card-scale", String(base.scale));
+        card.style.setProperty("--stagger-delay", `${idx * 80}ms`);
+      });
+
+      const totalStackH = cardH + Math.round(240 * yRatio) + 20;
+      showcaseStackEl.style.setProperty("--stack-h", `${totalStackH}px`);
+    }
+
+    function renderShowcaseState() {
+      showcaseCards.forEach((card, index) => {
+        const id = card.dataset.caseId;
+        const isHovered = id === showcaseHoveredId;
+        const isActive = id === showcaseActiveId;
+
+        card.classList.toggle("is-hovered", isHovered);
+        card.classList.toggle("is-active", isActive);
+        card.setAttribute("aria-current", isActive ? "true" : "false");
+
+        card.style.zIndex =
+          isHovered ? "20" :
+          isActive ? "15" :
+          String(showcaseCards.length - index);
+      });
+    }
+
+    const showcaseModalEl = document.getElementById("showcase-case-modal");
+    const showcaseModalTitleEl = document.getElementById("showcase-modal-title");
+    const showcaseModalSubEl = document.getElementById("showcase-modal-sub");
+    const showcaseModalImgEl = document.getElementById("showcase-modal-img");
+    const showcaseModalNoticeEl = document.getElementById("showcase-modal-notice");
+    const showcaseModalDescEl = document.getElementById("showcase-modal-desc");
+    const showcaseModalCloseBtn = document.getElementById("showcase-modal-close");
+    const showcaseModalBookBtn = document.getElementById("showcase-modal-book");
+    let currentModalCase = null;
+
+    function openShowcaseModal(caseId, triggerEl) {
+      const item = showcaseCases.find((c) => c.id === caseId);
+      if (!item || !showcaseModalEl) return;
+      currentModalCase = item;
+      showcaseLastTriggerBtn = triggerEl || document.activeElement;
+      showcaseActiveId = caseId;
+      renderShowcaseState();
+
+      if (showcaseModalTitleEl) showcaseModalTitleEl.textContent = `${item.label} — ${item.treatment}`;
+      if (showcaseModalSubEl) {
+        showcaseModalSubEl.textContent = item.verified
+          ? `Verified Clinical Case · ${item.treatment}`
+          : `Treatment Category · ${item.treatment} (Demonstration Placeholder)`;
+      }
+      if (showcaseModalImgEl) {
+        showcaseModalImgEl.src = item.image;
+        showcaseModalImgEl.alt = `Illustrative dental showcase portrait for ${item.label}`;
+      }
+      if (showcaseModalNoticeEl) {
+        showcaseModalNoticeEl.textContent = item.verified
+          ? "Verified Memon Dental Clinic case record published with patient authorization."
+          : "Clinical Case Notice: Verified case details and before/after documentation for this demonstration card are not yet available. No patient outcomes are fabricated.";
+      }
+      if (showcaseModalDescEl) {
+        showcaseModalDescEl.textContent = item.summary;
+      }
+
+      showcaseModalEl.classList.add("is-open");
+      showcaseModalEl.setAttribute("aria-hidden", "false");
+      if (showcaseModalCloseBtn) {
+        setTimeout(() => showcaseModalCloseBtn.focus(), 30);
+      }
+    }
+
+    function closeShowcaseModal() {
+      if (!showcaseModalEl || !showcaseModalEl.classList.contains("is-open")) return;
+      showcaseModalEl.classList.remove("is-open");
+      showcaseModalEl.setAttribute("aria-hidden", "true");
+      if (showcaseLastTriggerBtn && typeof showcaseLastTriggerBtn.focus === "function") {
+        showcaseLastTriggerBtn.focus();
+      }
+      showcaseLastTriggerBtn = null;
+    }
+
+    if (showcaseModalCloseBtn) {
+      showcaseModalCloseBtn.addEventListener("click", closeShowcaseModal);
+    }
+    if (showcaseModalEl) {
+      showcaseModalEl.addEventListener("click", (e) => {
+        if (e.target === showcaseModalEl) closeShowcaseModal();
+      });
+    }
+    if (showcaseModalBookBtn) {
+      showcaseModalBookBtn.addEventListener("click", () => {
+        const treatment = currentModalCase ? currentModalCase.treatment : "General Dentistry";
+        closeShowcaseModal();
+        openBookingModal(treatment);
+      });
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (!showcaseModalEl || !showcaseModalEl.classList.contains("is-open")) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeShowcaseModal();
+        return;
+      }
+      if (e.key === "Tab") {
+        const focusables = showcaseModalEl.querySelectorAll("button, [href], [tabindex]:not([tabindex='-1'])");
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    showcaseCards.forEach((card, idx) => {
+      const id = card.dataset.caseId;
+      const viewBtn = card.querySelector(".showcase-view-btn");
+
+      card.addEventListener("mouseenter", () => {
+        if (window.innerWidth < 768) return;
+        if (showcaseHoverTimer) {
+          clearTimeout(showcaseHoverTimer);
+          showcaseHoverTimer = null;
+        }
+        if (showcaseHoveredId !== id) {
+          showcaseHoveredId = id;
+          renderShowcaseState();
+        }
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (window.innerWidth < 768) return;
+        if (showcaseHoverTimer) clearTimeout(showcaseHoverTimer);
+        showcaseHoverTimer = setTimeout(() => {
+          if (showcaseHoveredId === id) {
+            showcaseHoveredId = null;
+            renderShowcaseState();
+          }
+          showcaseHoverTimer = null;
+        }, 45);
+      });
+
+      card.addEventListener("click", (event) => {
+        if (event.target.closest(".showcase-view-btn")) {
+          return;
+        }
+        showcaseActiveId = id;
+        renderShowcaseState();
+      });
+
+      card.addEventListener("keydown", (event) => {
+        if (event.target.closest(".showcase-view-btn")) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showcaseActiveId = id;
+          renderShowcaseState();
+        } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+          event.preventDefault();
+          const next = showcaseCards[(idx + 1) % showcaseCards.length];
+          if (next) {
+            showcaseActiveId = next.dataset.caseId;
+            renderShowcaseState();
+            next.focus();
+          }
+        } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+          event.preventDefault();
+          const prev = showcaseCards[(idx - 1 + showcaseCards.length) % showcaseCards.length];
+          if (prev) {
+            showcaseActiveId = prev.dataset.caseId;
+            renderShowcaseState();
+            prev.focus();
+          }
+        }
+      });
+
+      if (viewBtn) {
+        viewBtn.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          openShowcaseModal(id, viewBtn);
+        });
+      }
+    });
+
+    // Update active card on mobile horizontal swipe
+    if (showcaseStackEl) {
+      let scrollTicking = false;
+      showcaseStackEl.addEventListener("scroll", () => {
+        if (window.innerWidth >= 768 || scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+          const stackRect = showcaseStackEl.getBoundingClientRect();
+          const stackCenter = stackRect.left + stackRect.width / 2;
+          let closestId = showcaseActiveId;
+          let minDist = Infinity;
+          showcaseCards.forEach((card) => {
+            const rect = card.getBoundingClientRect();
+            const center = rect.left + rect.width / 2;
+            const d = Math.abs(center - stackCenter);
+            if (d < minDist) {
+              minDist = d;
+              closestId = card.dataset.caseId;
+            }
+          });
+          if (closestId && closestId !== showcaseActiveId) {
+            showcaseActiveId = closestId;
+            renderShowcaseState();
+          }
+          scrollTicking = false;
+        });
+      }, { passive: true });
+    }
+
+    updateShowcaseGeometry();
+    renderShowcaseState();
+
+    if (showcaseSectionEl) {
+      if (reducedMotion || !("IntersectionObserver" in window)) {
+        showcaseSectionEl.classList.add("is-visible");
+      } else {
+        const showcaseObs = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              showcaseSectionEl.classList.add("is-visible");
+              showcaseSectionEl.classList.remove("is-offscreen");
+            } else {
+              showcaseSectionEl.classList.add("is-offscreen");
+            }
+          }
+        }, { threshold: 0.12 });
+        showcaseObs.observe(showcaseSectionEl);
+      }
+    }
+
     window.addEventListener("resize", () => {
       measure();
       updateFolderGeometry();
+      updateShowcaseGeometry();
     });
     window.addEventListener("load", () => {
       measure();
       updateFolderGeometry();
+      updateShowcaseGeometry();
     });
     updateFolderGeometry();
+
+    // Meet Our Doctors section (#doctors) one-time entrance animation
+    const doctorsSectionEl = document.getElementById("doctors");
+    if (doctorsSectionEl) {
+      if (reducedMotion || !("IntersectionObserver" in window)) {
+        doctorsSectionEl.classList.add("is-visible");
+      } else {
+        const docObs = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              doctorsSectionEl.classList.add("is-visible");
+              docObs.disconnect();
+              break;
+            }
+          }
+        }, { threshold: 0.15 });
+        docObs.observe(doctorsSectionEl);
+      }
+    }
+
+    // Immersive Liquid Glass Appointment System (#appointment-booking)
+    const BOOKING_MONTH_NAMES = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    function isBookingLeapYear(year) {
+      return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    }
+
+    function getBookingDaysInMonth(year, monthIndex) {
+      const m = ((monthIndex % 12) + 12) % 12;
+      if (m === 1) return isBookingLeapYear(year) ? 29 : 28;
+      if (m === 3 || m === 5 || m === 8 || m === 10) return 30;
+      return 31;
+    }
+
+    function formatIsoDate(year, monthIndex, day) {
+      const mm = String(monthIndex + 1).padStart(2, "0");
+      const dd = String(day).padStart(2, "0");
+      return `${year}-${mm}-${dd}`;
+    }
+
+    function formatReadableDate(isoDate) {
+      if (!isoDate) return "";
+      const parts = isoDate.split("-").map(Number);
+      if (parts.length !== 3) return isoDate;
+      const [y, m, d] = parts;
+      const monthName = BOOKING_MONTH_NAMES[m - 1] || "";
+      return `${monthName.slice(0, 3)} ${d}, ${y}`;
+    }
+
+    const nowDate = new Date();
+    const todayYear = nowDate.getFullYear();
+    const todayMonth = nowDate.getMonth();
+    const todayDay = nowDate.getDate();
+    const todayIso = formatIsoDate(todayYear, todayMonth, todayDay);
+    const defaultSelectDay = Math.min(todayDay + 1, getBookingDaysInMonth(todayYear, todayMonth));
+    const defaultSelectIso = formatIsoDate(todayYear, todayMonth, defaultSelectDay);
+
+    const bookingState = {
+      viewYear: todayYear,
+      viewMonth: todayMonth,
+      selectedDate: defaultSelectIso,
+      selectedTime: "3:00 PM",
+      submitting: false,
+      lastSubmittedRequest: null
+    };
+
+    const bookingMonthLabelEl = document.getElementById("booking-month-label");
+    const bookingMonthPrevBtn = document.getElementById("booking-month-prev");
+    const bookingMonthNextBtn = document.getElementById("booking-month-next");
+    const bookingCalendarGridEl = document.getElementById("booking-calendar-grid");
+    const bookingTimeStripEl = document.getElementById("booking-time-strip");
+    const bookingTimeSlotBtns = bookingTimeStripEl
+      ? Array.from(bookingTimeStripEl.querySelectorAll(".booking-time-slot"))
+      : [];
+    const bookingTimePrevBtn = document.getElementById("booking-time-prev");
+    const bookingTimeClearBtn = document.getElementById("booking-time-clear");
+    const bookingResetPrefsBtn = document.getElementById("booking-reset-preferences");
+    const bookingJumpTodayBtn = document.getElementById("booking-jump-today");
+    const bookingProgressBarEl = document.getElementById("booking-progress-bar");
+    const bookingProgressTextEl = document.getElementById("booking-progress-text");
+    const bookingSelectionSummaryEl = document.getElementById("booking-selection-summary");
+
+    const glassFormEl = document.getElementById("appointment-glass-form");
+    const glassFullNameEl = document.getElementById("booking-fullname");
+    const glassPhoneEl = document.getElementById("booking-phonenumber");
+    const glassEmailEl = document.getElementById("booking-email");
+    const glassTreatmentEl = document.getElementById("booking-treatment-select");
+    const glassSubmitBtn = document.getElementById("booking-submit-btn");
+    const glassSubmitLabelEl = document.getElementById("booking-submit-label");
+    const glassFeedbackEl = document.getElementById("booking-form-feedback");
+
+    const errDateEl = document.getElementById("booking-date-error");
+    const errNameEl = document.getElementById("booking-fullname-error");
+    const errPhoneEl = document.getElementById("booking-phone-error");
+    const errEmailEl = document.getElementById("booking-email-error");
+    const errTreatmentEl = document.getElementById("booking-treatment-error");
+
+    function updateBookingToolbar() {
+      const hasDateAndTime = Boolean(bookingState.selectedDate && bookingState.selectedTime);
+      const hasPatientInfo = Boolean(
+        glassFullNameEl && glassFullNameEl.value.trim().length >= 2 &&
+        glassPhoneEl && glassPhoneEl.value.trim().length >= 7
+      );
+      const step = bookingState.lastSubmittedRequest ? 3 : hasPatientInfo ? 3 : hasDateAndTime ? 2 : 1;
+
+      if (bookingProgressTextEl) {
+        bookingProgressTextEl.textContent = `Step ${step} of 3`;
+      }
+      if (bookingProgressBarEl) {
+        bookingProgressBarEl.style.width = step === 3 ? "96px" : step === 2 ? "68px" : "34px";
+        bookingProgressBarEl.style.background = step === 3 ? "#1ECB84" : "rgba(16, 26, 66, 0.34)";
+      }
+      if (bookingSelectionSummaryEl) {
+        if (bookingState.selectedDate && bookingState.selectedTime) {
+          bookingSelectionSummaryEl.textContent =
+            `${formatReadableDate(bookingState.selectedDate)} · ${bookingState.selectedTime}`;
+        } else if (bookingState.selectedDate) {
+          bookingSelectionSummaryEl.textContent =
+            `${formatReadableDate(bookingState.selectedDate)} · Select time`;
+        } else {
+          bookingSelectionSummaryEl.textContent = "Select Date & Time";
+        }
+      }
+    }
+
+    function renderBookingTimeSlots() {
+      bookingTimeSlotBtns.forEach((btn) => {
+        const slot = btn.getAttribute("data-time-slot");
+        const isSelected = slot === bookingState.selectedTime;
+        btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+      });
+      updateBookingToolbar();
+    }
+
+    function renderBookingCalendar(focusDayNumber) {
+      if (!bookingCalendarGridEl) return;
+      const year = bookingState.viewYear;
+      const month = bookingState.viewMonth;
+
+      if (bookingMonthLabelEl) {
+        bookingMonthLabelEl.textContent = `${BOOKING_MONTH_NAMES[month]} ${year}`;
+      }
+
+      const firstDayJs = new Date(year, month, 1).getDay(); // 0=Sun..6=Sat
+      const leadingBlanks = (firstDayJs + 6) % 7; // Monday=0..Sunday=6
+      const totalDays = getBookingDaysInMonth(year, month);
+
+      bookingCalendarGridEl.innerHTML = "";
+
+      for (let b = 0; b < leadingBlanks; b++) {
+        const blankEl = document.createElement("span");
+        blankEl.className = "booking-calendar-day booking-calendar-day--outside booking-day booking-day--empty";
+        blankEl.setAttribute("aria-hidden", "true");
+        bookingCalendarGridEl.appendChild(blankEl);
+      }
+
+      let btnToFocus = null;
+
+      for (let d = 1; d <= totalDays; d++) {
+        const iso = formatIsoDate(year, month, d);
+        const isPast =
+          year < todayYear ||
+          (year === todayYear && month < todayMonth) ||
+          (year === todayYear && month === todayMonth && d < todayDay);
+        const isToday = year === todayYear && month === todayMonth && d === todayDay;
+        const isSelected = bookingState.selectedDate === iso;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "booking-calendar-day booking-day";
+        if (isToday) {
+          btn.classList.add("is-today");
+          btn.dataset.today = "true";
+        }
+        if (isSelected) btn.classList.add("is-selected");
+        btn.textContent = String(d);
+        btn.dataset.isoDate = iso;
+        btn.dataset.dayNumber = String(d);
+        btn.disabled = isPast;
+        btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+        btn.setAttribute(
+          "aria-label",
+          `${BOOKING_MONTH_NAMES[month]} ${d}, ${year}${isToday ? " (Today)" : ""}${isSelected ? " (Selected)" : ""}`
+        );
+
+        btn.addEventListener("click", () => {
+          if (isPast) return;
+          bookingState.selectedDate = iso;
+          bookingState.lastSubmittedRequest = null;
+          if (errDateEl) {
+            errDateEl.textContent = "";
+            errDateEl.classList.remove("is-visible");
+          }
+          renderBookingCalendar(d);
+          updateBookingToolbar();
+        });
+
+        btn.addEventListener("keydown", (e) => {
+          let offset = 0;
+          if (e.key === "ArrowRight") offset = 1;
+          else if (e.key === "ArrowLeft") offset = -1;
+          else if (e.key === "ArrowDown") offset = 7;
+          else if (e.key === "ArrowUp") offset = -7;
+          if (offset !== 0) {
+            e.preventDefault();
+            const targetDay = d + offset;
+            if (targetDay >= 1 && targetDay <= totalDays) {
+              const targetBtn = bookingCalendarGridEl.querySelector(`button[data-day-number="${targetDay}"]`);
+              if (targetBtn && !targetBtn.disabled) {
+                bookingState.selectedDate = targetBtn.dataset.isoDate;
+                renderBookingCalendar(targetDay);
+                updateBookingToolbar();
+              }
+            }
+          }
+        });
+
+        if (focusDayNumber === d) {
+          btnToFocus = btn;
+        }
+        bookingCalendarGridEl.appendChild(btn);
+      }
+
+      if (btnToFocus) {
+        btnToFocus.focus();
+      }
+    }
+
+    function updateWithTransition(updateDOM) {
+      const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion || typeof document.startViewTransition !== "function") {
+        updateDOM();
+        return;
+      }
+      try {
+        document.startViewTransition(() => {
+          updateDOM();
+        });
+      } catch (_) {
+        updateDOM();
+      }
+    }
+
+    if (bookingMonthPrevBtn) {
+      bookingMonthPrevBtn.addEventListener("click", () => {
+        updateWithTransition(() => {
+          if (bookingState.viewMonth === 0) {
+            bookingState.viewMonth = 11;
+            bookingState.viewYear -= 1;
+          } else {
+            bookingState.viewMonth -= 1;
+          }
+          renderBookingCalendar();
+        });
+      });
+    }
+
+    if (bookingMonthNextBtn) {
+      bookingMonthNextBtn.addEventListener("click", () => {
+        updateWithTransition(() => {
+          if (bookingState.viewMonth === 11) {
+            bookingState.viewMonth = 0;
+            bookingState.viewYear += 1;
+          } else {
+            bookingState.viewMonth += 1;
+          }
+          renderBookingCalendar();
+        });
+      });
+    }
+
+    bookingTimeSlotBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const slot = btn.getAttribute("data-time-slot");
+        if (!slot) return;
+        bookingState.selectedTime = slot;
+        bookingState.lastSubmittedRequest = null;
+        renderBookingTimeSlots();
+      });
+    });
+
+    if (bookingTimePrevBtn) {
+      bookingTimePrevBtn.addEventListener("click", () => {
+        const slots = bookingTimeSlotBtns.map((b) => b.getAttribute("data-time-slot")).filter(Boolean);
+        if (!slots.length) return;
+        const idx = slots.indexOf(bookingState.selectedTime);
+        const prevIdx = idx <= 0 ? slots.length - 1 : idx - 1;
+        bookingState.selectedTime = slots[prevIdx];
+        renderBookingTimeSlots();
+      });
+    }
+
+    if (bookingTimeClearBtn) {
+      bookingTimeClearBtn.addEventListener("click", () => {
+        bookingState.selectedTime = "3:00 PM";
+        renderBookingTimeSlots();
+      });
+    }
+
+    if (bookingJumpTodayBtn) {
+      bookingJumpTodayBtn.addEventListener("click", () => {
+        bookingState.viewYear = todayYear;
+        bookingState.viewMonth = todayMonth;
+        bookingState.selectedDate = todayIso;
+        renderBookingCalendar();
+        updateBookingToolbar();
+      });
+    }
+
+    if (bookingResetPrefsBtn) {
+      bookingResetPrefsBtn.addEventListener("click", () => {
+        bookingState.viewYear = todayYear;
+        bookingState.viewMonth = todayMonth;
+        bookingState.selectedDate = todayIso;
+        bookingState.selectedTime = "3:00 PM";
+        bookingState.lastSubmittedRequest = null;
+        if (glassFeedbackEl) {
+          glassFeedbackEl.classList.remove("is-visible");
+          glassFeedbackEl.innerHTML = "";
+        }
+        renderBookingCalendar();
+        renderBookingTimeSlots();
+      });
+    }
+
+    function setFieldError(inputEl, errorEl, message) {
+      if (inputEl) {
+        if (message) {
+          inputEl.classList.add("is-invalid");
+          inputEl.setAttribute("aria-invalid", "true");
+        } else {
+          inputEl.classList.remove("is-invalid");
+          inputEl.removeAttribute("aria-invalid");
+        }
+      }
+      if (errorEl) {
+        errorEl.textContent = message || "";
+        errorEl.classList.toggle("is-visible", Boolean(message));
+      }
+    }
+
+    function validatePhoneField(raw) {
+      const trimmed = (raw || "").trim();
+      if (!trimmed) return "Please enter your phone or WhatsApp number.";
+      if (!/^[+\d][\d\s\-().]{6,22}$/.test(trimmed)) {
+        return "Enter a valid phone number (e.g. +92 300 1234567).";
+      }
+      const digits = trimmed.replace(/\D/g, "");
+      if (digits.length < 7 || digits.length > 15) {
+        return "Phone number must contain 7 to 15 digits.";
+      }
+      return "";
+    }
+
+    function validateEmailField(raw) {
+      const trimmed = (raw || "").trim();
+      if (!trimmed) return "";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed)) {
+        return "Please enter a valid email address or leave optional.";
+      }
+      return "";
+    }
+
+    [glassFullNameEl, glassPhoneEl, glassEmailEl, glassTreatmentEl].forEach((el) => {
+      if (!el) return;
+      el.addEventListener("input", () => {
+        if (el === glassFullNameEl && el.value.trim().length >= 2) {
+          setFieldError(glassFullNameEl, errNameEl, "");
+        } else if (el === glassPhoneEl && !validatePhoneField(el.value)) {
+          setFieldError(glassPhoneEl, errPhoneEl, "");
+        } else if (el === glassEmailEl && !validateEmailField(el.value)) {
+          setFieldError(glassEmailEl, errEmailEl, "");
+        }
+        updateBookingToolbar();
+      });
+      el.addEventListener("change", updateBookingToolbar);
+    });
+
+    if (glassFormEl) {
+      glassFormEl.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (bookingState.submitting) return;
+
+        const fullName = glassFullNameEl ? glassFullNameEl.value.trim() : "";
+        const phone = glassPhoneEl ? glassPhoneEl.value.trim() : "";
+        const email = glassEmailEl ? glassEmailEl.value.trim() : "";
+        const treatment = glassTreatmentEl ? glassTreatmentEl.value.trim() : "General Consultation";
+
+        const nameErr = fullName.length < 2 ? "Please enter your full name (at least 2 characters)." : "";
+        const phoneErr = validatePhoneField(phone);
+        const emailErr = validateEmailField(email);
+        const dateErr = !bookingState.selectedDate ? "Please select a preferred appointment date." : "";
+        const treatmentErr = !treatment ? "Please select a treatment." : "";
+
+        setFieldError(glassFullNameEl, errNameEl, nameErr);
+        setFieldError(glassPhoneEl, errPhoneEl, phoneErr);
+        setFieldError(glassEmailEl, errEmailEl, emailErr);
+        setFieldError(glassTreatmentEl, errTreatmentEl, treatmentErr);
+        if (errDateEl) {
+          errDateEl.textContent = dateErr;
+          errDateEl.classList.toggle("is-visible", Boolean(dateErr));
+        }
+
+        if (nameErr || phoneErr || emailErr || dateErr || treatmentErr) {
+          if (nameErr && glassFullNameEl) glassFullNameEl.focus();
+          else if (phoneErr && glassPhoneEl) glassPhoneEl.focus();
+          else if (emailErr && glassEmailEl) glassEmailEl.focus();
+          return;
+        }
+
+        bookingState.submitting = true;
+        if (glassSubmitBtn) glassSubmitBtn.disabled = true;
+        if (glassSubmitLabelEl) glassSubmitLabelEl.textContent = "Preparing Request...";
+
+        setTimeout(() => {
+          bookingState.submitting = false;
+          if (glassSubmitBtn) glassSubmitBtn.disabled = false;
+          if (glassSubmitLabelEl) glassSubmitLabelEl.textContent = "Book Appointment";
+
+          const readableDate = formatReadableDate(bookingState.selectedDate);
+          const preferredTime = bookingState.selectedTime || "Flexible timing";
+          const prefilledMessage = [
+            `Appointment Request — ${CLINIC_CONFIG.name} (${CLINIC_CONFIG.location})`,
+            `Patient Name: ${fullName}`,
+            `Phone: ${phone}`,
+            email ? `Email: ${email}` : null,
+            `Treatment: ${treatment}`,
+            `Preferred Date: ${readableDate} (${bookingState.selectedDate})`,
+            `Preferred Time: ${preferredTime} (pending clinic confirmation)`
+          ].filter(Boolean).join("\n");
+
+          bookingState.lastSubmittedRequest = {
+            fullName,
+            phone,
+            email,
+            treatment,
+            selectedDate: bookingState.selectedDate,
+            selectedTime: preferredTime,
+            message: prefilledMessage
+          };
+
+          updateBookingToolbar();
+
+          if (glassFeedbackEl) {
+            glassFeedbackEl.innerHTML = "";
+            const titleStrong = document.createElement("strong");
+            titleStrong.textContent = "Appointment Request Prepared (Pending Clinic Confirmation)";
+            glassFeedbackEl.appendChild(titleStrong);
+
+            const summaryP = document.createElement("div");
+            summaryP.textContent =
+              `Requested for ${fullName} · ${treatment} · Preferred slot: ${readableDate} at ${preferredTime}. Our reception team at ${CLINIC_CONFIG.name} (${CLINIC_CONFIG.location}) will contact you on ${phone} to confirm your appointment time.`;
+            glassFeedbackEl.appendChild(summaryP);
+
+            const actionsWrap = document.createElement("div");
+            actionsWrap.className = "booking-feedback-actions";
+
+            const copyBtn = document.createElement("button");
+            copyBtn.type = "button";
+            copyBtn.className = "booking-feedback-link";
+            copyBtn.textContent = "Copy Request Summary";
+            copyBtn.addEventListener("click", () => {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(prefilledMessage).then(() => {
+                  copyBtn.textContent = "Copied Summary ✓";
+                }).catch(() => {});
+              }
+            });
+            actionsWrap.appendChild(copyBtn);
+
+            if (CLINIC_CONFIG.whatsappHref) {
+              const waLink = document.createElement("a");
+              waLink.className = "booking-feedback-link";
+              const sep = CLINIC_CONFIG.whatsappHref.includes("?") ? "&" : "?";
+              waLink.href = `${CLINIC_CONFIG.whatsappHref}${sep}text=${encodeURIComponent(prefilledMessage)}`;
+              waLink.target = "_blank";
+              waLink.rel = "noopener noreferrer";
+              waLink.textContent = "Send via WhatsApp";
+              actionsWrap.appendChild(waLink);
+            }
+
+            glassFeedbackEl.appendChild(actionsWrap);
+            glassFeedbackEl.classList.add("is-visible");
+          }
+        }, 240);
+      });
+    }
+
+    renderBookingCalendar();
+    renderBookingTimeSlots();
+
+    // Pause #appointment-booking ambient gradient animation when off-screen
+    const apptBookingSectionEl = document.getElementById("appointment-booking");
+    if (apptBookingSectionEl && "IntersectionObserver" in window && !reducedMotion) {
+      const bookingObs = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          apptBookingSectionEl.classList.toggle("is-offscreen", !entry.isIntersecting);
+        }
+      }, { threshold: 0.05 });
+      bookingObs.observe(apptBookingSectionEl);
+    }
+
+    // Progressive Enhancement Scroll Reveals (Part 3)
+    function initScrollReveals(root = document) {
+      const targets = [
+        ...root.querySelectorAll(".reveal-heading, .reveal-subhead, .reveal-copy")
+      ];
+      if (!targets.length) return () => {};
+
+      if (
+        !("IntersectionObserver" in window) ||
+        (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      ) {
+        targets.forEach((el) => el.classList.add("is-visible"));
+        return () => {};
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: "0px 0px -6% 0px"
+        }
+      );
+
+      targets.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+          el.classList.add("is-visible");
+        } else {
+          observer.observe(el);
+        }
+      });
+
+      document.documentElement.classList.add("motion-ready");
+
+      return () => {
+        observer.disconnect();
+        document.documentElement.classList.remove("motion-ready");
+      };
+    }
+
+    initScrollReveals();
+
+    // Mobile Navigation Drawer & Active Section Tracking (Part 4)
+    const mobileNavToggleBtn = document.getElementById("mobile-nav-toggle");
+    const mobileNavDrawerEl = document.getElementById("mobile-nav-drawer");
+
+    function closeMobileNavDrawer() {
+      if (!mobileNavDrawerEl || !mobileNavToggleBtn) return;
+      mobileNavDrawerEl.classList.remove("is-open");
+      mobileNavToggleBtn.setAttribute("aria-expanded", "false");
+    }
+
+    if (mobileNavToggleBtn && mobileNavDrawerEl) {
+      mobileNavToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = mobileNavDrawerEl.classList.toggle("is-open");
+        mobileNavToggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      mobileNavDrawerEl.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          closeMobileNavDrawer();
+        });
+      });
+
+      document.addEventListener("click", (e) => {
+        if (
+          mobileNavDrawerEl.classList.contains("is-open") &&
+          !mobileNavDrawerEl.contains(e.target) &&
+          e.target !== mobileNavToggleBtn &&
+          !mobileNavToggleBtn.contains(e.target)
+        ) {
+          closeMobileNavDrawer();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && mobileNavDrawerEl.classList.contains("is-open")) {
+          closeMobileNavDrawer();
+          mobileNavToggleBtn.focus();
+        }
+      });
+    }
+
+    // Active Navigation Link & Sticky Scroll State
+    const navSectionLinks = Array.from(document.querySelectorAll("#links a[data-nav-section]"));
+    const mobileSectionLinks = Array.from(document.querySelectorAll("#mobile-nav-drawer a[data-mobile-nav]"));
+    const trackedSectionIds = ["hero", "kitchen", "services", "doctors", "patient-showcase", "appointment-booking", "location"];
+
+    function updateActiveNavigation() {
+      const sy = window.scrollY || window.pageYOffset || 0;
+      if (navEl) {
+        navEl.classList.toggle("is-scrolled", sy > 36);
+      }
+
+      const focusY = sy + window.innerHeight * 0.34;
+      let activeId = "hero";
+      for (const id of trackedSectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.offsetTop;
+        const bottom = top + el.offsetHeight;
+        if (focusY >= top && focusY < bottom) {
+          activeId = id === "kitchen" ? "hero" : id;
+          break;
+        }
+      }
+
+      navSectionLinks.forEach((link) => {
+        const sec = link.getAttribute("data-nav-section");
+        if (sec === activeId) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+
+      mobileSectionLinks.forEach((link) => {
+        const sec = link.getAttribute("data-mobile-nav");
+        if (sec === activeId) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", updateActiveNavigation, { passive: true });
+    updateActiveNavigation();
+
+    // Live Karachi (PKT, UTC+5) Clinic Visiting Hours Status (#location)
+    function updateKarachiClinicHoursBadge() {
+      const badgeEl = document.getElementById("clinic-hours-badge");
+      const statusTextEl = document.getElementById("clinic-hours-status-text");
+      const detailTextEl = document.getElementById("clinic-hours-detail-text");
+      if (!badgeEl || !statusTextEl) return;
+
+      const pktOffsetMs = 5 * 60 * 60 * 1000;
+      const pktDate = new Date(Date.now() + pktOffsetMs);
+      const dayIdx = pktDate.getUTCDay(); // 0=Sun..6=Sat
+      const hrs = pktDate.getUTCHours();
+      const mins = pktDate.getUTCMinutes();
+      const totalMins = hrs * 60 + mins;
+
+      let isOpen = false;
+      let label = "";
+      let detail = "Appointments are scheduled to minimize waiting room time and give every patient unhurried clinical attention.";
+
+      if (dayIdx === 0) {
+        isOpen = false;
+        label = "Sunday in Karachi · By Prior Appointment";
+        detail = "Standard clinic hours resume Monday at 11:00 AM PKT. Request your preferred slot online anytime.";
+      } else if (totalMins >= 11 * 60 && totalMins < 21 * 60) {
+        isOpen = true;
+        label = "Open Today in Karachi · 11:00 AM – 9:00 PM PKT";
+      } else if (totalMins < 11 * 60) {
+        isOpen = false;
+        label = "Opens Today at 11:00 AM PKT · Federal B Area";
+      } else {
+        isOpen = false;
+        label = "Closed for Evening · Online Booking Open 24/7";
+      }
+
+      badgeEl.classList.toggle("is-closed", !isOpen);
+      statusTextEl.textContent = label;
+      if (detailTextEl) detailTextEl.textContent = detail;
+    }
+
+    updateKarachiClinicHoursBadge();
+
+    // Wire location & footer buttons
+    ["loc-whatsapp"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("click", (e) => {
+        if (CLINIC_CONFIG.whatsappHref) {
+          el.setAttribute("href", CLINIC_CONFIG.whatsappHref);
+        } else {
+          e.preventDefault();
+          openBookingModal();
+        }
+      });
+    });
+
+    ["loc-call"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("click", (e) => {
+        if (CLINIC_CONFIG.phoneHref) {
+          el.setAttribute("href", CLINIC_CONFIG.phoneHref);
+        } else {
+          e.preventDefault();
+          openBookingModal();
+        }
+      });
+    });
+
+    const backToTopBtn = document.getElementById("foot-back-to-top");
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+      });
+    }
+
+    // Floating WhatsApp button: builds a real WhatsApp URL with no phone number
+    const floatingWhatsappEl = document.getElementById("floating-whatsapp");
+    if (floatingWhatsappEl) {
+      floatingWhatsappEl.addEventListener("click", () => {
+        const baseEndpoint = CLINIC_CONFIG.whatsappHref
+          ? CLINIC_CONFIG.whatsappHref.replace(/\?.*$/, "")
+          : "https://wa.me/";
+        const selectedDateStr = bookingState && bookingState.selectedDateIso
+          ? formatReadableDate(bookingState.selectedDateIso)
+          : "";
+        const selectedTimeStr = bookingState && bookingState.selectedTime
+          ? bookingState.selectedTime
+          : "";
+        const selectedTreatmentStr = bookingState && bookingState.treatment
+          ? bookingState.treatment
+          : "General Consultation";
+        const msg = selectedDateStr && selectedTimeStr
+          ? `Hello Memon Dental Clinic (Federal B Area, Karachi), I would like to inquire about a ${selectedTreatmentStr} appointment around ${selectedDateStr} (${selectedTimeStr}).`
+          : "Hello Memon Dental Clinic (Federal B Area, Karachi), I would like to inquire about an appointment.";
+        floatingWhatsappEl.setAttribute("href", `${baseEndpoint}?text=${encodeURIComponent(msg)}`);
+      });
+    }
 
     window.__olla = {
       get p() {
@@ -2132,6 +6649,18 @@
       get lockedFolder() {
         return folderState.locked;
       },
+      get showcaseActiveId() {
+        return showcaseActiveId;
+      },
+      get showcaseHoveredId() {
+        return showcaseHoveredId;
+      },
+      get bookingState() {
+        return bookingState;
+      },
+      get motionReady() {
+        return document.documentElement.classList.contains("motion-ready");
+      },
       measure,
       config: CLINIC_CONFIG
     };
@@ -2140,6 +6669,7 @@
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
         measure();
+        updateShowcaseGeometry();
         requestAnimationFrame(tick);
       });
     } else {
