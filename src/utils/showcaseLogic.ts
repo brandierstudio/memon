@@ -15,7 +15,7 @@ export const SHOWCASE_CASES: ShowcaseCase[] = [
     label: 'Client 01',
     treatment: 'Smile Makeover',
     shortTreatment: 'Smile Makeover',
-    image: '/assets/cases/client-01.webp',
+    image: '/assets/patients/client-01.webp',
     verified: false,
     footerTheme: 'lavender',
     summary:
@@ -26,7 +26,7 @@ export const SHOWCASE_CASES: ShowcaseCase[] = [
     label: 'Client 02',
     treatment: 'Teeth Alignment',
     shortTreatment: 'Teeth Alignment',
-    image: '/assets/cases/client-02.webp',
+    image: '/assets/patients/client-02.webp',
     verified: false,
     footerTheme: 'blue',
     summary:
@@ -37,7 +37,7 @@ export const SHOWCASE_CASES: ShowcaseCase[] = [
     label: 'Client 03',
     treatment: 'Dental Implants',
     shortTreatment: 'Dental Implants',
-    image: '/assets/cases/client-03.webp',
+    image: '/assets/patients/client-03.webp',
     verified: false,
     footerTheme: 'sand',
     summary:
@@ -48,7 +48,7 @@ export const SHOWCASE_CASES: ShowcaseCase[] = [
     label: 'Client 04',
     treatment: 'Full Mouth Rehabilitation',
     shortTreatment: 'Full Mouth Rehab',
-    image: '/assets/cases/client-04.webp',
+    image: '/assets/patients/client-04.webp',
     verified: false,
     footerTheme: 'slate',
     summary:
@@ -59,7 +59,7 @@ export const SHOWCASE_CASES: ShowcaseCase[] = [
     label: 'Client 05',
     treatment: 'Cosmetic Dentistry',
     shortTreatment: 'Cosmetic Dentistry',
-    image: '/assets/cases/client-05.webp',
+    image: '/assets/patients/client-05.webp',
     verified: false,
     footerTheme: 'mauve',
     summary:
@@ -180,4 +180,31 @@ export function reduceShowcaseState(
     default:
       return state;
   }
+}
+
+export function getNextShowcaseId(currentId: string): string {
+  const ids = SHOWCASE_CASES.map((c) => c.id);
+  const idx = ids.indexOf(currentId);
+  if (idx === -1) return ids[0];
+  return ids[(idx + 1) % ids.length];
+}
+
+export function getPrevShowcaseId(currentId: string): string {
+  const ids = SHOWCASE_CASES.map((c) => c.id);
+  const idx = ids.indexOf(currentId);
+  if (idx === -1) return ids[ids.length - 1];
+  return ids[(idx - 1 + ids.length) % ids.length];
+}
+
+export function resolveCardIndexFromTap(
+  touchRelX: number,
+  containerWidth: number,
+  totalCards: number = 5,
+): number {
+  if (totalCards <= 1 || containerWidth <= 0) return 0;
+  // If tap is far right, prioritize rear cards
+  const clampedX = Math.max(0, Math.min(containerWidth, touchRelX));
+  const segmentWidth = containerWidth / totalCards;
+  const rawIdx = Math.floor(clampedX / segmentWidth);
+  return Math.max(0, Math.min(totalCards - 1, rawIdx));
 }

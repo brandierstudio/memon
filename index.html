@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+  <script type="module" src="/src/assetGuard.ts"></script>
   <style>
     :root {
       --page: #e9e7df;
@@ -633,6 +634,7 @@
       max-width: 18ch;
       z-index: 3;
     }
+    #dentist-card-img,
     #pots {
       position: absolute;
       left: 50%;
@@ -645,6 +647,9 @@
       object-position: center bottom;
       pointer-events: none;
       z-index: 1;
+    }
+    #pots {
+      z-index: 2;
     }
     #card .shop {
       position: absolute;
@@ -1668,6 +1673,90 @@
       }
     }
 
+    /* Touch Navigation Controls for Showcase */
+    .showcase-touch-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: clamp(16px, 2.4vw, 24px) auto 0;
+      width: fit-content;
+      max-width: 90%;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(166, 120, 232, 0.28);
+      box-shadow: 0 10px 28px rgba(30, 35, 75, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 25;
+    }
+
+    .showcase-nav-arrow {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: #EFF2FA;
+      color: #17224D;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      border: 0;
+      transition: background 200ms ease, transform 200ms ease, color 200ms ease;
+      touch-action: manipulation;
+    }
+
+    .showcase-nav-arrow:hover,
+    .showcase-nav-arrow:focus-visible {
+      background: #4F8FF7;
+      color: #FFFFFF;
+      transform: scale(1.04);
+      outline: none;
+    }
+
+    .showcase-pills-list {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .showcase-pill-btn {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: transparent;
+      color: #3B4668;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 220ms ease;
+      touch-action: manipulation;
+    }
+
+    .showcase-pill-btn:hover {
+      background: #EEF2FD;
+      color: #111D43;
+    }
+
+    .showcase-pill-btn.is-active {
+      background: linear-gradient(135deg, #4F8FF7 0%, #A678E8 100%);
+      color: #FFFFFF;
+      box-shadow: 0 6px 16px rgba(79, 143, 247, 0.35);
+      border-color: rgba(255, 255, 255, 0.9);
+      transform: scale(1.08);
+    }
+
     @media (max-width: 767px) {
       #patient-showcase {
         padding: 64px 0 56px;
@@ -1689,11 +1778,11 @@
         height: auto !important;
         overflow-x: auto;
         overflow-y: hidden;
-        padding: 20px 18px 40px;
+        padding: 20px 18px 30px;
         scroll-snap-type: x mandatory;
         scroll-padding-inline: 18px;
         -webkit-overflow-scrolling: touch;
-        touch-action: pan-x;
+        touch-action: pan-y pinch-zoom;
         scrollbar-width: none;
       }
       .showcase-stack::-webkit-scrollbar {
@@ -1709,6 +1798,10 @@
       }
       .showcase-card.is-active {
         box-shadow: 0 20px 45px rgba(30, 35, 75, 0.18);
+      }
+      .showcase-touch-controls {
+        margin: 8px 16px 0;
+        width: calc(100% - 32px);
       }
       .showcase-modal-body {
         grid-template-columns: 1fr;
@@ -2692,210 +2785,124 @@
     /* =========================================================================
        CLINIC LOCATION & VISITING HOURS SECTION (#location)
        ========================================================================= */
+    /* =========================================================================
+       CLINIC LOCATION SECTION (#location) — MATCHING APPROVED 3D PIN REFERENCE
+       ========================================================================= */
     #location {
       position: relative;
       width: var(--w);
       margin: var(--gap) auto 0;
-      border-radius: 18px;
+      border-radius: 28px;
       overflow: hidden;
-      padding: clamp(56px, 6.4vw, 96px) clamp(20px, 4vw, 64px);
+      padding: clamp(48px, 5.5vw, 84px) clamp(22px, 4.4vw, 72px);
       background:
-        radial-gradient(circle at 12% 18%, rgba(79, 143, 247, 0.12) 0%, transparent 48%),
-        radial-gradient(circle at 88% 82%, rgba(166, 120, 232, 0.12) 0%, transparent 52%),
-        linear-gradient(180deg, #F6F5F0 0%, #EFECE4 100%);
-      border: 1px solid rgba(255, 255, 255, 0.78);
-    }
-
-    .location-header {
-      max-width: 720px;
-      margin: 0 auto clamp(36px, 4vw, 56px);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .location-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.76);
-      border: 1px solid rgba(20, 26, 74, 0.10);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #303A87;
-    }
-
-    .location-heading {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(2.4rem, 4.8vw, 4.4rem);
-      font-weight: 600;
-      line-height: 1.02;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-    }
-
-    .location-sub {
-      font-size: clamp(15px, 1.15vw, 18px);
-      line-height: 1.55;
-      color: rgba(22, 25, 58, 0.76);
-      max-width: 56ch;
-    }
-
-    .location-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: clamp(20px, 2.4vw, 32px);
-      align-items: stretch;
-    }
-
-    .location-card {
-      position: relative;
-      border-radius: 26px;
-      padding: clamp(24px, 2.8vw, 38px);
-      background: rgba(255, 255, 255, 0.86);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+        radial-gradient(circle at 82% 28%, rgba(245, 204, 98, 0.22) 0%, transparent 48%),
+        radial-gradient(circle at 18% 75%, rgba(232, 220, 202, 0.38) 0%, transparent 54%),
+        linear-gradient(165deg, #FBF8F2 0%, #F4ECE0 48%, #EAE0CE 100%);
       border: 1px solid rgba(255, 255, 255, 0.92);
       box-shadow:
-        0 18px 44px rgba(16, 25, 58, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.95);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 24px;
+        0 24px 60px rgba(38, 30, 18, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.96);
+      isolation: isolate;
     }
 
-    .location-map-visual {
+    .location-ref-layout {
       position: relative;
-      width: 100%;
-      height: 248px;
-      border-radius: 18px;
-      overflow: hidden;
-      background:
-        linear-gradient(135deg, #E6ECFA 0%, #D9E4FA 50%, #EAE4F8 100%);
-      border: 1px solid rgba(48, 58, 135, 0.12);
-    }
-
-    .location-map-svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    .location-pin-badge {
-      position: absolute;
-      left: 50%;
-      top: 48%;
-      transform: translate(-50%, -50%);
-      display: inline-flex;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: clamp(28px, 4vw, 64px);
       align-items: center;
-      gap: 10px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: rgba(16, 26, 66, 0.94);
-      color: #FFFFFF;
-      font-size: 13.5px;
-      font-weight: 600;
-      box-shadow: 0 12px 28px rgba(16, 26, 66, 0.28);
-      white-space: nowrap;
     }
 
-    .location-pin-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #1ECB84;
-      box-shadow: 0 0 0 4px rgba(30, 203, 132, 0.28);
-      flex-shrink: 0;
-    }
-
-    .location-info-row {
+    .location-ref-copy {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 18px;
+      max-width: 560px;
     }
 
-    .location-card-title {
-      font-size: clamp(20px, 1.65vw, 24px);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      color: var(--ink);
-    }
-
-    .location-address-text {
-      font-size: 15px;
-      line-height: 1.52;
-      color: rgba(22, 25, 58, 0.78);
-    }
-
-    .location-feature-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      list-style: none;
-    }
-
-    .location-feature-item {
+    .location-ref-eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #F1F4FB;
-      color: #1F285E;
-      font-size: 12.5px;
+      gap: 8px;
+      font-family: "Jost", Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #7D6B4F;
+    }
+
+    .location-ref-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 2px 0 6px;
+    }
+
+    .location-ref-lead {
+      font-family: "Jost", Arial, sans-serif;
+      font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.04;
+      color: #6C5B3D;
+    }
+
+    .location-ref-main-title {
+      font-family: "Jost", Arial, sans-serif;
+      font-size: clamp(3rem, 5.8vw, 5.2rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 0.98;
+      color: #211B14;
+    }
+
+    .location-ref-address {
+      font-size: clamp(16px, 1.3vw, 19px);
+      line-height: 1.48;
+      color: #383023;
       font-weight: 500;
     }
 
-    .location-actions {
+    .location-ref-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(45, 38, 27, 0.82);
+    }
+
+    .location-ref-features {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
+      margin: 4px 0;
+      list-style: none;
     }
 
-    .location-btn {
-      min-height: 44px;
-      padding: 0 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
+    .location-ref-chip {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(108, 91, 61, 0.16);
+      color: #3B3224;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .location-ref-status-box {
+      display: flex;
+      flex-direction: column;
       gap: 8px;
-      transition:
-        transform var(--motion-standard) var(--motion-ease),
-        background var(--motion-standard) var(--motion-ease),
-        box-shadow var(--motion-standard) var(--motion-ease);
-    }
-
-    .location-btn--primary {
-      background: var(--navy);
-      color: #FFFFFF;
-      box-shadow: 0 8px 20px rgba(20, 26, 74, 0.22);
-    }
-
-    .location-btn--primary:hover {
-      background: #232E7A;
-      transform: translateY(-2px);
-    }
-
-    .location-btn--ghost {
-      background: #EEF1FA;
-      color: var(--ink);
-      border: 1px solid rgba(20, 26, 74, 0.12);
-    }
-
-    .location-btn--ghost:hover {
-      background: #E2E8F8;
-      transform: translateY(-2px);
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      margin-top: 2px;
     }
 
     .location-status-pill {
@@ -2903,12 +2910,12 @@
       align-items: center;
       gap: 8px;
       align-self: flex-start;
-      padding: 7px 14px;
+      padding: 5px 12px;
       border-radius: 999px;
       background: #ECFDF5;
       border: 1px solid rgba(30, 203, 132, 0.35);
       color: #0D593E;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
     }
 
@@ -2929,37 +2936,133 @@
       background: #66718C;
     }
 
-    .location-hours-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      list-style: none;
-      margin: 4px 0;
+    .location-hours-mini {
+      font-size: 13.5px;
+      color: rgba(45, 38, 27, 0.88);
+      line-height: 1.45;
     }
 
-    .location-hours-row {
+    .location-ref-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .location-btn-primary {
+      min-height: 48px;
+      padding: 0 24px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #191B33;
+      color: #FFFFFF;
+      box-shadow: 0 10px 24px rgba(25, 27, 51, 0.24);
+      transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease;
+    }
+
+    .location-btn-primary:hover,
+    .location-btn-primary:focus-visible {
+      background: #282D5C;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(25, 27, 51, 0.32);
+      outline: none;
+    }
+
+    .location-btn-ghost {
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 14px;
+      font-size: 14.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(45, 38, 27, 0.16);
+      color: #211B14;
+      transition: transform 220ms ease, background 220ms ease;
+    }
+
+    .location-btn-ghost:hover,
+    .location-btn-ghost:focus-visible {
+      background: #FFFFFF;
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .location-ref-visual {
+      position: relative;
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow:
+        0 28px 65px rgba(45, 35, 18, 0.18),
+        0 8px 24px rgba(45, 35, 18, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      background: #EAE2D3;
+      aspect-ratio: 1 / 1;
+      max-height: 580px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 11px;
-      border-bottom: 1px solid rgba(22, 25, 58, 0.08);
-      font-size: 14.5px;
+      justify-content: center;
     }
 
-    .location-hours-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
+    .location-ref-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      transition: transform 600ms cubic-bezier(.2,.8,.2,1);
     }
 
-    .location-hours-day {
+    .location-ref-visual:hover .location-ref-img {
+      transform: scale(1.025);
+    }
+
+    .location-ref-tag {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(22, 26, 54, 0.90);
+      color: #FFFFFF;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--ink);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(16, 20, 48, 0.32);
+      letter-spacing: 0.02em;
     }
 
-    .location-hours-time {
-      color: rgba(22, 25, 58, 0.78);
-      font-variant-numeric: tabular-nums;
+    .location-ref-tag-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #F5B82E;
+      box-shadow: 0 0 10px #F5B82E;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 959px) {
+      .location-ref-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .location-ref-visual {
+        max-height: 480px;
+        order: -1;
+      }
     }
 
     /* =========================================================================
@@ -3406,6 +3509,7 @@
         height: 68vh;
         padding: 18px;
       }
+      #dentist-card-img,
       #pots {
         bottom: 0;
         top: auto;
@@ -3593,7 +3697,14 @@
     <aside id="card">
       <span class="new">DENTAL CARE</span>
       <p>Care designed around your smile.</p>
-      <video id="pots" poster="/dentist-card.jpg" muted loop playsinline autoplay crossorigin="anonymous"></video>
+      <img
+        id="dentist-card-img"
+        src="/assets/dentist/dentist-card.webp"
+        data-fallback-src="/assets/dentist/dentist-card.webp"
+        alt="Pakistani female dentist at Memon Dental Clinic"
+        decoding="async"
+      >
+      <video id="pots" poster="/assets/dentist/dentist-card.webp" muted loop playsinline autoplay></video>
       <a href="#booking" class="shop" data-open-booking="visit">Book a Visit</a>
     </aside>
   </section>
@@ -3709,9 +3820,10 @@
         >
           <img
             class="showcase-photo"
-            src="/assets/cases/client-01.webp"
+            src="/assets/patients/client-01.webp"
+            data-fallback-src="/assets/patients/client-01.webp"
             alt="Illustrative dental showcase portrait for Client 01"
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />
           <div class="showcase-card-footer">
@@ -3749,9 +3861,10 @@
         >
           <img
             class="showcase-photo"
-            src="/assets/cases/client-02.webp"
+            src="/assets/patients/client-02.webp"
+            data-fallback-src="/assets/patients/client-02.webp"
             alt="Illustrative dental showcase portrait for Client 02"
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />
           <div class="showcase-card-footer">
@@ -3789,9 +3902,10 @@
         >
           <img
             class="showcase-photo"
-            src="/assets/cases/client-03.webp"
+            src="/assets/patients/client-03.webp"
+            data-fallback-src="/assets/patients/client-03.webp"
             alt="Illustrative dental showcase portrait for Client 03"
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />
           <div class="showcase-card-footer">
@@ -3829,9 +3943,10 @@
         >
           <img
             class="showcase-photo"
-            src="/assets/cases/client-04.webp"
+            src="/assets/patients/client-04.webp"
+            data-fallback-src="/assets/patients/client-04.webp"
             alt="Illustrative dental showcase portrait for Client 04"
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />
           <div class="showcase-card-footer">
@@ -3869,9 +3984,10 @@
         >
           <img
             class="showcase-photo"
-            src="/assets/cases/client-05.webp"
+            src="/assets/patients/client-05.webp"
+            data-fallback-src="/assets/patients/client-05.webp"
             alt="Illustrative dental showcase portrait for Client 05"
-            loading="lazy"
+            loading="eager"
             decoding="async"
           />
           <div class="showcase-card-footer">
@@ -3896,8 +4012,26 @@
               <span class="showcase-btn-arrow" aria-hidden="true">→</span>
             </button>
           </div>
-        </article>
       </div>
+    </div>
+
+    <!-- Touch Navigation Controls (Flawless mobile & tablet interaction) -->
+    <div class="showcase-touch-controls" role="toolbar" aria-label="Patient smile case selector">
+      <button type="button" class="showcase-nav-arrow showcase-nav-prev" id="showcase-prev-btn" aria-label="Previous smile case">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Prev</span>
+      </button>
+      <div class="showcase-pills-list" role="tablist" aria-label="Select patient smile case">
+        <button type="button" class="showcase-pill-btn is-active" data-showcase-jump="case-01" role="tab" aria-selected="true" aria-label="Select Client 01 Smile Makeover">01</button>
+        <button type="button" class="showcase-pill-btn" data-showcase-jump="case-02" role="tab" aria-selected="false" aria-label="Select Client 02 Teeth Alignment">02</button>
+        <button type="button" class="showcase-pill-btn" data-showcase-jump="case-03" role="tab" aria-selected="false" aria-label="Select Client 03 Dental Implants">03</button>
+        <button type="button" class="showcase-pill-btn" data-showcase-jump="case-04" role="tab" aria-selected="false" aria-label="Select Client 04 Full Mouth Rehabilitation">04</button>
+        <button type="button" class="showcase-pill-btn" data-showcase-jump="case-05" role="tab" aria-selected="false" aria-label="Select Client 05 Cosmetic Dentistry">05</button>
+      </div>
+      <button type="button" class="showcase-nav-arrow showcase-nav-next" id="showcase-next-btn" aria-label="Next smile case">
+        <span>Next</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 18l6-6-6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
 
     <!-- Accessible Case Detail Modal -->
@@ -3928,7 +4062,8 @@
           <img
             id="showcase-modal-img"
             class="showcase-modal-thumb"
-            src="/assets/cases/client-01.webp"
+            src="/assets/patients/client-01.webp"
+            data-fallback-src="/assets/patients/client-01.webp"
             alt="Illustrative portrait preview"
           />
           <div class="showcase-modal-info">
@@ -4239,66 +4374,47 @@
     </div>
   </section>
 
-  <!-- CLINIC LOCATION & VISITING HOURS SECTION (#location) -->
+  <!-- CLINIC LOCATION SECTION (#location) — MATCHING 3D PIN REFERENCE -->
   <section id="location" aria-labelledby="location-heading">
-    <header class="location-header">
-      <span class="location-eyebrow reveal-copy">Visit Our Clinic</span>
-      <h2 id="location-heading" class="location-heading reveal-heading">Memon Dental Clinic — Federal B Area</h2>
-      <p class="location-sub reveal-copy">
-        Thoughtful, unhurried dental care in the heart of Federal B Area, Karachi. Designed for patient comfort, strict clinical sterilization, and effortless family visits.
-      </p>
-    </header>
+    <div class="location-ref-layout">
+      <div class="location-ref-copy reveal-copy">
+        <span class="location-ref-eyebrow">Precision in Dentistry · Excellence in Practice</span>
 
-    <div class="location-grid">
-      <article class="location-card reveal-copy" aria-label="Clinic Location and Directions">
-        <div class="location-map-visual" role="img" aria-label="Architectural neighbourhood map of Federal B Area, Karachi">
-          <svg class="location-map-svg" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-              <linearGradient id="locRoadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.92"/>
-                <stop offset="100%" stop-color="#F2F6FF" stop-opacity="0.78"/>
-              </linearGradient>
-            </defs>
-            <rect width="800" height="320" fill="#E3EAF8"/>
-            <!-- Subtle neighbourhood blocks -->
-            <rect x="34" y="28" width="180" height="105" rx="14" fill="#D5DFF3"/>
-            <rect x="242" y="28" width="240" height="105" rx="14" fill="#DAE3F6"/>
-            <rect x="510" y="28" width="256" height="105" rx="14" fill="#D5DFF3"/>
-            <rect x="34" y="172" width="220" height="120" rx="14" fill="#DAE3F6"/>
-            <rect x="284" y="172" width="230" height="120" rx="14" fill="#D2DCF1"/>
-            <rect x="542" y="172" width="224" height="120" rx="14" fill="#DAE3F6"/>
-            <!-- Arterial avenues (Shahrah-e-Pakistan / Federal B Area grid) -->
-            <path d="M 0,152 L 800,152" stroke="url(#locRoadGrad)" stroke-width="22"/>
-            <path d="M 228,0 L 268,320" stroke="url(#locRoadGrad)" stroke-width="18"/>
-            <path d="M 498,0 L 528,320" stroke="url(#locRoadGrad)" stroke-width="18"/>
-            <circle cx="400" cy="152" r="46" fill="rgba(30, 203, 132, 0.16)"/>
-            <circle cx="400" cy="152" r="24" fill="rgba(30, 203, 132, 0.28)"/>
-          </svg>
-          <div class="location-pin-badge">
-            <span class="location-pin-dot" aria-hidden="true"></span>
-            <span>Memon Dental Clinic · Federal B Area, Karachi</span>
+        <div class="location-ref-title-block">
+          <span class="location-ref-lead">Best Located</span>
+          <h2 id="location-heading" class="location-ref-main-title">Dental Clinic</h2>
+        </div>
+
+        <p class="location-ref-address">
+          Memon Dental Clinic located in Federal B Area, Karachi, Pakistan.
+        </p>
+
+        <p class="location-ref-desc">
+          Thoughtful, unhurried dental care in the heart of Federal B Area. Centrally positioned on main Karachi arterial avenues with barrier-free ground-floor patient entry and dedicated parking.
+        </p>
+
+        <ul class="location-ref-features" aria-label="Location amenities">
+          <li class="location-ref-chip">✓ Central Federal B Area Avenue Access</li>
+          <li class="location-ref-chip">✓ Ground-Floor Direct Entry &amp; Parking</li>
+          <li class="location-ref-chip">✓ Hospital-Grade Sterilization Protocols</li>
+        </ul>
+
+        <div class="location-ref-status-box">
+          <div class="location-status-pill" id="clinic-hours-badge" aria-live="polite">
+            <span class="location-status-dot" aria-hidden="true"></span>
+            <span id="clinic-hours-status-text">Checking Karachi Clinic Hours…</span>
+          </div>
+          <div class="location-hours-mini" id="clinic-hours-detail-text">
+            Mon – Sat: 11:00 AM – 9:00 PM PKT · Sunday: By Prior Appointment
           </div>
         </div>
 
-        <div class="location-info-row">
-          <h3 class="location-card-title">Federal B Area, Karachi</h3>
-          <p class="location-address-text">
-            Centrally situated in Federal B Area, Karachi with convenient access from main arterial avenues, ground-floor patient entry, and welcoming consultation suites.
-          </p>
-          <ul class="location-feature-list" aria-label="Clinic amenities">
-            <li class="location-feature-item">✓ Autoclave Sterilization Protocol</li>
-            <li class="location-feature-item">✓ Private Consultation Suites</li>
-            <li class="location-feature-item">✓ Digital Dental Imaging</li>
-            <li class="location-feature-item">✓ Family &amp; Pediatric Friendly</li>
-          </ul>
-        </div>
-
-        <div class="location-actions">
+        <div class="location-ref-actions">
           <a
             href="https://www.google.com/maps/search/?api=1&amp;query=Memon+Dental+Clinic+Federal+B+Area+Karachi"
             target="_blank"
             rel="noopener noreferrer"
-            class="location-btn location-btn--primary"
+            class="location-btn-primary"
             id="location-directions-link"
           >
             <span>Open in Google Maps</span>
@@ -4306,57 +4422,31 @@
           </a>
           <button
             type="button"
-            class="location-btn location-btn--ghost"
+            class="location-btn-ghost"
             data-open-booking="appointment"
           >
-            Book Your Visit
+            <span>Book Your Visit</span>
+            <span aria-hidden="true">→</span>
           </button>
+          <a href="#whatsapp" id="loc-whatsapp" class="location-btn-ghost">WhatsApp</a>
+          <a href="#call" id="loc-call" class="location-btn-ghost">Call Us</a>
         </div>
-      </article>
+      </div>
 
-      <article class="location-card reveal-copy" aria-label="Clinic Visiting Hours and Schedule">
-        <div class="location-info-row">
-          <div class="location-status-pill" id="clinic-hours-badge" aria-live="polite">
-            <span class="location-status-dot" aria-hidden="true"></span>
-            <span id="clinic-hours-status-text">Checking Karachi Clinic Hours…</span>
-          </div>
-          <h3 class="location-card-title">Visiting Hours &amp; Patient Care</h3>
-          <p class="location-address-text" id="clinic-hours-detail-text">
-            Appointments are scheduled to minimize waiting room time and give every patient unhurried clinical attention.
-          </p>
-
-          <ul class="location-hours-list" aria-label="Weekly clinic schedule">
-            <li class="location-hours-row">
-              <span class="location-hours-day">Monday – Thursday</span>
-              <span class="location-hours-time">11:00 AM – 9:00 PM</span>
-            </li>
-            <li class="location-hours-row">
-              <span class="location-hours-day">Friday</span>
-              <span class="location-hours-time">11:00 AM – 1:00 PM · 3:00 PM – 9:00 PM</span>
-            </li>
-            <li class="location-hours-row">
-              <span class="location-hours-day">Saturday</span>
-              <span class="location-hours-time">11:00 AM – 9:00 PM</span>
-            </li>
-            <li class="location-hours-row">
-              <span class="location-hours-day">Sunday</span>
-              <span class="location-hours-time">By Prior Appointment</span>
-            </li>
-          </ul>
+      <div class="location-ref-visual reveal-copy" aria-label="3D location pin over Memon Dental Clinic facade in Federal B Area, Karachi">
+        <img
+          class="location-ref-img"
+          src="/assets/location/clinic-location-pin.webp"
+          data-fallback-src="/assets/location/clinic-location-pin.jpg"
+          alt="Memon Dental Clinic monumental 3D location pin in Federal B Area, Karachi"
+          loading="eager"
+          decoding="async"
+        >
+        <div class="location-ref-tag" aria-hidden="true">
+          <span class="location-ref-tag-dot"></span>
+          <span>Federal B Area, Karachi</span>
         </div>
-
-        <div class="location-actions">
-          <button
-            type="button"
-            class="location-btn location-btn--primary"
-            data-open-booking="General Consultation"
-          >
-            Schedule Consultation
-          </button>
-          <a href="#whatsapp" id="loc-whatsapp" class="location-btn location-btn--ghost">WhatsApp</a>
-          <a href="#call" id="loc-call" class="location-btn location-btn--ghost">Call Us</a>
-        </div>
-      </article>
+      </div>
     </div>
   </section>
 
@@ -4502,8 +4592,12 @@
     const SKY = "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261109_013341_08629ffd-6ab5-44a8-bec8-f1939ab3a6cd.png&w=2048&q=88";
     const BALLOONS = "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20261109_013346_9a3e7023-d72b-4572-a9b2-cc7a8f57a248.png&w=1024&q=90";
     const KITCHEN = "/dental_clinic_room.jpg";
-    const GRILL_CLIP = "TOOTH_GREENSCREEN_VIDEO_URL_HERE";
-    const POTS_CLIP = "/dentist-card.mp4";
+    const TOOTH_VIDEO = "/assets/hero/tooth.mp4";
+    const TOOTH_SPRITE = "/assets/hero/tooth-sprite.webp";
+    const TOOTH_FALLBACK = "/assets/hero/tooth-fallback.webp";
+    const DENTIST_IMAGE = "/assets/dentist/dentist-card.webp";
+    const GRILL_CLIP = TOOTH_VIDEO;
+    const POTS_CLIP = "/assets/dentist/dentist-card.mp4";
 
     const navEl = document.getElementById("nav");
     const skyEl = document.getElementById("sky");
@@ -4515,6 +4609,7 @@
     const ctxEnv = envK.getContext("2d");
     const tshadowEl = document.getElementById("tshadow");
     const cardEl = document.getElementById("card");
+    const dentistCardImgEl = document.getElementById("dentist-card-img");
     const potsEl = document.getElementById("pots");
     const ktextEl = document.getElementById("ktext");
     const gS = document.getElementById("gS");
@@ -4540,6 +4635,18 @@
     cloudFrontEl.style.backgroundImage = `url("${SKY}")`;
     balloonsEl.style.backgroundImage = `url("${BALLOONS}")`;
     kitchenEl.style.backgroundImage = `url("${KITCHEN}")`;
+
+    // Verify dental clinic room background image and apply embedded fallback if needed
+    (function verifyKitchenBackground() {
+      const probe = new Image();
+      probe.onerror = () => {
+        const fallbackUri = window.__getMemonFallbackAsset && window.__getMemonFallbackAsset(KITCHEN);
+        if (fallbackUri) {
+          kitchenEl.style.backgroundImage = `url("${fallbackUri}")`;
+        }
+      };
+      probe.src = KITCHEN;
+    })();
 
     // Treatments mega-menu open/close behaviour
     const shopLink = document.querySelector("#links a.shop");
@@ -4701,19 +4808,15 @@
       });
     }
 
-    // Supporting Pakistani female dentist card video & seamless background colour sampling
-    potsEl.crossOrigin = "anonymous";
-    potsEl.src = POTS_CLIP;
-    potsEl.addEventListener("loadeddata", () => {
+    // Supporting Pakistani female dentist card visual & seamless background colour sampling
+    function sampleCardBackgroundColor(sourceEl, w, h) {
       try {
-        const vw = potsEl.videoWidth;
-        const vh = potsEl.videoHeight;
-        if (vw > 0 && vh > 0) {
+        if (w > 0 && h > 0) {
           const c = document.createElement("canvas");
           c.width = 8;
           c.height = 8;
           const cx = c.getContext("2d");
-          cx.drawImage(potsEl, 0, 0, vw * 0.12, vh * 0.12, 0, 0, 8, 8);
+          cx.drawImage(sourceEl, 0, 0, w * 0.12, h * 0.12, 0, 0, 8, 8);
           const data = cx.getImageData(0, 0, 8, 8).data;
           let r = 0, g = 0, b = 0;
           for (let i = 0; i < data.length; i += 4) {
@@ -4724,13 +4827,49 @@
           r = (r / 64) | 0;
           g = (g / 64) | 0;
           b = (b / 64) | 0;
-          cardEl.style.background = `rgb(${r}, ${g}, ${b})`;
+          if (r > 180 && g > 140) {
+            cardEl.style.background = `rgb(${r}, ${g}, ${b})`;
+          }
         }
       } catch (_) {}
-    }, { once: true });
-    potsEl.play().catch(() => {});
+    }
 
-    // Tooth frame caching & chroma key (preserved 48-frame scrub engine)
+    if (dentistCardImgEl) {
+      dentistCardImgEl.addEventListener("load", () => {
+        sampleCardBackgroundColor(dentistCardImgEl, dentistCardImgEl.naturalWidth, dentistCardImgEl.naturalHeight);
+      }, { once: true });
+      dentistCardImgEl.addEventListener("error", () => {
+        const fallbackUri = window.__getMemonFallbackAsset && window.__getMemonFallbackAsset(DENTIST_IMAGE);
+        if (fallbackUri && dentistCardImgEl.src !== fallbackUri) {
+          dentistCardImgEl.src = fallbackUri;
+        }
+      });
+    }
+
+    if (potsEl) {
+      potsEl.poster = DENTIST_IMAGE;
+      potsEl.src = POTS_CLIP;
+      potsEl.addEventListener("loadeddata", () => {
+        sampleCardBackgroundColor(potsEl, potsEl.videoWidth, potsEl.videoHeight);
+      }, { once: true });
+      potsEl.addEventListener("error", () => {
+        if (!potsEl.dataset.retriedRoot) {
+          potsEl.dataset.retriedRoot = "true";
+          potsEl.src = "/dentist-card.mp4";
+          potsEl.play().catch(() => {});
+        } else {
+          // Hide broken video element so the underlying #dentist-card-img stays cleanly visible
+          potsEl.style.display = "none";
+        }
+      });
+      if (!reducedMotion) {
+        potsEl.play().catch(() => {});
+      } else {
+        potsEl.style.display = "none";
+      }
+    }
+
+    // Tooth frame caching & chroma key (preserved 48-frame scrub engine with instant sprite bootstrap)
     const NF = 48;
     const FS = 560;
     const frames = [];
@@ -4743,74 +4882,154 @@
       if (!force && idx === lastFrame) return;
       lastFrame = idx;
       const src = frames[idx];
+      if (!src) return;
       ctxS.clearRect(0, 0, gS.width, gS.height);
       ctxS.drawImage(src, 0, 0, gS.width, gS.height);
       ctxK.clearRect(0, 0, gK.width, gK.height);
       ctxK.drawImage(src, 0, 0, gK.width, gK.height);
     }
 
+    function loadImgElement(url, fallbackKey) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.decoding = "async";
+        img.onload = () => resolve(img);
+        img.onerror = () => {
+          const embeddedUri = window.__getMemonFallbackAsset && window.__getMemonFallbackAsset(fallbackKey || url);
+          if (embeddedUri && img.src !== embeddedUri) {
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = embeddedUri;
+          } else {
+            reject(new Error(`Failed to load ${url}`));
+          }
+        };
+        img.src = url;
+      });
+    }
+
+    function seekVideoTo(v, targetTime) {
+      return new Promise((resolve) => {
+        if (Math.abs(v.currentTime - targetTime) < 0.006 && v.readyState >= 2) {
+          resolve();
+          return;
+        }
+        let settled = false;
+        const done = () => {
+          if (settled) return;
+          settled = true;
+          v.removeEventListener("seeked", done);
+          clearTimeout(timer);
+          resolve();
+        };
+        const timer = setTimeout(done, 220);
+        v.addEventListener("seeked", done, { once: true });
+        try {
+          v.currentTime = targetTime;
+        } catch (_) {
+          done();
+        }
+      });
+    }
+
     (async function cacheToothFrames() {
+      // Stage 1: Instant 48-frame chroma-keyed sprite sheet bootstrap (<25ms)
+      try {
+        const spriteImg = await loadImgElement(TOOTH_SPRITE, "/assets/hero/tooth-sprite.webp");
+        const cols = 8;
+        const rows = 6;
+        const cellW = Math.floor(spriteImg.naturalWidth / cols);
+        const cellH = Math.floor(spriteImg.naturalHeight / rows);
+        for (let i = 0; i < NF; i++) {
+          const col = i % cols;
+          const row = Math.floor(i / cols);
+          const c = document.createElement("canvas");
+          c.width = FS;
+          c.height = FS;
+          const cx = c.getContext("2d");
+          cx.drawImage(spriteImg, col * cellW, row * cellH, cellW, cellH, 0, 0, FS, FS);
+          frames[i] = c;
+        }
+        ready = true;
+        drawFrame(currentFrameIndex, true);
+      } catch (_) {
+        // Fallback to single chroma-keyed frame 0 if sprite sheet failed
+        try {
+          const fallbackImg = await loadImgElement(TOOTH_FALLBACK, "/assets/hero/tooth-fallback.webp");
+          const c = document.createElement("canvas");
+          c.width = FS;
+          c.height = FS;
+          const cx = c.getContext("2d");
+          cx.drawImage(fallbackImg, 0, 0, FS, FS);
+          for (let i = 0; i < NF; i++) frames[i] = c;
+          ready = true;
+          drawFrame(currentFrameIndex, true);
+        } catch (_err) {}
+      }
+
+      // Stage 2: High-resolution 560x560 video chroma-key frame extraction
       try {
         const v = document.createElement("video");
-        v.crossOrigin = "anonymous";
         v.muted = true;
         v.playsInline = true;
         v.preload = "auto";
 
         await new Promise((resolve, reject) => {
           let triedFallback = false;
-          v.addEventListener("loadeddata", resolve, { once: true });
+          const timer = setTimeout(() => reject(new Error("video load timeout")), 6000);
+          v.addEventListener("loadeddata", () => {
+            clearTimeout(timer);
+            resolve();
+          }, { once: true });
           v.addEventListener("error", () => {
-            if (!triedFallback && GRILL_CLIP === "TOOTH_GREENSCREEN_VIDEO_URL_HERE") {
+            if (!triedFallback) {
               triedFallback = true;
               v.src = "/tooth.mp4";
+              v.load();
             } else {
+              clearTimeout(timer);
               reject(new Error("video load error"));
             }
           });
-          v.src = GRILL_CLIP;
+          v.src = TOOTH_VIDEO;
+          v.load();
         });
 
-        const dur = Math.max(0.01, v.duration - 0.05);
-        for (let i = 0; i < NF; i++) {
-          await new Promise((resolve) => {
-            const onSeeked = () => {
-              v.removeEventListener("seeked", onSeeked);
-              resolve();
-            };
-            v.addEventListener("seeked", onSeeked);
-            v.currentTime = (dur * i) / 47;
-          });
+        if (v.videoWidth > 0 && v.videoHeight > 0 && Number.isFinite(v.duration) && v.duration > 0) {
+          const dur = Math.max(0.01, v.duration - 0.05);
+          for (let i = 0; i < NF; i++) {
+            await seekVideoTo(v, (dur * i) / 47);
 
-          const c = document.createElement("canvas");
-          c.width = FS;
-          c.height = FS;
-          const cx = c.getContext("2d", { willReadFrequently: true });
-          cx.drawImage(v, 0, 0, FS, FS);
-          const img = cx.getImageData(0, 0, FS, FS);
-          const d = img.data;
-          for (let p = 0; p < d.length; p += 4) {
-            const r = d[p];
-            const g = d[p + 1];
-            const b = d[p + 2];
-            const m = r > b ? r : b;
-            const k = g - m;
-            if (k > 18) {
-              const alpha = Math.max(0, 1 - (k - 18) / 52);
-              d[p + 3] = (alpha * 255) | 0;
-              const maxG = m + 6;
-              if (g > maxG) d[p + 1] = maxG;
+            const c = document.createElement("canvas");
+            c.width = FS;
+            c.height = FS;
+            const cx = c.getContext("2d", { willReadFrequently: true });
+            cx.drawImage(v, 0, 0, FS, FS);
+            const img = cx.getImageData(0, 0, FS, FS);
+            const d = img.data;
+            for (let p = 0; p < d.length; p += 4) {
+              const r = d[p];
+              const g = d[p + 1];
+              const b = d[p + 2];
+              const m = r > b ? r : b;
+              const k = g - m;
+              if (k > 18) {
+                const alpha = Math.max(0, 1 - (k - 18) / 52);
+                d[p + 3] = (alpha * 255) | 0;
+                const maxG = m + 6;
+                if (g > maxG) d[p + 1] = maxG;
+              }
+            }
+            cx.putImageData(img, 0, 0);
+            frames[i] = c;
+
+            if (i === 0 || i === currentFrameIndex) {
+              ready = true;
+              drawFrame(currentFrameIndex, true);
             }
           }
-          cx.putImageData(img, 0, 0);
-          frames.push(c);
-
-          if (i === 0) {
-            ready = true;
-            drawFrame(currentFrameIndex, true);
-          }
+          drawFrame(currentFrameIndex, true);
         }
-        drawFrame(currentFrameIndex, true);
       } catch (_) {}
     })();
 
@@ -5556,7 +5775,7 @@
         id: "case-01",
         label: "Client 01",
         treatment: "Smile Makeover",
-        image: "/assets/cases/client-01.webp",
+        image: "/assets/patients/client-01.webp",
         verified: false,
         summary: "Demonstration placeholder for Comprehensive Smile Makeover planning (porcelain veneers, enamel contouring, and shade harmonization). Confirmed patient case photography will appear here once clinical consent is finalized."
       },
@@ -5564,7 +5783,7 @@
         id: "case-02",
         label: "Client 02",
         treatment: "Teeth Alignment",
-        image: "/assets/cases/client-02.webp",
+        image: "/assets/patients/client-02.webp",
         verified: false,
         summary: "Demonstration placeholder for Orthodontic Teeth Alignment (digital clear aligners and arch balance). Confirmed patient case photography will appear here once clinical consent is finalized."
       },
@@ -5572,7 +5791,7 @@
         id: "case-03",
         label: "Client 03",
         treatment: "Dental Implants",
-        image: "/assets/cases/client-03.webp",
+        image: "/assets/patients/client-03.webp",
         verified: false,
         summary: "Demonstration placeholder for Guided Dental Implant Restoration (biocompatible titanium fixtures and custom ceramic crowns). Confirmed patient case photography will appear here once clinical consent is finalized."
       },
@@ -5580,7 +5799,7 @@
         id: "case-04",
         label: "Client 04",
         treatment: "Full Mouth Rehabilitation",
-        image: "/assets/cases/client-04.webp",
+        image: "/assets/patients/client-04.webp",
         verified: false,
         summary: "Demonstration placeholder for Full Mouth Rehabilitation (occlusal bite restoration, prosthodontic crowns, and functional comfort). Confirmed patient case photography will appear here once clinical consent is finalized."
       },
@@ -5588,7 +5807,7 @@
         id: "case-05",
         label: "Client 05",
         treatment: "Cosmetic Dentistry",
-        image: "/assets/cases/client-05.webp",
+        image: "/assets/patients/client-05.webp",
         verified: false,
         summary: "Demonstration placeholder for Aesthetic & Cosmetic Dentistry (conservative composite bonding and professional whitening). Confirmed patient case photography will appear here once clinical consent is finalized."
       }
@@ -5652,6 +5871,33 @@
       showcaseStackEl.style.setProperty("--stack-h", `${totalStackH}px`);
     }
 
+    function selectShowcaseCardById(caseId, scrollIntoViewIfMobile = true) {
+      if (!caseId) return;
+      showcaseActiveId = caseId;
+      renderShowcaseState();
+
+      if (window.innerWidth < 768 && scrollIntoViewIfMobile && showcaseStackEl) {
+        const targetCard = showcaseCards.find((c) => c.dataset.caseId === caseId);
+        if (targetCard) {
+          targetCard.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        }
+      }
+    }
+
+    function goToNextShowcaseCard() {
+      const ids = showcaseCases.map((c) => c.id);
+      const currIdx = ids.indexOf(showcaseActiveId);
+      const nextIdx = (currIdx + 1) % ids.length;
+      selectShowcaseCardById(ids[nextIdx], true);
+    }
+
+    function goToPrevShowcaseCard() {
+      const ids = showcaseCases.map((c) => c.id);
+      const currIdx = ids.indexOf(showcaseActiveId);
+      const prevIdx = (currIdx - 1 + ids.length) % ids.length;
+      selectShowcaseCardById(ids[prevIdx], true);
+    }
+
     function renderShowcaseState() {
       showcaseCards.forEach((card, index) => {
         const id = card.dataset.caseId;
@@ -5662,10 +5908,20 @@
         card.classList.toggle("is-active", isActive);
         card.setAttribute("aria-current", isActive ? "true" : "false");
 
+        // Active card always receives highest z-index (30) so it is on top and never blocked
         card.style.zIndex =
-          isHovered ? "20" :
-          isActive ? "15" :
+          isActive ? "30" :
+          isHovered ? "25" :
           String(showcaseCards.length - index);
+      });
+
+      // Sync touch pills
+      const pillButtons = document.querySelectorAll(".showcase-pill-btn[data-showcase-jump]");
+      pillButtons.forEach((btn) => {
+        const jumpId = btn.dataset.showcaseJump;
+        const isMatch = jumpId === showcaseActiveId;
+        btn.classList.toggle("is-active", isMatch);
+        btn.setAttribute("aria-selected", isMatch ? "true" : "false");
       });
     }
 
@@ -5761,6 +6017,81 @@
       }
     });
 
+    // Smart hit-testing and touch gestures on the showcase stack
+    if (showcaseStackEl) {
+      // Coordinate-based hit testing so overlapping bounding boxes don't block clicks/taps
+      showcaseStackEl.addEventListener("click", (e) => {
+        if (e.target.closest(".showcase-view-btn")) return;
+        if (window.innerWidth < 768) return; // Handled per-card on mobile
+
+        const elements = document.elementsFromPoint(e.clientX, e.clientY);
+        const hitCards = elements.filter((el) => el.classList && el.classList.contains("showcase-card"));
+        if (!hitCards.length) return;
+
+        // Traverse cards from rightmost to leftmost to select exposed card under finger/cursor
+        const stackRect = showcaseStackEl.getBoundingClientRect();
+        const relX = e.clientX - stackRect.left;
+
+        let chosenCard = hitCards[0];
+        for (let i = showcaseCards.length - 1; i >= 0; i--) {
+          const c = showcaseCards[i];
+          if (hitCards.includes(c)) {
+            const cardRect = c.getBoundingClientRect();
+            if (relX >= (cardRect.left - stackRect.left)) {
+              chosenCard = c;
+              break;
+            }
+          }
+        }
+
+        if (chosenCard) {
+          const id = chosenCard.dataset.caseId;
+          if (showcaseActiveId === id) {
+            openShowcaseModal(id, chosenCard);
+          } else {
+            selectShowcaseCardById(id, false);
+          }
+        }
+      });
+
+      // Touch swipe gestures
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartTime = 0;
+      let isHorizontalSwipe = false;
+
+      showcaseStackEl.addEventListener("touchstart", (e) => {
+        if (!e.touches || !e.touches.length) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+        isHorizontalSwipe = false;
+      }, { passive: true });
+
+      showcaseStackEl.addEventListener("touchmove", (e) => {
+        if (!e.touches || !e.touches.length) return;
+        const dx = e.touches[0].clientX - touchStartX;
+        const dy = e.touches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+          isHorizontalSwipe = true;
+        }
+      }, { passive: true });
+
+      showcaseStackEl.addEventListener("touchend", (e) => {
+        if (!isHorizontalSwipe || !e.changedTouches || !e.changedTouches.length) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        const dy = e.changedTouches[0].clientY - touchStartY;
+        const dt = Date.now() - touchStartTime;
+        if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy) && dt < 500) {
+          if (dx < -35) {
+            goToNextShowcaseCard();
+          } else if (dx > 35) {
+            goToPrevShowcaseCard();
+          }
+        }
+      }, { passive: true });
+    }
+
     showcaseCards.forEach((card, idx) => {
       const id = card.dataset.caseId;
       const viewBtn = card.querySelector(".showcase-view-btn");
@@ -5793,32 +6124,26 @@
         if (event.target.closest(".showcase-view-btn")) {
           return;
         }
-        showcaseActiveId = id;
-        renderShowcaseState();
+        if (window.innerWidth < 768) {
+          if (showcaseActiveId === id) {
+            openShowcaseModal(id, card);
+          } else {
+            selectShowcaseCardById(id, true);
+          }
+        }
       });
 
       card.addEventListener("keydown", (event) => {
         if (event.target.closest(".showcase-view-btn")) return;
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          showcaseActiveId = id;
-          renderShowcaseState();
+          selectShowcaseCardById(id, true);
         } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
           event.preventDefault();
-          const next = showcaseCards[(idx + 1) % showcaseCards.length];
-          if (next) {
-            showcaseActiveId = next.dataset.caseId;
-            renderShowcaseState();
-            next.focus();
-          }
+          goToNextShowcaseCard();
         } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
           event.preventDefault();
-          const prev = showcaseCards[(idx - 1 + showcaseCards.length) % showcaseCards.length];
-          if (prev) {
-            showcaseActiveId = prev.dataset.caseId;
-            renderShowcaseState();
-            prev.focus();
-          }
+          goToPrevShowcaseCard();
         }
       });
 
@@ -5831,7 +6156,21 @@
       }
     });
 
-    // Update active card on mobile horizontal swipe
+    // Touch controls listeners (Prev, Next, and numbered pills)
+    const prevCaseBtn = document.getElementById("showcase-prev-btn");
+    const nextCaseBtn = document.getElementById("showcase-next-btn");
+    if (prevCaseBtn) prevCaseBtn.addEventListener("click", goToPrevShowcaseCard);
+    if (nextCaseBtn) nextCaseBtn.addEventListener("click", goToNextShowcaseCard);
+
+    const jumpCaseBtns = document.querySelectorAll(".showcase-pill-btn[data-showcase-jump]");
+    jumpCaseBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const jumpId = btn.dataset.showcaseJump;
+        if (jumpId) selectShowcaseCardById(jumpId, true);
+      });
+    });
+
+    // Update active card on mobile horizontal carousel scroll
     if (showcaseStackEl) {
       let scrollTicking = false;
       showcaseStackEl.addEventListener("scroll", () => {

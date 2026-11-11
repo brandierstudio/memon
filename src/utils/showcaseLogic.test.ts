@@ -5,10 +5,17 @@ import {
   computeCardStackLayout,
   computeShowcaseZIndex,
   reduceShowcaseState,
+  getNextShowcaseId,
+  getPrevShowcaseId,
+  resolveCardIndexFromTap,
   type ShowcaseState,
 } from './showcaseLogic';
 
-test('SHOWCASE_CASES contains exact 5 unverified demonstration cases in order', () => {
+import fs from 'node:fs';
+import path from 'node:path';
+import { EMBEDDED_PRODUCTION_ASSETS } from '../generated/embeddedAssets';
+
+test('SHOWCASE_CASES contains exact 5 unverified demonstration cases in order and verified production assets', () => {
   assert.equal(SHOWCASE_CASES.length, 5);
   assert.deepEqual(
     SHOWCASE_CASES.map((c) => `${c.label} — ${c.treatment}`),
@@ -22,8 +29,15 @@ test('SHOWCASE_CASES contains exact 5 unverified demonstration cases in order', 
   );
   for (const item of SHOWCASE_CASES) {
     assert.equal(item.verified, false);
-    assert.match(item.image, /^\/assets\/cases\/client-0[1-5]\.webp$/);
+    assert.match(item.image, /^\/assets\/patients\/client-0[1-5]\.webp$/);
+    assert.ok(EMBEDDED_PRODUCTION_ASSETS[item.image], `Missing embedded asset for ${item.image}`);
+    const diskPath = path.join(process.cwd(), 'public', item.image.replace(/^\/+/, ''));
+    assert.ok(fs.existsSync(diskPath) && fs.statSync(diskPath).size > 1000, `Missing disk asset ${diskPath}`);
   }
+  assert.ok(EMBEDDED_PRODUCTION_ASSETS['/assets/hero/tooth-sprite.webp']);
+  assert.ok(EMBEDDED_PRODUCTION_ASSETS['/assets/dentist/dentist-card.webp']);
+  assert.ok(EMBEDDED_PRODUCTION_ASSETS['/assets/location/clinic-location.webp']);
+  assert.ok(EMBEDDED_PRODUCTION_ASSETS['/assets/location/clinic-location-pin.webp'], 'Missing clinic-location-pin.webp');
 });
 
 test('computeCardStackLayout prevents horizontal overflow across desktop, tablet, and mobile', () => {
@@ -77,3 +91,19 @@ test('reduceShowcaseState manages hover, active selection, and case detail modal
   assert.equal(state.modalCaseId, null);
   assert.equal(state.activeId, 'case-04');
 });
+
+test('getNextShowcaseId and getPrevShowcaseId navigate cyclically across all 5 cases', () => {
+  assert.equal(getNextShowcaseId('case-01'), 'case-02');
+  assert.equal(getNextShowcaseId('case-05'), 'case-01');
+  assert.equal(getPrevShowcaseId('case-01'), 'case-05');
+  assert.equal(getPrevShowcaseId('case-03'), 'case-02');
+});
+
+test('resolveCardIndexFromTap assigns index proportionally across touch coordinates', () => {
+  assert.equal(resolveCardIndexFromTap(10, 750, 5), 0);
+  assert.equal(resolveCardIndexFromTap(160, 750, 5), 1);
+  assert.equal(resolveCardIndexFromTap(320, 750, 5), 2);
+  assert.equal(resolveCardIndexFromTap(480, 750, 5), 3);
+  assert.equal(resolveCardIndexFromTap(740, 750, 5), 4);
+});
+
