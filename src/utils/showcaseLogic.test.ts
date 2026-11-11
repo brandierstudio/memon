@@ -107,3 +107,17 @@ test('resolveCardIndexFromTap assigns index proportionally across touch coordina
   assert.equal(resolveCardIndexFromTap(740, 750, 5), 4);
 });
 
+test('Vercel deployment config and package.json esbuild peer dependency are compatible with vite@^8', () => {
+  const pkgJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'));
+  assert.notEqual(pkgJson.devDependencies?.esbuild, '^0.25.0');
+  assert.match(pkgJson.devDependencies?.esbuild || '', /^\^0\.2[78]\./);
+
+  const npmrc = fs.readFileSync(path.join(process.cwd(), '.npmrc'), 'utf8');
+  assert.match(npmrc, /legacy-peer-deps=true/);
+
+  const vercelJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'vercel.json'), 'utf8'));
+  assert.equal(vercelJson.framework, 'vite');
+  assert.equal(vercelJson.outputDirectory, 'dist');
+});
+
+

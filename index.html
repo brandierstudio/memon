@@ -1782,7 +1782,7 @@
         scroll-snap-type: x mandatory;
         scroll-padding-inline: 18px;
         -webkit-overflow-scrolling: touch;
-        touch-action: pan-y pinch-zoom;
+        touch-action: pan-x pan-y pinch-zoom;
         scrollbar-width: none;
       }
       .showcase-stack::-webkit-scrollbar {
@@ -4437,7 +4437,7 @@
         <img
           class="location-ref-img"
           src="/assets/location/clinic-location-pin.webp"
-          data-fallback-src="/assets/location/clinic-location-pin.jpg"
+          data-fallback-src="/assets/location/clinic-location-pin.webp"
           alt="Memon Dental Clinic monumental 3D location pin in Federal B Area, Karachi"
           loading="eager"
           decoding="async"
@@ -5908,10 +5908,10 @@
         card.classList.toggle("is-active", isActive);
         card.setAttribute("aria-current", isActive ? "true" : "false");
 
-        // Active card always receives highest z-index (30) so it is on top and never blocked
+        // Hovered card gets 35, active card gets 30, background cards get descending 5..1
         card.style.zIndex =
+          isHovered ? "35" :
           isActive ? "30" :
-          isHovered ? "25" :
           String(showcaseCards.length - index);
       });
 
@@ -6017,48 +6017,13 @@
       }
     });
 
-    // Smart hit-testing and touch gestures on the showcase stack
+    // Smart hit-testing and touch/drag gestures on the showcase stack
     if (showcaseStackEl) {
-      // Coordinate-based hit testing so overlapping bounding boxes don't block clicks/taps
-      showcaseStackEl.addEventListener("click", (e) => {
-        if (e.target.closest(".showcase-view-btn")) return;
-        if (window.innerWidth < 768) return; // Handled per-card on mobile
-
-        const elements = document.elementsFromPoint(e.clientX, e.clientY);
-        const hitCards = elements.filter((el) => el.classList && el.classList.contains("showcase-card"));
-        if (!hitCards.length) return;
-
-        // Traverse cards from rightmost to leftmost to select exposed card under finger/cursor
-        const stackRect = showcaseStackEl.getBoundingClientRect();
-        const relX = e.clientX - stackRect.left;
-
-        let chosenCard = hitCards[0];
-        for (let i = showcaseCards.length - 1; i >= 0; i--) {
-          const c = showcaseCards[i];
-          if (hitCards.includes(c)) {
-            const cardRect = c.getBoundingClientRect();
-            if (relX >= (cardRect.left - stackRect.left)) {
-              chosenCard = c;
-              break;
-            }
-          }
-        }
-
-        if (chosenCard) {
-          const id = chosenCard.dataset.caseId;
-          if (showcaseActiveId === id) {
-            openShowcaseModal(id, chosenCard);
-          } else {
-            selectShowcaseCardById(id, false);
-          }
-        }
-      });
-
-      // Touch swipe gestures
       let touchStartX = 0;
       let touchStartY = 0;
       let touchStartTime = 0;
       let isHorizontalSwipe = false;
+      let lastSwipeTime = 0;
 
       showcaseStackEl.addEventListener("touchstart", (e) => {
         if (!e.touches || !e.touches.length) return;
@@ -6072,32 +6037,58 @@
         if (!e.touches || !e.touches.length) return;
         const dx = e.touches[0].clientX - touchStartX;
         const dy = e.touches[0].clientY - touchStartY;
-        if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+        if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.2) {
           isHorizontalSwipe = true;
         }
       }, { passive: true });
 
       showcaseStackEl.addEventListener("touchend", (e) => {
         if (!isHorizontalSwipe || !e.changedTouches || !e.changedTouches.length) return;
+        // On < 768px, native CSS scroll-snap handles horizontal scrolling smoothly
+        if (window.innerWidth < 768) return;
         const dx = e.changedTouches[0].clientX - touchStartX;
         const dy = e.changedTouches[0].clientY - touchStartY;
         const dt = Date.now() - touchStartTime;
-        if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy) && dt < 500) {
-          if (dx < -35) {
+        if (Math.abs(dx) > 32 && Math.abs(dx) > Math.abs(dy) && dt < 650) {
+          lastSwipeTime = Date.now();
+          if (dx < -32) {
             goToNextShowcaseCard();
-          } else if (dx > 35) {
+          } else if (dx > 32) {
             goToPrevShowcaseCard();
           }
         }
       }, { passive: true });
+
+      showcaseStackEl.addEventListener("click", (e) => {
+        if (Date.now() - lastSwipeTime < 350) return;
+        if (e.target.closest(".showcase-view-btn")) return;
+
+        // Use topmost visible card at the tap/click coordinate
+        let chosenCard = e.target.closest(".showcase-card");
+        if (!chosenCard && typeof document.elementsFromPoint === "function") {
+          const elements = document.elementsFromPoint(e.clientX, e.clientY);
+          chosenCard = elements.find((el) => el.classList && el.classList.contains("showcase-card")) || null;
+        }
+        if (!chosenCard) return;
+
+        const id = chosenCard.dataset.caseId;
+        if (!id) return;
+
+        if (showcaseActiveId === id) {
+          openShowcaseModal(id, chosenCard);
+        } else {
+          showcaseHoveredId = id;
+          selectShowcaseCardById(id, true);
+        }
+      });
     }
 
-    showcaseCards.forEach((card, idx) => {
+    showcaseCards.forEach((card) => {
       const id = card.dataset.caseId;
       const viewBtn = card.querySelector(".showcase-view-btn");
 
-      card.addEventListener("mouseenter", () => {
-        if (window.innerWidth < 768) return;
+      card.addEventListener("pointerenter", (e) => {
+        if (e.pointerType === "touch" || window.innerWidth < 768) return;
         if (showcaseHoverTimer) {
           clearTimeout(showcaseHoverTimer);
           showcaseHoverTimer = null;
@@ -6108,8 +6099,8 @@
         }
       });
 
-      card.addEventListener("mouseleave", () => {
-        if (window.innerWidth < 768) return;
+      card.addEventListener("pointerleave", (e) => {
+        if (e.pointerType === "touch" || window.innerWidth < 768) return;
         if (showcaseHoverTimer) clearTimeout(showcaseHoverTimer);
         showcaseHoverTimer = setTimeout(() => {
           if (showcaseHoveredId === id) {
@@ -6118,19 +6109,6 @@
           }
           showcaseHoverTimer = null;
         }, 45);
-      });
-
-      card.addEventListener("click", (event) => {
-        if (event.target.closest(".showcase-view-btn")) {
-          return;
-        }
-        if (window.innerWidth < 768) {
-          if (showcaseActiveId === id) {
-            openShowcaseModal(id, card);
-          } else {
-            selectShowcaseCardById(id, true);
-          }
-        }
       });
 
       card.addEventListener("keydown", (event) => {

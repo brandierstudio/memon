@@ -2,10 +2,14 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
+import {fileURLToPath} from 'url';
 import {defineConfig} from 'vite';
 import {EMBEDDED_PRODUCTION_ASSETS} from './src/generated/embeddedAssets.ts';
 
-const ROOT_DIR = import.meta.dirname || process.cwd();
+const ROOT_DIR =
+  typeof import.meta.dirname === 'string'
+    ? import.meta.dirname
+    : path.dirname(fileURLToPath(import.meta.url));
 
 function ensurePublicAssetsExist(rootDir: string) {
   const publicDir = path.resolve(rootDir, 'public');
